@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的起始頁</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 搜尋區域 -->
+        <div class="search-section">
+            <div class="search-engine-selector">
+                <select id="searchEngine">
+                    <option value="google">Google</option>
+                    <option value="bing">Bing</option>
+                    <option value="duckduckgo">DuckDuckGo</option>
+                    <option value="baidu">百度</option>
+                    <option value="custom">自訂</option>
+                </select>
+                <button id="settingsBtn" class="icon-btn" title="設定">⚙️</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜尋..." autocomplete="off">
+                <button id="searchBtn">🔍</button>
+            </div>
+        </div>
+
+        <!-- 書籤區域 -->
+        <div class="bookmarks-section">
+            <div class="section-header">
+                <h2>我的書籤</h2>
+                <button id="addBookmarkBtn" class="add-btn">+ 新增書籤</button>
+            </div>
+            <div id="bookmarksList" class="bookmarks-grid"></div>
+        </div>
+    </div>
+
+    <!-- 設定彈窗 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>搜尋引擎設定</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label for="customSearchUrl">自訂搜尋引擎 URL：</label>
+                <input type="text" id="customSearchUrl" placeholder="https://example.com/search?q={query}">
+                <small>使用 {query} 作為搜尋關鍵字的佔位符</small>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettings" class="btn-primary">儲存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增/編輯書籤彈窗 -->
+    <div id="bookmarkModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="bookmarkModalTitle">新增書籤</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label for="bookmarkName">名稱：</label>
+                <input type="text" id="bookmarkName" placeholder="網站名稱">
+                
+                <label for="bookmarkUrl">網址：</label>
+                <input type="text" id="bookmarkUrl" placeholder="https://example.com">
+                
+                <label for="bookmarkIcon">圖示 (選填)：</label>
+                <input type="text" id="bookmarkIcon" placeholder="🌐 或網址">
+            </div>
+            <div class="modal-footer">
+                <button id="saveBookmark" class="btn-primary">儲存</button>
+                <button id="cancelBookmark" class="btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
