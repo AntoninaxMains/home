@@ -83,7 +83,11 @@ body {
 .suggestions-title { font-size: 12px; font-weight: 700; color: var(--text-subtle); text-align: left; }
 .suggestion-list { display: flex; flex-wrap: wrap; gap: 8px; }
 .suggestion-item { border: none; border-radius: 999px; padding: 8px 14px; background: rgba(76,110,245,0.1); color: var(--primary-dark); font-weight: 600; font-size: 13px; cursor: pointer; transition: transform var(--transition), box-shadow var(--transition); }
-.suggestion-item:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(76,110,245,0.25); }
+.suggestion-item:hover,
+.suggestion-item:focus-visible { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(76,110,245,0.25); outline: none; }
+body.dark-mode .suggestion-item { background: rgba(255,255,255,0.12); color: #fff; }
+body.dark-mode .suggestion-item:hover,
+body.dark-mode .suggestion-item:focus-visible { box-shadow: 0 10px 18px rgba(0,0,0,0.4); }
 
 /* Toolbar */
 .toolbar { display: flex; justify-content: center; }

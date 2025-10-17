@@ -725,6 +725,7 @@ function saveSettings() {
     const customUrl = document.getElementById('customSearchUrl').value;
     localStorage.setItem('customSearchUrl', customUrl);
     searchEngines.custom.url = customUrl;
+    syncCustomSearchInputs(customUrl);
     
     // 儲存背景設定
     const bgType = document.querySelector('input[name="bgType"]:checked').value;
@@ -997,7 +998,7 @@ function initEventListeners() {
     
     const quickDarkModeBtn = document.getElementById('quickDarkModeBtn');
     if (quickDarkModeBtn) {
-        quickDarkModeBtn.addEventListener('click', toggleDarkMode);
+        quickDarkModeBtn.addEventListener('click', () => toggleDarkMode());
     }
     
     // 移動端懸浮球
@@ -1274,6 +1275,8 @@ function setCurrentSearchEngine(engineKey, { persist = true } = {}) {
         const inline = document.getElementById('customSearchInline');
         if (inline) inline.focus();
     }
+
+    updateSearchSuggestions(document.getElementById('searchInput')?.value || '');
 }
 
 function renderEngineDropdown() {
