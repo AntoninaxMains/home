@@ -358,7 +358,7 @@ const searchEngines = {
     },
     bing: {
         url: 'https://www.bing.com/search?q={query}',
-        icon: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bing_Logo.svg',
+        icon: 'assets/bing-logo.svg',
         labelKey: 'engineBing'
     },
     duckduckgo: {
@@ -392,6 +392,9 @@ function getIconMarkup(descriptor, size = 20, label = '') {
         return `<i data-lucide="${iconName}" style="width:${size}px;height:${size}px;"></i>`;
     }
     if (descriptor.startsWith('http')) {
+        return `<img src="${descriptor}" alt="${escapeHtml(label || descriptor)}" style="width:${size}px;height:${size}px;object-fit:contain;" loading="lazy">`;
+    }
+    if (/^(?:\.?\.\/|\/|data:)/.test(descriptor) || /\.(svg|png|jpe?g|gif|webp)$/i.test(descriptor)) {
         return `<img src="${descriptor}" alt="${escapeHtml(label || descriptor)}" style="width:${size}px;height:${size}px;object-fit:contain;" loading="lazy">`;
     }
     const altText = escapeHtml(label || descriptor);
