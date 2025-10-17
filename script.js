@@ -1,0 +1,488 @@
+// 搜尋引擎配置
+const searchEngines = {
+    google: { url: 'https://www.google.com/search?q={query}', icon: '🔍' },
+    bing: { url: 'https://www.bing.com/search?q={query}', icon: '🔎' },
+    duckduckgo: { url: 'https://duckduckgo.com/?q={query}', icon: '🦆' },
+    baidu: { url: 'https://www.baidu.com/s?wd={query}', icon: '📍' },
+    custom: { url: '', icon: '⚙️' }
+};
+
+// 背景漸層預設
+const gradientPresets = {
+    default: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    sunset: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    ocean: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+    purple: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+    green: 'linear-gradient(135deg, #81FBB8 0%, #28C76F 100%)',
+    dark: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
+};
+
+// 全局變數
+let bookmarks = [];
+let categories = [];
+let editingBookmarkId = null;
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    loadSettings();
+    loadCategories();
+    loadBookmarks();
+    initEventListeners();
+    updateSearchIcon();
+});
+
+// 載入設定
+function loadSettings() {
+    const savedEngine = localStorage.getItem('searchEngine') || 'google';
+    const customUrl = localStorage.getItem('customSearchUrl') || '';
+    
+    document.getElementById('searchEngine').value = savedEngine;
+    document.getElementById('customSearchUrl').value = customUrl;
+    
+    if (savedEngine === 'custom') {
+        searchEngines.custom.url = customUrl;
+    }
+    
+    // 載入背景設定
+    loadBackgroundSettings();
+}
+
+// 載入背景設定
+function loadBackgroundSettings() {
+    const bgType = localStorage.getItem('bgType') || 'gradient';
+    const bgValue = localStorage.getItem('bgValue') || 'default';
+    
+    document.querySelector(`input[name="bgType"][value="${bgType}"]`).checked = true;
+    showBgOptions(bgType);
+    
+    if (bgType === 'gradient') {
+        document.getElementById('gradientPreset').value = bgValue;
+        applyBackground('gradient', bgValue);
+    } else if (bgType === 'image') {
+        document.getElementById('bgImageUrl').value = bgValue;
+        applyBackground('image', bgValue);
+    } else if (bgType === 'color') {
+        document.getElementById('bgColor').value = bgValue;
+        applyBackground('color', bgValue);
+    }
+}
+
+// 應用背景
+function applyBackground(type, value) {
+    const body = document.body;
+    
+    if (type === 'gradient') {
+        body.style.background = gradientPresets[value] || gradientPresets.default;
+        body.style.backgroundSize = 'cover';
+        body.style.backgroundAttachment = 'fixed';
+    } else if (type === 'image') {
+        body.style.background = `url(${value})`;
+        body.style.backgroundSize = 'cover';
+        body.style.backgroundPosition = 'center';
+        body.style.backgroundAttachment = 'fixed';
+    } else if (type === 'color') {
+        body.style.background = value;
+    }
+}
+
+// 顯示背景選項
+function showBgOptions(type) {
+    document.getElementById('gradientOptions').style.display = type === 'gradient' ? 'block' : 'none';
+    document.getElementById('imageOptions').style.display = type === 'image' ? 'block' : 'none';
+    document.getElementById('colorOptions').style.display = type === 'color' ? 'block' : 'none';
+}
+
+// 儲存設定
+function saveSettings() {
+    const customUrl = document.getElementById('customSearchUrl').value;
+    localStorage.setItem('customSearchUrl', customUrl);
+    searchEngines.custom.url = customUrl;
+    
+    // 儲存背景設定
+    const bgType = document.querySelector('input[name="bgType"]:checked').value;
+    let bgValue = '';
+    
+    if (bgType === 'gradient') {
+        bgValue = document.getElementById('gradientPreset').value;
+    } else if (bgType === 'image') {
+        bgValue = document.getElementById('bgImageUrl').value;
+    } else if (bgType === 'color') {
+        bgValue = document.getElementById('bgColor').value;
+    }
+    
+    localStorage.setItem('bgType', bgType);
+    localStorage.setItem('bgValue', bgValue);
+    applyBackground(bgType, bgValue);
+    
+    closeModal('settingsModal');
+}
+
+// 初始化事件監聽
+function initEventListeners() {
+    // 搜尋功能
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+    
+    // 搜尋引擎選擇
+    document.getElementById('searchEngine').addEventListener('change', function(e) {
+        localStorage.setItem('searchEngine', e.target.value);
+        updateSearchIcon();
+        if (e.target.value === 'custom') {
+            openModal('settingsModal');
+        }
+    });
+    
+    // 設定按鈕
+    document.getElementById('settingsBtn').addEventListener('click', function() {
+        openModal('settingsModal');
+    });
+    
+    document.getElementById('saveSettings').addEventListener('click', saveSettings);
+    
+    // 背景類型選擇
+    document.querySelectorAll('input[name="bgType"]').forEach(radio => {
+        radio.addEventListener('change', function(e) {
+            showBgOptions(e.target.value);
+        });
+    });
+    
+    // 書籤按鈕
+    document.getElementById('saveBookmark').addEventListener('click', saveBookmark);
+    document.getElementById('cancelBookmark').addEventListener('click', function() {
+        closeModal('bookmarkModal');
+    });
+    
+    // 抓取圖示按鈕
+    document.getElementById('fetchIcon').addEventListener('click', fetchFavicon);
+    
+    // 分類選擇
+    document.getElementById('bookmarkCategory').addEventListener('change', function(e) {
+        const newCategoryInput = document.getElementById('newCategory');
+        if (e.target.value === 'new') {
+            newCategoryInput.style.display = 'block';
+            newCategoryInput.focus();
+        } else {
+            newCategoryInput.style.display = 'none';
+        }
+    });
+    
+    // 關閉彈窗
+    document.querySelectorAll('.close').forEach(function(closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            closeModal(modal.id);
+        });
+    });
+    
+    // 點擊外部關閉彈窗
+    window.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+            closeModal(e.target.id);
+        }
+    });
+}
+
+// 更新搜尋圖示
+function updateSearchIcon() {
+    const engine = document.getElementById('searchEngine').value;
+    document.getElementById('searchEngineIcon').textContent = searchEngines[engine].icon;
+}
+
+// 執行搜尋
+function performSearch() {
+    const query = document.getElementById('searchInput').value.trim();
+    if (!query) return;
+    
+    const engine = document.getElementById('searchEngine').value;
+    let searchUrl = searchEngines[engine].url;
+    
+    if (engine === 'custom' && !searchUrl) {
+        alert('請先設定自訂搜尋引擎 URL');
+        openModal('settingsModal');
+        return;
+    }
+    
+    searchUrl = searchUrl.replace('{query}', encodeURIComponent(query));
+    window.location.href = searchUrl;
+}
+
+// 分類管理
+function loadCategories() {
+    const saved = localStorage.getItem('categories');
+    categories = saved ? JSON.parse(saved) : ['常用', '社交媒體', '工作', '娛樂'];
+    updateCategorySelect();
+}
+
+function saveCategories() {
+    localStorage.setItem('categories', JSON.stringify(categories));
+}
+
+function updateCategorySelect() {
+    const select = document.getElementById('bookmarkCategory');
+    select.innerHTML = '<option value="">選擇分類...</option>';
+    categories.forEach(cat => {
+        select.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+    select.innerHTML += '<option value="new">+ 新增分類</option>';
+}
+
+// 書籤管理
+function loadBookmarks() {
+    const saved = localStorage.getItem('bookmarks');
+    bookmarks = saved ? JSON.parse(saved) : getDefaultBookmarks();
+    renderBookmarks();
+}
+
+function getDefaultBookmarks() {
+    return [
+        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: '🐙', category: '工作' },
+        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: '📺', category: '娛樂' },
+        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: '📧', category: '常用' },
+        { id: Date.now() + 3, name: 'Twitter', url: 'https://twitter.com', icon: '🐦', category: '社交媒體' },
+        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: '📝', category: '工作' },
+        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: '📷', category: '社交媒體' }
+    ];
+}
+
+function saveBookmarksToStorage() {
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+}
+
+function renderBookmarks() {
+    const container = document.getElementById('bookmarksContainer');
+    container.innerHTML = '';
+    
+    // 按分類分組
+    const bookmarksByCategory = {};
+    bookmarks.forEach(bookmark => {
+        const cat = bookmark.category || '未分類';
+        if (!bookmarksByCategory[cat]) {
+            bookmarksByCategory[cat] = [];
+        }
+        bookmarksByCategory[cat].push(bookmark);
+    });
+    
+    // 渲染每個分類
+    Object.keys(bookmarksByCategory).forEach(category => {
+        const section = createCategorySection(category, bookmarksByCategory[category]);
+        container.appendChild(section);
+    });
+}
+
+function createCategorySection(category, categoryBookmarks) {
+    const section = document.createElement('div');
+    section.className = 'category-section';
+    
+    const header = document.createElement('div');
+    header.className = 'category-header';
+    header.innerHTML = `
+        <div class="category-title">📁 ${category}</div>
+        <div class="category-actions">
+            <button class="add-btn" onclick="openBookmarkModal(null, '${category}')">+ 新增</button>
+            ${category !== '未分類' ? `<button class="manage-btn" onclick="deleteCategory('${category}')">刪除分類</button>` : ''}
+        </div>
+    `;
+    
+    const grid = document.createElement('div');
+    grid.className = 'bookmarks-grid';
+    
+    categoryBookmarks.forEach(bookmark => {
+        const bookmarkEl = createBookmarkElement(bookmark);
+        grid.appendChild(bookmarkEl);
+    });
+    
+    section.appendChild(header);
+    section.appendChild(grid);
+    
+    return section;
+}
+
+function createBookmarkElement(bookmark) {
+    const div = document.createElement('div');
+    div.className = 'bookmark-item';
+    div.onclick = function(e) {
+        if (!e.target.closest('.bookmark-actions')) {
+            window.open(bookmark.url, '_blank');
+        }
+    };
+    
+    let iconHtml;
+    if (bookmark.icon.startsWith('http')) {
+        iconHtml = `<img src="${bookmark.icon}" alt="${bookmark.name}" onerror="this.parentElement.innerHTML='🌐';">`;
+    } else if (bookmark.icon.includes('favicon')) {
+        iconHtml = `<img src="${bookmark.icon}" alt="${bookmark.name}" onerror="this.parentElement.innerHTML='🌐';">`;
+    } else {
+        iconHtml = bookmark.icon || '🌐';
+    }
+    
+    div.innerHTML = `
+        <div class="bookmark-actions">
+            <button onclick="editBookmark(${bookmark.id}); event.stopPropagation();" title="編輯">✏️</button>
+            <button onclick="deleteBookmark(${bookmark.id}); event.stopPropagation();" title="刪除">🗑️</button>
+        </div>
+        <div class="bookmark-icon">${iconHtml}</div>
+        <div class="bookmark-name">${bookmark.name}</div>
+    `;
+    
+    return div;
+}
+
+function openBookmarkModal(bookmark = null, defaultCategory = '') {
+    editingBookmarkId = bookmark ? bookmark.id : null;
+    
+    const title = document.getElementById('bookmarkModalTitle');
+    const categorySelect = document.getElementById('bookmarkCategory');
+    const nameInput = document.getElementById('bookmarkName');
+    const urlInput = document.getElementById('bookmarkUrl');
+    const iconInput = document.getElementById('bookmarkIcon');
+    
+    title.textContent = bookmark ? '編輯書籤' : '新增書籤';
+    categorySelect.value = bookmark ? bookmark.category : defaultCategory;
+    nameInput.value = bookmark ? bookmark.name : '';
+    urlInput.value = bookmark ? bookmark.url : '';
+    iconInput.value = bookmark ? bookmark.icon : '';
+    
+    document.getElementById('newCategory').style.display = 'none';
+    
+    openModal('bookmarkModal');
+    nameInput.focus();
+}
+
+function saveBookmark() {
+    const categorySelect = document.getElementById('bookmarkCategory');
+    const newCategoryInput = document.getElementById('newCategory');
+    const name = document.getElementById('bookmarkName').value.trim();
+    const url = document.getElementById('bookmarkUrl').value.trim();
+    const icon = document.getElementById('bookmarkIcon').value.trim() || '🌐';
+    
+    if (!name || !url) {
+        alert('請填寫名稱和網址');
+        return;
+    }
+    
+    let category = categorySelect.value;
+    if (category === 'new') {
+        category = newCategoryInput.value.trim();
+        if (!category) {
+            alert('請輸入新分類名稱');
+            return;
+        }
+        if (!categories.includes(category)) {
+            categories.push(category);
+            saveCategories();
+            updateCategorySelect();
+        }
+    }
+    
+    if (!category) {
+        category = '未分類';
+    }
+    
+    // 確保 URL 有協議
+    const finalUrl = url.match(/^https?:\/\//) ? url : 'https://' + url;
+    
+    if (editingBookmarkId) {
+        // 編輯現有書籤
+        const index = bookmarks.findIndex(b => b.id === editingBookmarkId);
+        if (index !== -1) {
+            bookmarks[index] = { ...bookmarks[index], name, url: finalUrl, icon, category };
+        }
+    } else {
+        // 新增書籤
+        bookmarks.push({
+            id: Date.now(),
+            name,
+            url: finalUrl,
+            icon,
+            category
+        });
+    }
+    
+    saveBookmarksToStorage();
+    renderBookmarks();
+    closeModal('bookmarkModal');
+}
+
+function editBookmark(id) {
+    const bookmark = bookmarks.find(b => b.id === id);
+    if (bookmark) {
+        openBookmarkModal(bookmark);
+    }
+}
+
+function deleteBookmark(id) {
+    if (confirm('確定要刪除這個書籤嗎？')) {
+        bookmarks = bookmarks.filter(b => b.id !== id);
+        saveBookmarksToStorage();
+        renderBookmarks();
+    }
+}
+
+function deleteCategory(category) {
+    if (confirm(`確定要刪除「${category}」分類嗎？\n此分類下的書籤將移至「未分類」。`)) {
+        // 將該分類的書籤移至未分類
+        bookmarks.forEach(bookmark => {
+            if (bookmark.category === category) {
+                bookmark.category = '未分類';
+            }
+        });
+        
+        // 從分類列表中移除
+        categories = categories.filter(cat => cat !== category);
+        
+        saveCategories();
+        saveBookmarksToStorage();
+        updateCategorySelect();
+        renderBookmarks();
+    }
+}
+
+// 抓取網站 favicon
+async function fetchFavicon() {
+    const urlInput = document.getElementById('bookmarkUrl');
+    const iconInput = document.getElementById('bookmarkIcon');
+    const url = urlInput.value.trim();
+    
+    if (!url) {
+        alert('請先輸入網址');
+        return;
+    }
+    
+    try {
+        // 確保 URL 有協議
+        const fullUrl = url.match(/^https?:\/\//) ? url : 'https://' + url;
+        const urlObj = new URL(fullUrl);
+        
+        // 嘗試多種 favicon 獲取方式
+        const faviconUrls = [
+            `https://www.google.com/s2/favicons?domain=${urlObj.hostname}&sz=128`,
+            `${urlObj.origin}/favicon.ico`,
+            `https://icon.horse/icon/${urlObj.hostname}`
+        ];
+        
+        // 使用第一個方法（Google favicon 服務）
+        iconInput.value = faviconUrls[0];
+        alert('已自動填入網站圖示！');
+        
+    } catch (error) {
+        alert('無法獲取圖示，請確認網址格式正確');
+    }
+}
+
+// 彈窗控制
+function openModal(modalId) {
+    document.getElementById(modalId).classList.add('show');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('show');
+}
+
+// 暴露全局函數
+window.openBookmarkModal = openBookmarkModal;
+window.editBookmark = editBookmark;
+window.deleteBookmark = deleteBookmark;
+window.deleteCategory = deleteCategory;
