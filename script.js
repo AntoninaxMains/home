@@ -436,28 +436,28 @@ function updateUILanguage() {
     
     // Toolbar buttons with icons
     const quickButtons = [
-        { id: 'addBookmarkBtn', label: 'addBookmark' },
-        { id: 'manageCategoriesBtn', label: 'manageCategories' },
-        { id: 'settingsBtn', label: 'settings' },
-        { id: 'quickLangBtn', label: 'selectLanguage' },
-        { id: 'quickDarkModeBtn', label: document.body.classList.contains('dark-mode') ? 'lightMode' : 'darkMode' }
+        { id: 'addBookmarkBtn', label: 'addBookmark', icon: 'plus' },
+        { id: 'manageCategoriesBtn', label: 'manageCategories', icon: 'folder' },
+        { id: 'settingsBtn', label: 'settings', icon: 'settings' },
+        { id: 'quickLangBtn', label: 'selectLanguage', icon: 'globe-2' },
+        { id: 'quickDarkModeBtn', label: document.body.classList.contains('dark-mode') ? 'lightMode' : 'darkMode', icon: document.body.classList.contains('dark-mode') ? 'sun' : 'moon' }
     ];
 
-    quickButtons.forEach(({ id, label }) => {
+    quickButtons.forEach(({ id, label, icon }) => {
         const btn = document.getElementById(id);
         if (!btn) return;
-        const icon = btn.querySelector('[data-lucide]');
-        if (icon) {
-            btn.innerHTML = '';
-            btn.appendChild(icon);
+        let iconEl = btn.querySelector('[data-lucide]');
+        const desiredIcon = typeof icon === 'function' ? icon() : icon;
+        if (!iconEl) {
+            iconEl = document.createElement('i');
+            iconEl.setAttribute('data-lucide', desiredIcon);
         } else {
-            btn.innerHTML = '';
+            iconEl.setAttribute('data-lucide', desiredIcon);
         }
+        btn.innerHTML = '';
+        btn.appendChild(iconEl);
         btn.setAttribute('title', t(label));
         btn.setAttribute('aria-label', t(label));
-        if (id === 'quickDarkModeBtn' && icon) {
-            icon.setAttribute('data-lucide', document.body.classList.contains('dark-mode') ? 'sun' : 'moon');
-        }
     });
     
     // Bookmarks header
