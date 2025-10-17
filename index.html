@@ -172,7 +172,7 @@
                         <div class="settings-field">
                             <label data-i18n="backgroundBlur">背景模糊</label>
                             <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
-                                <input id="blurToggle" type="checkbox" checked />
+                                <input id="blurToggle" type="checkbox" />
                                 <label for="blurToggle" style="font-weight:600;" data-i18n="enableBlur">啟用背景模糊</label>
                             </div>
                             <input id="blurRange" type="range" min="0" max="40" value="0" style="width:100%; margin-top:8px;" />
@@ -282,8 +282,8 @@
                     <button class="modal-close" data-close="iconSearchModal" aria-label="關閉圖標搜索">×</button>
                 </header>
                 <div class="modal-body">
-                    <p class="hint" style="margin-bottom: 12px;">從 Simple Icons 搜索品牌圖標，例如：github, google, facebook, youtube 等</p>
-                    <input id="iconSearchInput" type="text" placeholder="輸入品牌名稱..." style="margin-bottom: 16px;" />
+                    <p class="hint" style="margin-bottom: 12px;" data-i18n="iconSearchHint">從 Simple Icons 搜尋品牌圖標，例如：github、google、youtube</p>
+                    <input id="iconSearchInput" type="text" data-i18n-placeholder="iconSearchPlaceholder" placeholder="輸入品牌名稱..." style="margin-bottom: 16px;" />
                     <div id="iconSearchResults" class="icon-grid"></div>
                 </div>
                 <footer class="modal-footer">

@@ -35,6 +35,13 @@ const translations = {
         iconPlaceholder: '🌐 Emoji or image URL',
         iconHint: 'Enter emoji, image URL, or use auto fetch',
         iconSearch: 'Search Icon',
+    iconSearchHint: 'Search Simple Icons for brand logos, e.g. github, google, youtube',
+    iconSearchPlaceholder: 'Enter a brand name...',
+    iconLoading: 'Loading icon library…',
+    iconLoadError: 'Unable to load icon library. Please try again later.',
+    iconLoadMore: 'Load more icons',
+    iconNoResults: 'No icons available right now.',
+    iconNoResultsWithQuery: 'No icons found for "{query}".',
         manageCategoriesTitle: 'Manage Categories',
         categoriesDesc: 'Create categories to organize bookmarks. When a category is deleted, bookmarks return to main list.',
         noCategories: 'No categories yet',
@@ -91,7 +98,8 @@ const translations = {
         alertInvalidImage: 'Please select a valid image file',
         alertImageTooLarge: 'Image size cannot exceed 5MB',
         alertImageUploaded: 'Image uploaded and applied!',
-        alertUploadError: 'Image upload failed, please try again'
+    alertUploadError: 'Image upload failed, please try again',
+    alertIconSelected: 'Icon selected: {icon}'
     },
     'zh-CN': {
         // Hero
@@ -128,6 +136,13 @@ const translations = {
         iconPlaceholder: '🌐 Emoji 或图片网址',
         iconHint: '可输入 Emoji、图片网址，或使用自动抓取',
         iconSearch: '搜索图标',
+    iconSearchHint: '从 Simple Icons 搜索品牌图标，例如：github、google、youtube',
+    iconSearchPlaceholder: '输入品牌名称...',
+    iconLoading: '图标库载入中…',
+    iconLoadError: '图标库载入失败，请稍后重试。',
+    iconLoadMore: '加载更多图标',
+    iconNoResults: '目前没有可用的图标。',
+    iconNoResultsWithQuery: '找不到符合「{query}」的图标。',
         manageCategoriesTitle: '管理分类',
         categoriesDesc: '建立分类来整理书签。删除分类时，书签会回到主列表。',
         noCategories: '还没有分类',
@@ -184,7 +199,8 @@ const translations = {
         alertInvalidImage: '请选择有效的图片文件',
         alertImageTooLarge: '图片大小不能超过 5MB',
         alertImageUploaded: '图片已上传并应用！',
-        alertUploadError: '图片上传失败，请重试'
+    alertUploadError: '图片上传失败，请重试',
+    alertIconSelected: '已选择图标：{icon}'
     },
     'zh-TW': {
         // Hero
@@ -221,6 +237,13 @@ const translations = {
         iconPlaceholder: '🌐 Emoji 或圖片網址',
         iconHint: '可輸入 Emoji、圖片網址，或使用自動抓取',
         iconSearch: '搜尋圖標',
+    iconSearchHint: '從 Simple Icons 搜尋品牌圖標，例如：github、google、youtube',
+    iconSearchPlaceholder: '輸入品牌名稱...',
+    iconLoading: '圖標庫載入中…',
+    iconLoadError: '圖標庫載入失敗，請稍後再試。',
+    iconLoadMore: '載入更多圖標',
+    iconNoResults: '目前沒有可用的圖標。',
+    iconNoResultsWithQuery: '找不到符合「{query}」的圖標。',
         manageCategoriesTitle: '管理分類',
         categoriesDesc: '建立分類來整理書籤。刪除分類時，書籤會回到主列表。',
         noCategories: '還沒有分類',
@@ -277,7 +300,8 @@ const translations = {
         alertInvalidImage: '請選擇有效的圖片檔案',
         alertImageTooLarge: '圖片大小不能超過 5MB',
         alertImageUploaded: '圖片已上傳並應用！',
-        alertUploadError: '圖片上傳失敗，請重試'
+    alertUploadError: '圖片上傳失敗，請重試',
+    alertIconSelected: '已選擇圖標：{icon}'
     }
 };
 
@@ -328,6 +352,17 @@ let bookmarks = [];
 let categories = [];
 let editingBookmarkId = null;
 let currentSearchEngine = 'google';
+let iconLibrary = [];
+let iconLibraryPromise = null;
+let iconResultsLimit = 60;
+
+const POPULAR_ICON_FALLBACK = [
+    'github', 'google', 'facebook', 'twitter', 'instagram', 'youtube',
+    'linkedin', 'reddit', 'discord', 'slack', 'spotify', 'netflix',
+    'amazon', 'apple', 'microsoft', 'dropbox', 'notion', 'figma',
+    'steam', 'twitch', 'tiktok', 'pinterest', 'telegram', 'whatsapp',
+    'gmail', 'outlook', 'yahoo', 'medium', 'stackoverflow', 'wikipedia'
+];
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
@@ -400,29 +435,30 @@ function updateUILanguage() {
     if (searchBtn) searchBtn.textContent = t('searchButton');
     
     // Toolbar buttons with icons
-    const addBtn = document.getElementById('addBookmarkBtn');
-    if (addBtn) {
-        const icon = addBtn.querySelector('i');
-        addBtn.innerHTML = '';
-        if (icon) addBtn.appendChild(icon.cloneNode(true));
-        addBtn.appendChild(document.createTextNode(' ' + t('addBookmark')));
-    }
-    
-    const manageCatBtn = document.getElementById('manageCategoriesBtn');
-    if (manageCatBtn) {
-        const icon = manageCatBtn.querySelector('i');
-        manageCatBtn.innerHTML = '';
-        if (icon) manageCatBtn.appendChild(icon.cloneNode(true));
-        manageCatBtn.appendChild(document.createTextNode(' ' + t('manageCategories')));
-    }
-    
-    const settingsBtn = document.getElementById('settingsBtn');
-    if (settingsBtn) {
-        const icon = settingsBtn.querySelector('i');
-        settingsBtn.innerHTML = '';
-        if (icon) settingsBtn.appendChild(icon.cloneNode(true));
-        settingsBtn.appendChild(document.createTextNode(' ' + t('settings')));
-    }
+    const quickButtons = [
+        { id: 'addBookmarkBtn', label: 'addBookmark' },
+        { id: 'manageCategoriesBtn', label: 'manageCategories' },
+        { id: 'settingsBtn', label: 'settings' },
+        { id: 'quickLangBtn', label: 'selectLanguage' },
+        { id: 'quickDarkModeBtn', label: document.body.classList.contains('dark-mode') ? 'lightMode' : 'darkMode' }
+    ];
+
+    quickButtons.forEach(({ id, label }) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        const icon = btn.querySelector('[data-lucide]');
+        if (icon) {
+            btn.innerHTML = '';
+            btn.appendChild(icon);
+        } else {
+            btn.innerHTML = '';
+        }
+        btn.setAttribute('title', t(label));
+        btn.setAttribute('aria-label', t(label));
+        if (id === 'quickDarkModeBtn' && icon) {
+            icon.setAttribute('data-lucide', document.body.classList.contains('dark-mode') ? 'sun' : 'moon');
+        }
+    });
     
     // Bookmarks header
     const bookmarkHeader = document.querySelector('.bookmark-card__header h2');
@@ -593,9 +629,12 @@ function loadAppearanceSettings() {
     const overlayRange = document.getElementById('overlayOpacity');
     const overlayValue = document.getElementById('overlayValue');
 
-    if (blurToggle) blurToggle.checked = blurEnabled === 'true' || blurEnabled === null;
-    if (blurRange) blurRange.value = blurAmount || 16;
-    if (blurValue) blurValue.textContent = blurRange ? blurRange.value : (blurAmount || 16);
+    const isBlurEnabled = blurEnabled === 'true';
+    const blurLevel = blurAmount !== null ? blurAmount : '0';
+
+    if (blurToggle) blurToggle.checked = isBlurEnabled;
+    if (blurRange) blurRange.value = blurLevel;
+    if (blurValue) blurValue.textContent = blurRange ? blurRange.value : blurLevel;
     if (overlaySelect) overlaySelect.value = overlayType;
     if (overlayRange) overlayRange.value = overlayOpacity !== null ? overlayOpacity : 0.4;
     if (overlayValue) overlayValue.textContent = Number(overlayRange ? overlayRange.value : (overlayOpacity !== null ? overlayOpacity : 0.4)).toFixed(2);
@@ -618,8 +657,8 @@ function saveAppearanceSettings() {
 }
 
 function applyAppearanceSettings() {
-    const blurEnabled = localStorage.getItem('blurEnabled') === 'true' || localStorage.getItem('blurEnabled') === null;
-    const blurAmount = localStorage.getItem('blurAmount') || 16;
+    const blurEnabled = localStorage.getItem('blurEnabled') === 'true';
+    const blurAmount = localStorage.getItem('blurAmount') !== null ? Number(localStorage.getItem('blurAmount')) : 0;
     const overlayType = localStorage.getItem('overlayType') || 'none';
     const overlayOpacity = localStorage.getItem('overlayOpacity') !== null ? Number(localStorage.getItem('overlayOpacity')) : 0.4;
 
@@ -973,11 +1012,7 @@ function getDefaultBookmarks() {
         { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: 'https://cdn.simpleicons.org/gmail', category: '' },
         { id: Date.now() + 3, name: 'X', url: 'https://x.com', icon: 'https://cdn.simpleicons.org/x', category: '' },
         { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: 'https://cdn.simpleicons.org/notion', category: '' },
-        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'https://cdn.simpleicons.org/instagram', category: '' },
-        { id: Date.now() + 6, name: 'LinkedIn', url: 'https://www.linkedin.com/', icon: 'https://cdn.simpleicons.org/linkedin/0A66C2', category: '' },
-        { id: Date.now() + 7, name: 'Amazon', url: 'https://www.amazon.com/', icon: 'https://cdn.simpleicons.org/amazon/FF9900', category: '' },
-        { id: Date.now() + 8, name: 'Microsoft', url: 'https://www.microsoft.com/', icon: 'https://cdn.simpleicons.org/microsoft/5E5E5E', category: '' },
-        { id: Date.now() + 9, name: 'Outlook', url: 'https://outlook.live.com/', icon: 'https://cdn.simpleicons.org/microsoftoutlook/0078D4', category: '' }
+        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'https://cdn.simpleicons.org/instagram', category: '' }
     ];
 }
 
@@ -1312,7 +1347,7 @@ function updateFabDarkModeIcon() {
     const fabDarkMode = document.getElementById('fabDarkMode');
     if (fabDarkMode) {
         const isDark = document.body.classList.contains('dark-mode');
-        const icon = fabDarkMode.querySelector('i');
+        const icon = fabDarkMode.querySelector('[data-lucide]');
         const span = fabDarkMode.querySelector('span');
         if (icon) {
             icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
@@ -1321,6 +1356,8 @@ function updateFabDarkModeIcon() {
         if (span) {
             span.textContent = isDark ? t('lightMode') || '日間模式' : t('darkMode') || '夜間模式';
         }
+        fabDarkMode.setAttribute('title', isDark ? t('lightMode') || '日間模式' : t('darkMode') || '夜間模式');
+        fabDarkMode.setAttribute('aria-label', isDark ? t('lightMode') || '日間模式' : t('darkMode') || '夜間模式');
     }
 }
 
@@ -1344,11 +1381,13 @@ function toggleDarkMode(forceState) {
     const quickBtn = document.getElementById('quickDarkModeBtn');
     if (quickBtn) {
         quickBtn.classList.toggle('active', isDark);
-        const icon = quickBtn.querySelector('i');
+        const icon = quickBtn.querySelector('[data-lucide]');
         if (icon) {
             icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
             if (window.lucide) window.lucide.createIcons();
         }
+        quickBtn.setAttribute('title', t(isDark ? 'lightMode' : 'darkMode'));
+        quickBtn.setAttribute('aria-label', t(isDark ? 'lightMode' : 'darkMode'));
     }
     
     // 更新設置面板的 checkbox
@@ -1356,18 +1395,7 @@ function toggleDarkMode(forceState) {
     if (toggle) toggle.checked = isDark;
     
     // 更新 FAB 圖標
-    const fabBtn = document.getElementById('fabDarkMode');
-    if (fabBtn) {
-        const fabIcon = fabBtn.querySelector('i');
-        if (fabIcon) {
-            fabIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-            if (window.lucide) window.lucide.createIcons();
-        }
-        const fabSpan = fabBtn.querySelector('span');
-        if (fabSpan) {
-            fabSpan.textContent = isDark ? (t('lightMode') || '日間模式') : (t('darkMode') || '夜間模式');
-        }
-    }
+    updateFabDarkModeIcon();
     
     // 顯示/隱藏深度設置
     const settings = document.getElementById('darkModeSettings');
@@ -1405,22 +1433,59 @@ function cycleLanguage() {
     changeLanguage(languages[nextIndex]);
 }
 
+function ensureIconLibrary() {
+    if (iconLibrary.length) {
+        return Promise.resolve(iconLibrary);
+    }
+    if (iconLibraryPromise) {
+        return iconLibraryPromise;
+    }
+    iconLibraryPromise = fetch('https://unpkg.com/simple-icons@latest/_data/simple-icons.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch icon list');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const icons = Array.isArray(data?.icons) ? data.icons : [];
+            iconLibrary = icons
+                .map(icon => icon.slug)
+                .filter(Boolean)
+                .sort((a, b) => a.localeCompare(b));
+            if (!iconLibrary.length) {
+                iconLibrary = [...POPULAR_ICON_FALLBACK];
+            }
+            return iconLibrary;
+        })
+        .catch(error => {
+            console.error('Icon library load failed:', error);
+            iconLibrary = [...POPULAR_ICON_FALLBACK];
+            return iconLibrary;
+        });
+    return iconLibraryPromise;
+}
+
 // 圖標搜索功能
-function openIconSearch() {
+async function openIconSearch() {
     openModal('iconSearchModal');
-    
-    // 常用品牌圖標
-    const popularIcons = [
-        'github', 'google', 'facebook', 'twitter', 'instagram', 'youtube',
-        'linkedin', 'reddit', 'discord', 'slack', 'spotify', 'netflix',
-        'amazon', 'apple', 'microsoft', 'dropbox', 'notion', 'figma',
-        'steam', 'twitch', 'tiktok', 'pinterest', 'telegram', 'whatsapp',
-        'gmail', 'outlook', 'yahoo', 'medium', 'stackoverflow', 'wikipedia'
-    ];
-    
-    renderIconGrid(popularIcons);
-    
-    // 搜索輸入
+
+    const grid = document.getElementById('iconSearchResults');
+    if (grid) {
+        grid.innerHTML = `<div class="icon-grid-message icon-grid-loading">${t('iconLoading') || '載入圖標庫中…'}</div>`;
+    }
+
+    iconResultsLimit = 60;
+
+    try {
+        const icons = await ensureIconLibrary();
+        renderIconGrid(icons, true);
+    } catch (error) {
+        if (grid) {
+            grid.innerHTML = `<div class="icon-grid-message icon-grid-error">${t('iconLoadError') || '圖標庫載入失敗，請稍後再試。'}</div>`;
+        }
+    }
+
     const searchInput = document.getElementById('iconSearchInput');
     if (searchInput) {
         searchInput.value = '';
@@ -1428,25 +1493,54 @@ function openIconSearch() {
         searchInput.oninput = function() {
             const query = this.value.toLowerCase().trim();
             if (query) {
-                const filtered = popularIcons.filter(icon => icon.includes(query));
-                renderIconGrid(filtered.length > 0 ? filtered : [query]);
+                const filtered = iconLibrary.filter(icon => icon.includes(query));
+                renderIconGrid(filtered, true, query);
             } else {
-                renderIconGrid(popularIcons);
+                renderIconGrid(iconLibrary, true);
             }
         };
     }
 }
 
-function renderIconGrid(icons) {
+function renderIconGrid(icons, resetLimit = false, query = '') {
     const grid = document.getElementById('iconSearchResults');
     if (!grid) return;
-    
-    grid.innerHTML = icons.map(icon => `
-        <div class="icon-grid-item" onclick="selectIcon('${icon}')">
-            <img src="https://cdn.simpleicons.org/${icon}" alt="${icon}" onerror="this.style.display='none'">
-            <span>${icon}</span>
-        </div>
-    `).join('');
+
+    if (resetLimit) {
+        iconResultsLimit = 60;
+    }
+
+    if (!icons || icons.length === 0) {
+        const message = query
+            ? (t('iconNoResultsWithQuery') || '找不到符合的圖標：{query}').replace('{query}', query)
+            : (t('iconNoResults') || '目前沒有可用的圖標');
+        grid.innerHTML = `<div class="icon-grid-message icon-grid-empty">${message}</div>`;
+        return;
+    }
+
+    const limitedIcons = icons.slice(0, iconResultsLimit);
+
+    grid.innerHTML = limitedIcons.map(icon => {
+        const safeIcon = icon.replace(/'/g, "\\'");
+        return `
+            <div class="icon-grid-item" onclick="selectIcon('${safeIcon}')">
+                <img src="https://cdn.simpleicons.org/${icon}" alt="${icon}" onerror="this.src='https://api.iconify.design/simple-icons:${icon}.svg';">
+                <span>${icon}</span>
+            </div>
+        `;
+    }).join('');
+
+    if (icons.length > iconResultsLimit) {
+        const loadMoreBtn = document.createElement('button');
+        loadMoreBtn.className = 'icon-load-more';
+        loadMoreBtn.type = 'button';
+        loadMoreBtn.textContent = t('iconLoadMore') || '載入更多圖標';
+        loadMoreBtn.addEventListener('click', () => {
+            iconResultsLimit += 60;
+            renderIconGrid(icons, false, query);
+        });
+        grid.appendChild(loadMoreBtn);
+    }
 }
 
 function selectIcon(iconName) {
@@ -1456,7 +1550,8 @@ function selectIcon(iconName) {
         iconInput.value = iconUrl;
     }
     closeModal('iconSearchModal');
-    alert(`已選擇圖標：${iconName}`);
+    const message = (t('alertIconSelected') || '已選擇圖標：{icon}').replace('{icon}', iconName);
+    alert(message);
 }
 
 // 暴露全局函數

@@ -589,6 +589,37 @@ input[type="checkbox"] {
   padding: 8px;
 }
 
+.icon-grid-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 24px 12px;
+  font-size: 14px;
+  color: var(--text-subtle);
+}
+
+.icon-grid-loading {
+  animation: icon-pulse 1.2s ease-in-out infinite;
+}
+
+.icon-load-more {
+  grid-column: 1 / -1;
+  margin: 8px auto 0;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(76,110,245,0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.icon-load-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(76,110,245,0.35);
+}
+
 .icon-grid-item {
   display: flex;
   flex-direction: column;
@@ -625,4 +656,14 @@ body.dark-mode .icon-grid-item {
 
 body.dark-mode .icon-grid-item:hover {
   background: rgba(76, 110, 245, 0.2);
+}
+
+body.dark-mode .icon-load-more {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.35);
+}
+
+@keyframes icon-pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
 }
