@@ -374,7 +374,7 @@ function t(key) {
 const searchEngines = {
     google: {
         url: 'https://www.google.com/search?q={query}',
-        icon: 'google',
+        icon: 'assets/google.svg',
         labelKey: 'engineGoogle',
         iconSize: 18,
         dropdownIconSize: 16
@@ -389,14 +389,14 @@ const searchEngines = {
     },
     duckduckgo: {
         url: 'https://duckduckgo.com/?q={query}',
-        icon: 'duckduckgo',
+        icon: 'assets/duckduckgo.svg',
         labelKey: 'engineDuckDuckGo',
         iconSize: 18,
         dropdownIconSize: 16
     },
     baidu: {
         url: 'https://www.baidu.com/s?wd={query}',
-        icon: 'baidu',
+        icon: 'assets/baidu.svg',
         labelKey: 'engineBaidu',
         iconSize: 18,
         dropdownIconSize: 16
@@ -731,7 +731,7 @@ function loadSettings() {
 // 載入背景設定
 function loadBackgroundSettings() {
     const bgType = localStorage.getItem('bgType') || 'image';
-    const bgValue = localStorage.getItem('bgValue') || 'https://img.zakk.au/file/1758520685708_71119.jpg';
+    const bgValue = localStorage.getItem('bgValue') || 'assets/default-background.jpg';
 
     const radio = document.querySelector(`input[name="bgType"][value="${bgType}"]`);
     if (radio) radio.checked = true;
@@ -1913,14 +1913,14 @@ function loadBookmarks() {
 function getDefaultBookmarks() {
     const baseId = Date.now();
     return [
-        { id: baseId, name: 'GitHub', url: 'https://github.com', icon: 'github', category: '' },
-        { id: baseId + 1, name: 'ChatGPT', url: 'https://chat.openai.com', icon: 'openai', category: '' },
-        { id: baseId + 2, name: 'Gemini', url: 'https://gemini.google.com', icon: 'googlegemini', category: '' },
-        { id: baseId + 3, name: 'YouTube', url: 'https://youtube.com', icon: 'youtube', category: '' },
-        { id: baseId + 4, name: 'Gmail', url: 'https://gmail.com', icon: 'gmail', category: '' },
-        { id: baseId + 5, name: 'X', url: 'https://x.com', icon: 'x', category: '' },
-        { id: baseId + 6, name: 'Notion', url: 'https://notion.so', icon: 'notion', category: '' },
-        { id: baseId + 7, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'instagram', category: '' }
+        { id: baseId, name: 'GitHub', url: 'https://github.com', icon: 'assets/github.svg', category: '' },
+        { id: baseId + 1, name: 'ChatGPT', url: 'https://chat.openai.com', icon: 'assets/openai.svg', category: '' },
+        { id: baseId + 2, name: 'Gemini', url: 'https://gemini.google.com', icon: 'assets/googlegemini.svg', category: '' },
+        { id: baseId + 3, name: 'YouTube', url: 'https://youtube.com', icon: 'assets/youtube.svg', category: '' },
+        { id: baseId + 4, name: 'Gmail', url: 'https://gmail.com', icon: 'assets/gmail.svg', category: '' },
+        { id: baseId + 5, name: 'X', url: 'https://x.com', icon: 'assets/x.svg', category: '' },
+        { id: baseId + 6, name: 'Notion', url: 'https://notion.so', icon: 'assets/notion.svg', category: '' },
+        { id: baseId + 7, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'assets/instagram.svg', category: '' }
     ];
 }
 
