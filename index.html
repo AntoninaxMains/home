@@ -241,41 +241,29 @@
                         </section>
                     </div>
 
-                    <!-- 重置區域 -->
-                    <div class="settings-reset-section">
-                        <div class="settings-reset-card settings-reset-card--combined">
-                            <div class="settings-reset-header">
+                    <!-- 清理與重置 -->
+                    <div class="settings-layout" style="margin-top: 24px;">
+                        <section class="settings-card">
+                            <header class="settings-card__header">
                                 <i data-lucide="trash-2"></i>
-                                <h4>清理與重置</h4>
+                                <h4 data-i18n="clearSearchHistory">清空搜尋記錄</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <p data-i18n="clearSearchHistoryDescription">刪除所有搜尋歷史記錄。</p>
+                                <button id="clearSearchHistoryBtn" type="button" class="btn primary" data-i18n="clearSearchHistoryAction" style="width: 100%; margin-top: 8px;">立即清空</button>
                             </div>
-                            <div class="settings-reset-content">
-                                <div class="settings-reset-item">
-                                    <div class="settings-reset-item__text">
-                                        <h5 data-i18n="clearSearchHistory">清空搜尋記錄</h5>
-                                        <p data-i18n="clearSearchHistoryDescription">刪除所有搜尋歷史記錄。</p>
-                                    </div>
-                                    <button id="clearSearchHistoryBtn" type="button" class="btn ghost" data-i18n="clearSearchHistoryAction">立即清空</button>
-                                </div>
-                                <div class="settings-reset-divider"></div>
-                                <div class="settings-reset-item">
-                                    <div class="settings-reset-item__text">
-                                        <h5 data-i18n="clearSettings">重設所有設定</h5>
-                                        <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
-                                    </div>
-                                    <button id="resetSettings" type="button" class="btn ghost btn-danger" data-i18n="clearSettingsAction">立即重設</button>
-                                </div>
-                                <div class="settings-reset-divider"></div>
-                                <div class="settings-cache-info">
-                                    <div class="settings-cache-info__icon">
-                                        <i data-lucide="database"></i>
-                                    </div>
-                                    <div class="settings-cache-info__text">
-                                        <span class="settings-cache-label">緩存使用情況</span>
-                                        <span class="settings-cache-size" id="cacheSize">計算中...</span>
-                                    </div>
-                                </div>
+                        </section>
+
+                        <section class="settings-card">
+                            <header class="settings-card__header">
+                                <i data-lucide="refresh-cw"></i>
+                                <h4 data-i18n="clearSettings">重設所有設定</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
+                                <button id="resetSettings" type="button" class="btn primary" data-i18n="clearSettingsAction" style="width: 100%; margin-top: 8px;">立即重設</button>
                             </div>
-                        </div>
+                        </section>
                     </div>
                 </div>
                 <footer class="modal-footer">

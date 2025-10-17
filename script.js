@@ -133,7 +133,7 @@ const translations = {
         searchPlaceholder: '搜索任何内容...',
         searchButton: '搜索',
     searchOpenLink: '打开链接',
-    searchSuggestionsTitle: '猜你想搜',
+    searchSuggestionsTitle: '搜索联想',
     searchHistoryTitle: '搜索历史',
     noSearchHistory: '暂无搜索历史',
         // Toolbar
@@ -258,7 +258,7 @@ const translations = {
         searchPlaceholder: '搜尋任何內容...',
         searchButton: '搜尋',
     searchOpenLink: '打開連結',
-    searchSuggestionsTitle: '猜你想搜尋',
+    searchSuggestionsTitle: '搜尋聯想',
     searchHistoryTitle: '搜尋歷史',
     noSearchHistory: '暫無搜尋歷史',
         // Toolbar
@@ -901,9 +901,6 @@ function handleClearSearchHistory(event) {
 
     // 更新搜索建議顯示
     updateSearchSuggestions('');
-    
-    // 更新緩存大小
-    updateCacheSize();
 
     setTimeout(() => {
         if (button) {
@@ -1126,7 +1123,6 @@ function initEventListeners() {
     // 設定按鈕
     document.getElementById('settingsBtn').addEventListener('click', function() {
         openModal('settingsModal');
-        updateCacheSize(); // 更新緩存大小顯示
     });
     
     document.getElementById('saveSettings').addEventListener('click', saveSettings);
@@ -1395,9 +1391,12 @@ async function updateSearchSuggestions(query) {
     const callToken = ++latestSuggestQueryToken;
     const trimmed = (query || '').trim();
     
+    console.log('updateSearchSuggestions 調用，query:', trimmed);
+    
     // 如果沒有輸入，只顯示搜索歷史
     if (!trimmed) {
         const historyOnly = searchHistory.slice(0, SEARCH_SUGGESTION_LIMIT);
+        console.log('顯示搜索歷史:', historyOnly);
         renderSuggestionList(container, historyOnly, false);
         return;
     }
@@ -1405,8 +1404,10 @@ async function updateSearchSuggestions(query) {
     // 檢查是否需要遠端建議（輸入 1 個字符就開始）
     const minLength = 1;
     if (trimmed.length >= minLength && !isLikelyUrl(trimmed)) {
+        console.log('開始獲取遠程建議...');
         // 獲取遠端建議
         const remoteSuggestions = await fetchDuckDuckGoSuggestions(trimmed);
+        console.log('遠程建議結果:', remoteSuggestions);
         if (callToken !== latestSuggestQueryToken) return;
         
         if (remoteSuggestions && remoteSuggestions.length > 0) {
@@ -1414,6 +1415,7 @@ async function updateSearchSuggestions(query) {
             const localSuggestions = buildLocalSuggestions(query);
             // 合併本地和遠端建議
             const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
+            console.log('合併後的建議:', combined);
             renderSuggestionList(container, combined, true);
             return;
         }
@@ -1421,6 +1423,7 @@ async function updateSearchSuggestions(query) {
 
     // 如果沒有遠端建議，只顯示本地建議
     const localSuggestions = buildLocalSuggestions(query);
+    console.log('只有本地建議:', localSuggestions);
     renderSuggestionList(container, localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT), true);
 }
 
@@ -1449,8 +1452,11 @@ function buildLocalSuggestions(query) {
 }
 
 function renderSuggestionList(container, suggestions, hasQuery = false) {
+    console.log('renderSuggestionList 被調用，suggestions:', suggestions, 'hasQuery:', hasQuery);
+    
     // 如果沒有建議
     if (!suggestions || suggestions.length === 0) {
+        console.log('沒有建議，隱藏容器');
         // 沒有輸入且沒有歷史記錄，顯示提示
         if (!hasQuery && searchHistory.length === 0) {
             container.innerHTML = `<div class="suggestions-title">${t('searchHistoryTitle')}</div><div class="suggestion-list"><div class="hint" style="padding: 12px; text-align: center;">${t('noSearchHistory') || '暫無搜尋歷史'}</div></div>`;
@@ -1466,6 +1472,7 @@ function renderSuggestionList(container, suggestions, hasQuery = false) {
     // 根據是否有輸入決定標題
     const titleKey = hasQuery ? 'searchSuggestionsTitle' : 'searchHistoryTitle';
     const title = `<div class="suggestions-title">${t(titleKey)}</div>`;
+    console.log('使用標題:', titleKey, '翻譯為:', t(titleKey));
     
     const list = suggestions.map(item => {
         const value = escapeAttribute(item);
@@ -1474,6 +1481,7 @@ function renderSuggestionList(container, suggestions, hasQuery = false) {
     }).join('');
     container.innerHTML = `${title}<div class="suggestion-list">${list}</div>`;
     container.classList.remove('hidden');
+    console.log('建議列表已渲染，共', suggestions.length, '項');
 }
 
 function mergeSuggestions(localSuggestions, remoteSuggestions, limit = SEARCH_SUGGESTION_LIMIT) {
@@ -1523,6 +1531,7 @@ function cleanSuggestionText(value) {
 }
 
 function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMIT) {
+    console.log('extractDuckDuckGoSuggestions 被調用，payload:', payload, 'query:', query);
     const suggestions = [];
     const seen = new Set();
 
@@ -1539,6 +1548,7 @@ function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_
     if (Array.isArray(payload)) {
         // 標準格式：第二個元素是建議數組
         if (payload.length >= 2 && Array.isArray(payload[1])) {
+            console.log('使用標準格式解析，payload[1]:', payload[1]);
             payload[1].forEach(item => {
                 if (typeof item === 'string') {
                     add(item);
@@ -1548,6 +1558,7 @@ function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_
             });
         } else {
             // 備用格式：直接是建議數組
+            console.log('使用備用格式解析');
             payload.forEach(item => {
                 if (!item) return;
                 if (typeof item === 'string') {
@@ -1559,6 +1570,7 @@ function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_
         }
     } else if (payload && typeof payload === 'object') {
         // 對象格式
+        console.log('使用對象格式解析');
         if (Array.isArray(payload.phrase)) {
             payload.phrase.forEach(add);
         } else if (Array.isArray(payload.results)) {
@@ -1568,7 +1580,9 @@ function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_
         }
     }
 
-    return suggestions.slice(0, limit);
+    const result = suggestions.slice(0, limit);
+    console.log('extractDuckDuckGoSuggestions 返回結果:', result);
+    return result;
 }
 
 function getDuckDuckGoLocaleParams(lang = currentLanguage) {
