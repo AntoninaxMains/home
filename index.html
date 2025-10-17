@@ -120,6 +120,7 @@
                 </header>
                 <div class="modal-body settings-body">
                     <div class="settings-layout">
+                        <!-- 搜尋引擎 -->
                         <section class="settings-card">
                             <header class="settings-card__header">
                                 <i data-lucide="search"></i>
@@ -131,7 +132,46 @@
                                 <span class="hint" data-i18n="customSearchHint">使用 {query} 作為搜尋關鍵字的佔位符</span>
                             </div>
                         </section>
+
+                        <!-- 語言設置 -->
                         <section class="settings-card">
+                            <header class="settings-card__header">
+                                <i data-lucide="languages"></i>
+                                <h4 data-i18n="languageSection">語言</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <label for="languageSelect" data-i18n="selectLanguage">選擇語言</label>
+                                <select id="languageSelect" class="settings-select">
+                                    <option value="en">English</option>
+                                    <option value="zh-CN">简体中文</option>
+                                    <option value="zh-TW">正體中文</option>
+                                </select>
+                            </div>
+                        </section>
+
+                        <!-- 夜間模式 -->
+                        <section class="settings-card">
+                            <header class="settings-card__header">
+                                <i data-lucide="moon"></i>
+                                <h4 data-i18n="darkModeSection">夜間模式</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <div class="settings-field">
+                                    <label class="settings-inline">
+                                        <input type="checkbox" id="darkModeToggle" />
+                                        <span data-i18n="enableDarkMode">啟用夜間模式</span>
+                                    </label>
+                                </div>
+                                <div class="settings-field" id="darkModeSettings">
+                                    <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
+                                    <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
+                                    <span class="range-value" id="darkModeDepthValue">35%</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 背景設定 -->
+                        <section class="settings-card settings-card--wide">
                             <header class="settings-card__header">
                                 <i data-lucide="palette"></i>
                                 <h4 data-i18n="backgroundSection">背景設定</h4>
@@ -170,7 +210,9 @@
                                 </div>
                             </div>
                         </section>
-                        <section class="settings-card">
+
+                        <!-- 顯示效果 -->
+                        <section class="settings-card settings-card--wide">
                             <header class="settings-card__header">
                                 <i data-lucide="image"></i>
                                 <h4 data-i18n="appearanceSection">顯示效果（外觀）</h4>
@@ -197,47 +239,24 @@
                                 </div>
                             </div>
                         </section>
-                        <section class="settings-card">
-                            <header class="settings-card__header">
-                                <i data-lucide="sun"></i>
-                                <h4 data-i18n="darkModeSection">夜間模式</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <div class="settings-field">
-                                    <label class="settings-inline">
-                                        <input type="checkbox" id="darkModeToggle" />
-                                        <span data-i18n="enableDarkMode">啟用夜間模式</span>
-                                    </label>
-                                </div>
-                                <div class="settings-field" id="darkModeSettings">
-                                    <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
-                                    <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
-                                    <span class="range-value" id="darkModeDepthValue">35%</span>
-                                </div>
-                                <div class="settings-field">
-                                    <label for="languageSelect" data-i18n="selectLanguage">選擇語言</label>
-                                    <select id="languageSelect" class="settings-select">
-                                        <option value="en">English</option>
-                                        <option value="zh-CN">简体中文</option>
-                                        <option value="zh-TW">正體中文</option>
-                                    </select>
-                                </div>
+                    </div>
+
+                    <!-- 重置區域 -->
+                    <div class="settings-reset-section">
+                        <div class="settings-reset-card">
+                            <div class="settings-reset-card__text">
+                                <h5 data-i18n="clearSearchHistory">清空搜尋記錄</h5>
+                                <p data-i18n="clearSearchHistoryDescription">刪除所有搜尋歷史記錄。</p>
                             </div>
-                        </section>
-                    </div>
-                    <div class="settings-reset-card">
-                        <div class="settings-reset-card__text">
-                            <h5 data-i18n="clearSettings">重設所有設定</h5>
-                            <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
+                            <button id="clearSearchHistoryBtn" type="button" class="btn ghost" data-i18n="clearSearchHistoryAction">立即清空</button>
                         </div>
-                        <button id="resetSettings" type="button" class="btn ghost" data-i18n="clearSettingsAction">立即重設</button>
-                    </div>
-                    <div class="settings-reset-card">
-                        <div class="settings-reset-card__text">
-                            <h5 data-i18n="clearSearchHistory">清空搜尋記錄</h5>
-                            <p data-i18n="clearSearchHistoryDescription">刪除所有搜尋歷史記錄。</p>
+                        <div class="settings-reset-card">
+                            <div class="settings-reset-card__text">
+                                <h5 data-i18n="clearSettings">重設所有設定</h5>
+                                <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
+                            </div>
+                            <button id="resetSettings" type="button" class="btn ghost" data-i18n="clearSettingsAction">立即重設</button>
                         </div>
-                        <button id="clearSearchHistoryBtn" type="button" class="btn ghost" data-i18n="clearSearchHistoryAction">立即清空</button>
                     </div>
                 </div>
                 <footer class="modal-footer">

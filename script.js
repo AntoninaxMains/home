@@ -1398,29 +1398,26 @@ async function updateSearchSuggestions(query) {
         return;
     }
 
-    // 有輸入時，先顯示本地建議
-    const localSuggestions = buildLocalSuggestions(query);
-    const initialSuggestions = localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT);
-    renderSuggestionList(container, initialSuggestions, true);
-
-    // 檢查是否需要遠端建議
-    const minLength = getRemoteSuggestionMinLength();
-    if (trimmed.length < minLength || isLikelyUrl(trimmed)) {
-        if (remoteSuggestCancel) {
-            remoteSuggestCancel();
-            remoteSuggestCancel = null;
+    // 檢查是否需要遠端建議（輸入 1 個字符就開始）
+    const minLength = 1;
+    if (trimmed.length >= minLength && !isLikelyUrl(trimmed)) {
+        // 獲取遠端建議
+        const remoteSuggestions = await fetchDuckDuckGoSuggestions(trimmed);
+        if (callToken !== latestSuggestQueryToken) return;
+        
+        if (remoteSuggestions && remoteSuggestions.length > 0) {
+            // 獲取本地建議
+            const localSuggestions = buildLocalSuggestions(query);
+            // 合併本地和遠端建議
+            const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
+            renderSuggestionList(container, combined, true);
+            return;
         }
-        return;
     }
 
-    // 獲取遠端建議並合併
-    const remoteSuggestions = await fetchDuckDuckGoSuggestions(trimmed);
-    if (callToken !== latestSuggestQueryToken) return;
-    
-    if (remoteSuggestions && remoteSuggestions.length > 0) {
-        const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
-        renderSuggestionList(container, combined, true);
-    }
+    // 如果沒有遠端建議，只顯示本地建議
+    const localSuggestions = buildLocalSuggestions(query);
+    renderSuggestionList(container, localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT), true);
 }
 
 function buildLocalSuggestions(query) {
