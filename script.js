@@ -38,6 +38,7 @@ const translations = {
         iconHint: 'Enter emoji, image URL, or use auto fetch',
         iconSearch: 'Search Icon',
     iconSearchHint: 'Search Simple Icons for brand logos, e.g. github, google, youtube',
+    iconSearchLibraryLink: 'Open Simple Icons library',
     iconSearchPlaceholder: 'Enter a brand name...',
     iconLoading: 'Loading icon library…',
     iconLoadError: 'Unable to load icon library. Please try again later.',
@@ -150,6 +151,7 @@ const translations = {
         iconHint: '可输入 Emoji、图片网址，或使用自动抓取',
         iconSearch: '搜索图标',
     iconSearchHint: '从 Simple Icons 搜索品牌图标，例如：github、google、youtube',
+    iconSearchLibraryLink: '前往 Simple Icons 图标库',
     iconSearchPlaceholder: '输入品牌名称...',
     iconLoading: '图标库载入中…',
     iconLoadError: '图标库载入失败，请稍后重试。',
@@ -262,6 +264,7 @@ const translations = {
         iconHint: '可輸入 Emoji、圖片網址，或使用自動抓取',
         iconSearch: '搜尋圖標',
     iconSearchHint: '從 Simple Icons 搜尋品牌圖標，例如：github、google、youtube',
+    iconSearchLibraryLink: '前往 Simple Icons 圖標庫',
     iconSearchPlaceholder: '輸入品牌名稱...',
     iconLoading: '圖標庫載入中…',
     iconLoadError: '圖標庫載入失敗，請稍後再試。',
@@ -392,7 +395,11 @@ function getIconMarkup(descriptor, size = 20, label = '') {
         return `<img src="${descriptor}" alt="${escapeHtml(label || descriptor)}" style="width:${size}px;height:${size}px;object-fit:contain;" loading="lazy">`;
     }
     const altText = escapeHtml(label || descriptor);
-    return `<img src="${getBrandIconUrl(descriptor)}" alt="${altText}" style="width:${size}px;height:${size}px;object-fit:contain;" loading="lazy">`;
+    const slug = resolveIconSlug(descriptor);
+    const encodedSlug = encodeURIComponent(slug);
+    const fallbackSrc = `https://api.iconify.design/simple-icons:${encodedSlug}.svg`;
+    const mainSrc = getBrandIconUrl(slug);
+    return `<img src="${mainSrc}" alt="${altText}" style="width:${size}px;height:${size}px;object-fit:contain;" loading="lazy" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${fallbackSrc}';}else{this.remove();}">`;
 }
 
 function escapeHtml(value) {
