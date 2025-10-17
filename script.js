@@ -21,6 +21,7 @@ const gradientPresets = {
 let bookmarks = [];
 let categories = [];
 let editingBookmarkId = null;
+let currentSearchEngine = 'google';
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
@@ -36,12 +37,15 @@ function loadSettings() {
     const savedEngine = localStorage.getItem('searchEngine') || 'google';
     const customUrl = localStorage.getItem('customSearchUrl') || '';
     
-    document.getElementById('searchEngine').value = savedEngine;
+    currentSearchEngine = savedEngine;
     document.getElementById('customSearchUrl').value = customUrl;
     
     if (savedEngine === 'custom') {
         searchEngines.custom.url = customUrl;
     }
+    
+    // 設置活動標籤
+    setActiveEngineTab(savedEngine);
     
     // 載入背景設定
     loadBackgroundSettings();
@@ -126,13 +130,19 @@ function initEventListeners() {
         }
     });
     
-    // 搜尋引擎選擇
-    document.getElementById('searchEngine').addEventListener('change', function(e) {
-        localStorage.setItem('searchEngine', e.target.value);
-        updateSearchIcon();
-        if (e.target.value === 'custom') {
-            openModal('settingsModal');
-        }
+    // 搜尋引擎標籤切換
+    document.querySelectorAll('.engine-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const engine = this.dataset.engine;
+            currentSearchEngine = engine;
+            localStorage.setItem('searchEngine', engine);
+            setActiveEngineTab(engine);
+            updateSearchIcon();
+            
+            if (engine === 'custom' && !searchEngines.custom.url) {
+                openModal('settingsModal');
+            }
+        });
     });
     
     // 設定按鈕
@@ -196,10 +206,19 @@ function initEventListeners() {
     });
 }
 
+// 設置活動標籤
+function setActiveEngineTab(engine) {
+    document.querySelectorAll('.engine-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.engine === engine) {
+            tab.classList.add('active');
+        }
+    });
+}
+
 // 更新搜尋圖示
 function updateSearchIcon() {
-    const engine = document.getElementById('searchEngine').value;
-    document.getElementById('searchEngineIcon').textContent = searchEngines[engine].icon;
+    document.getElementById('searchEngineIcon').textContent = searchEngines[currentSearchEngine].icon;
 }
 
 // 執行搜尋
@@ -207,10 +226,9 @@ function performSearch() {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) return;
     
-    const engine = document.getElementById('searchEngine').value;
-    let searchUrl = searchEngines[engine].url;
+    let searchUrl = searchEngines[currentSearchEngine].url;
     
-    if (engine === 'custom' && !searchUrl) {
+    if (currentSearchEngine === 'custom' && !searchUrl) {
         alert('請先設定自訂搜尋引擎 URL');
         openModal('settingsModal');
         return;
@@ -233,11 +251,11 @@ function saveCategories() {
 
 function updateCategorySelect() {
     const select = document.getElementById('bookmarkCategory');
-    select.innerHTML = '<option value="">選擇分類...</option>';
+    select.innerHTML = '<option value="">主列表（不分類）</option>';
     categories.forEach(cat => {
         select.innerHTML += `<option value="${cat}">${cat}</option>`;
     });
-    select.innerHTML += '<option value="new">+ 新增分類</option>';
+    select.innerHTML += '<option value="new">+ 建立新分類</option>';
 }
 
 // 書籤管理
@@ -309,8 +327,8 @@ function createCategorySection(category, categoryBookmarks) {
     header.innerHTML = `
         <div class="category-title">📁 ${category}</div>
         <div class="category-actions">
-            <button class="add-btn" onclick="openBookmarkModal(null, '${category}')">+ 新增</button>
-            ${category !== '未分類' ? `<button class="manage-btn" onclick="deleteCategory('${category}')">刪除分類</button>` : ''}
+            <button class="add-btn" onclick="openBookmarkModal(null, '${category.replace(/'/g, "\\'")}')">+ 新增</button>
+            <button class="manage-btn" onclick="deleteCategory('${category.replace(/'/g, "\\'")}')">刪除分類</button>
         </div>
     `;
     

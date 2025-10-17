@@ -12,16 +12,33 @@
         <!-- 搜尋區域 -->
         <div class="search-section">
             <h1 class="logo">Start Page</h1>
-            <div class="search-box">
-                <div class="search-engine-icon" id="searchEngineIcon">🔍</div>
-                <input type="text" id="searchInput" placeholder="搜尋任何內容..." autocomplete="off">
-                <select id="searchEngine" class="search-engine-select">
-                    <option value="google">Google</option>
-                    <option value="bing">Bing</option>
-                    <option value="duckduckgo">DuckDuckGo</option>
-                    <option value="baidu">百度</option>
-                    <option value="custom">自訂</option>
-                </select>
+            <div class="search-container">
+                <div class="search-box">
+                    <div class="search-engine-icon" id="searchEngineIcon">🔍</div>
+                    <input type="text" id="searchInput" placeholder="搜尋任何內容..." autocomplete="off">
+                </div>
+                <div class="search-engine-tabs">
+                    <button class="engine-tab active" data-engine="google">
+                        <span class="engine-icon">🔍</span>
+                        <span>Google</span>
+                    </button>
+                    <button class="engine-tab" data-engine="bing">
+                        <span class="engine-icon">🔎</span>
+                        <span>Bing</span>
+                    </button>
+                    <button class="engine-tab" data-engine="duckduckgo">
+                        <span class="engine-icon">🦆</span>
+                        <span>DuckDuckGo</span>
+                    </button>
+                    <button class="engine-tab" data-engine="baidu">
+                        <span class="engine-icon">📍</span>
+                        <span>百度</span>
+                    </button>
+                    <button class="engine-tab" data-engine="custom">
+                        <span class="engine-icon">⚙️</span>
+                        <span>自訂</span>
+                    </button>
+                </div>
             </div>
         </div>
 
