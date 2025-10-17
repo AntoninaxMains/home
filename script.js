@@ -1,10 +1,292 @@
-// 搜尋引擎配置（使用 Lucide icon names）
+// 多語言配置
+const translations = {
+    'en': {
+        // Hero
+        heroTitle: 'Start Page',
+        heroSubtitle: 'Quick search and manage your bookmarks, all starts here.',
+        // Search
+        searchPlaceholder: 'Search anything...',
+        searchButton: 'Search',
+        // Toolbar
+        addBookmark: 'Add Bookmark',
+        manageCategories: 'Manage Categories',
+        settings: 'Settings',
+        // Bookmarks
+        myBookmarks: 'My Bookmarks',
+        bookmarksDesc: 'Your frequently visited sites, click to open.',
+        noBookmarks: 'No bookmarks yet, click the button above to add!',
+        // Modals
+        addBookmarkTitle: 'Add Bookmark',
+        editBookmarkTitle: 'Edit Bookmark',
+        categoryLabel: 'Category',
+        nameLabel: 'Name',
+        urlLabel: 'URL',
+        iconLabel: 'Icon',
+        autoFetch: 'Auto Fetch',
+        save: 'Save',
+        cancel: 'Cancel',
+        done: 'Done',
+        mainList: 'Main List (No Category)',
+        newCategory: '+ Create New Category',
+        enterNewCategory: 'Enter new category',
+        enterCategoryName: 'Enter new category name',
+        namePlaceholder: 'Website name',
+        urlPlaceholder: 'https://example.com',
+        iconPlaceholder: '🌐 Emoji or image URL',
+        iconHint: 'Enter emoji, image URL, or use auto fetch',
+        iconSearch: 'Search Icon',
+        manageCategoriesTitle: 'Manage Categories',
+        categoriesDesc: 'Create categories to organize bookmarks. When a category is deleted, bookmarks return to main list.',
+        noCategories: 'No categories yet',
+        addCategoryBtn: '+ Add',
+        deleteCategory: 'Delete',
+        // Settings
+        settingsTitle: 'Settings',
+        searchEngineSection: 'Search Engine',
+        customSearchUrl: 'Custom Search Engine URL',
+        customSearchHint: 'Use {query} as the search keyword placeholder',
+        backgroundSection: 'Background Settings',
+        backgroundType: 'Background Type',
+        gradient: 'Gradient',
+        image: 'Image',
+        solidColor: 'Solid Color',
+        selectGradient: 'Select Gradient',
+        imageUrl: 'Image URL',
+        imageHint: 'Tip: Use Unsplash, e.g. https://source.unsplash.com/1920x1080/?nature',
+        selectColor: 'Select Color',
+        appearanceSection: 'Display Effects (Appearance)',
+        backgroundBlur: 'Background Blur',
+        enableBlur: 'Enable Background Blur',
+        blurDepth: 'Blur Depth',
+        backgroundFilter: 'Background Filter',
+        filterNone: 'None',
+        filterWhite: 'White Filter',
+        filterBlack: 'Black Filter',
+        filterOpacity: 'Filter Opacity',
+        languageSection: 'Language',
+        selectLanguage: 'Select Language',
+        darkModeSection: 'Dark Mode',
+        enableDarkMode: 'Enable Dark Mode',
+        darkModeDepth: 'Dark Mode Depth',
+        // Gradient presets
+        gradientDefault: 'Sky Blue',
+        gradientSunset: 'Sunset Orange',
+        gradientOcean: 'Ocean Blue',
+        gradientPurple: 'Dreamy Purple',
+        gradientGreen: 'Forest Green',
+        gradientDark: 'Starry Night',
+        // Alerts
+        alertFillRequired: 'Please fill in name and URL',
+        alertEnterCategory: 'Please enter new category name',
+        alertCategoryExists: 'This category already exists',
+        alertDeleteBookmark: 'Are you sure you want to delete this bookmark?',
+        alertDeleteCategory: 'Are you sure you want to delete "{category}" category?\nBookmarks in this category will be moved to main list.',
+        alertSetCustomUrl: 'Please set custom search engine URL first',
+        alertIconFetched: 'Icon automatically filled!',
+        alertInvalidUrl: 'Please confirm URL format is correct'
+    },
+    'zh-CN': {
+        // Hero
+        heroTitle: 'Start Page',
+        heroSubtitle: '快速搜索、管理收藏，一切从这里开始。',
+        // Search
+        searchPlaceholder: '搜索任何内容...',
+        searchButton: '搜索',
+        // Toolbar
+        addBookmark: '新增书签',
+        manageCategories: '管理分类',
+        settings: '设置',
+        // Bookmarks
+        myBookmarks: '我的书签',
+        bookmarksDesc: '常用网站都在这里，点击即可打开。',
+        noBookmarks: '还没有书签，点击上方按钮新增！',
+        // Modals
+        addBookmarkTitle: '新增书签',
+        editBookmarkTitle: '编辑书签',
+        categoryLabel: '分类',
+        nameLabel: '名称',
+        urlLabel: '网址',
+        iconLabel: '图标',
+        autoFetch: '自动抓取',
+        save: '保存',
+        cancel: '取消',
+        done: '完成',
+        mainList: '主列表（不分类）',
+        newCategory: '+ 建立新分类',
+        enterNewCategory: '输入新分类',
+        enterCategoryName: '输入新分类名称',
+        namePlaceholder: '网站名称',
+        urlPlaceholder: 'https://example.com',
+        iconPlaceholder: '🌐 Emoji 或图片网址',
+        iconHint: '可输入 Emoji、图片网址，或使用自动抓取',
+        iconSearch: '搜索图标',
+        manageCategoriesTitle: '管理分类',
+        categoriesDesc: '建立分类来整理书签。删除分类时，书签会回到主列表。',
+        noCategories: '还没有分类',
+        addCategoryBtn: '+ 新增',
+        deleteCategory: '删除',
+        // Settings
+        settingsTitle: '设置',
+        searchEngineSection: '搜索引擎',
+        customSearchUrl: '自定义搜索引擎 URL',
+        customSearchHint: '使用 {query} 作为搜索关键字的占位符',
+        backgroundSection: '背景设置',
+        backgroundType: '背景类型',
+        gradient: '渐层',
+        image: '图片',
+        solidColor: '纯色',
+        selectGradient: '选择渐层',
+        imageUrl: '图片网址',
+        imageHint: '提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature',
+        selectColor: '选择颜色',
+        appearanceSection: '显示效果（外观）',
+        backgroundBlur: '背景模糊',
+        enableBlur: '启用背景模糊',
+        blurDepth: '模糊深度',
+        backgroundFilter: '背景滤镜',
+        filterNone: '无',
+        filterWhite: '白色滤镜',
+        filterBlack: '黑色滤镜',
+        filterOpacity: '滤镜透明度',
+        languageSection: '语言',
+        selectLanguage: '选择语言',
+        darkModeSection: '夜间模式',
+        enableDarkMode: '启用夜间模式',
+        darkModeDepth: '深色强度',
+        // Gradient presets
+        gradientDefault: '天空蓝',
+        gradientSunset: '日落橘红',
+        gradientOcean: '海洋蓝绿',
+        gradientPurple: '梦幻紫',
+        gradientGreen: '森林绿',
+        gradientDark: '星夜黑',
+        // Alerts
+        alertFillRequired: '请填写名称和网址',
+        alertEnterCategory: '请输入新分类名称',
+        alertCategoryExists: '此分类已存在',
+        alertDeleteBookmark: '确定要删除这个书签吗？',
+        alertDeleteCategory: '确定要删除「{category}」分类吗？\n此分类下的书签将移至主列表。',
+        alertSetCustomUrl: '请先设置自定义搜索引擎 URL',
+        alertIconFetched: '已自动填入网站图标！',
+        alertInvalidUrl: '无法获取图标，请确认网址格式正确'
+    },
+    'zh-TW': {
+        // Hero
+        heroTitle: 'Start Page',
+        heroSubtitle: '快速搜尋、管理收藏，一切從這裡開始。',
+        // Search
+        searchPlaceholder: '搜尋任何內容...',
+        searchButton: '搜尋',
+        // Toolbar
+        addBookmark: '新增書籤',
+        manageCategories: '管理分類',
+        settings: '設定',
+        // Bookmarks
+        myBookmarks: '我的書籤',
+        bookmarksDesc: '常用網站都在這裡，點擊即可開啟。',
+        noBookmarks: '還沒有書籤，點擊上方按鈕新增！',
+        // Modals
+        addBookmarkTitle: '新增書籤',
+        editBookmarkTitle: '編輯書籤',
+        categoryLabel: '分類',
+        nameLabel: '名稱',
+        urlLabel: '網址',
+        iconLabel: '圖示',
+        autoFetch: '自動抓取',
+        save: '儲存',
+        cancel: '取消',
+        done: '完成',
+        mainList: '主列表（不分類）',
+        newCategory: '+ 建立新分類',
+        enterNewCategory: '輸入新分類',
+        enterCategoryName: '輸入新分類名稱',
+        namePlaceholder: '網站名稱',
+        urlPlaceholder: 'https://example.com',
+        iconPlaceholder: '🌐 Emoji 或圖片網址',
+        iconHint: '可輸入 Emoji、圖片網址，或使用自動抓取',
+        iconSearch: '搜尋圖標',
+        manageCategoriesTitle: '管理分類',
+        categoriesDesc: '建立分類來整理書籤。刪除分類時，書籤會回到主列表。',
+        noCategories: '還沒有分類',
+        addCategoryBtn: '+ 新增',
+        deleteCategory: '刪除',
+        // Settings
+        settingsTitle: '設定',
+        searchEngineSection: '搜尋引擎',
+        customSearchUrl: '自訂搜尋引擎 URL',
+        customSearchHint: '使用 {query} 作為搜尋關鍵字的佔位符',
+        backgroundSection: '背景設定',
+        backgroundType: '背景類型',
+        gradient: '漸層',
+        image: '圖片',
+        solidColor: '純色',
+        selectGradient: '選擇漸層',
+        imageUrl: '圖片網址',
+        imageHint: '提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature',
+        selectColor: '選擇顏色',
+        appearanceSection: '顯示效果（外觀）',
+        backgroundBlur: '背景模糊',
+        enableBlur: '啟用背景模糊',
+        blurDepth: '模糊深度',
+        backgroundFilter: '背景濾鏡',
+        filterNone: '無',
+        filterWhite: '白色濾鏡',
+        filterBlack: '黑色濾鏡',
+        filterOpacity: '濾鏡透明度',
+        languageSection: '語言',
+        selectLanguage: '選擇語言',
+        darkModeSection: '夜間模式',
+        enableDarkMode: '啟用夜間模式',
+        darkModeDepth: '深色強度',
+        // Gradient presets
+        gradientDefault: '天空藍',
+        gradientSunset: '日落橘紅',
+        gradientOcean: '海洋藍綠',
+        gradientPurple: '夢幻紫',
+        gradientGreen: '森林綠',
+        gradientDark: '星夜黑',
+        // Alerts
+        alertFillRequired: '請填寫名稱和網址',
+        alertEnterCategory: '請輸入新分類名稱',
+        alertCategoryExists: '此分類已存在',
+        alertDeleteBookmark: '確定要刪除這個書籤嗎？',
+        alertDeleteCategory: '確定要刪除「{category}」分類嗎？\n此分類下的書籤將移至主列表。',
+        alertSetCustomUrl: '請先設定自訂搜尋引擎 URL',
+        alertIconFetched: '已自動填入網站圖示！',
+        alertInvalidUrl: '無法獲取圖示，請確認網址格式正確'
+    }
+};
+
+// 當前語言
+let currentLanguage = 'zh-TW';
+
+// 獲取翻譯文字
+function t(key) {
+    return translations[currentLanguage]?.[key] || translations['zh-TW'][key] || key;
+}
+
+// 搜尋引擎配置（使用真實品牌圖標）
 const searchEngines = {
-    google: { url: 'https://www.google.com/search?q={query}', icon: 'search' },
-    bing: { url: 'https://www.bing.com/search?q={query}', icon: 'compass' },
-    duckduckgo: { url: 'https://duckduckgo.com/?q={query}', icon: 'shield' },
-    baidu: { url: 'https://www.baidu.com/s?wd={query}', icon: 'globe' },
-    custom: { url: '', icon: 'settings' }
+    google: { 
+        url: 'https://www.google.com/search?q={query}', 
+        icon: 'https://cdn.simpleicons.org/google/4285F4'
+    },
+    bing: { 
+        url: 'https://www.bing.com/search?q={query}', 
+        icon: 'https://cdn.simpleicons.org/microsoftbing/008373'
+    },
+    duckduckgo: { 
+        url: 'https://duckduckgo.com/?q={query}', 
+        icon: 'https://cdn.simpleicons.org/duckduckgo/DE5833'
+    },
+    baidu: { 
+        url: 'https://www.baidu.com/s?wd={query}', 
+        icon: 'https://cdn.simpleicons.org/baidu/2319DC'
+    },
+    custom: { 
+        url: '', 
+        icon: 'lucide:settings' // 保留 Lucide 圖標
+    }
 };
 
 // 背景漸層預設
@@ -25,14 +307,139 @@ let currentSearchEngine = 'google';
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
+    loadLanguage();
     loadSettings();
     loadCategories();
     loadBookmarks();
+    loadDarkMode();
     initEventListeners();
     updateSearchIcon();
+    updateUILanguage();
     // initialize lucide icons
     if (window.lucide) window.lucide.createIcons();
 });
+
+// 載入語言設定
+function loadLanguage() {
+    const saved = localStorage.getItem('language');
+    if (saved && translations[saved]) {
+        currentLanguage = saved;
+    } else {
+        // 自動檢測瀏覽器語言
+        const browserLang = navigator.language || navigator.userLanguage;
+        if (browserLang.startsWith('zh')) {
+            currentLanguage = browserLang.includes('CN') ? 'zh-CN' : 'zh-TW';
+        } else {
+            currentLanguage = 'en';
+        }
+    }
+}
+
+// 切換語言
+function changeLanguage(lang) {
+    if (!translations[lang]) return;
+    currentLanguage = lang;
+    localStorage.setItem('language', lang);
+    updateUILanguage();
+    renderBookmarks();
+    updateCategorySelect();
+}
+
+// 更新 UI 語言
+function updateUILanguage() {
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key) {
+            el.textContent = t(key);
+        }
+    });
+    
+    // Update placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (key) {
+            el.placeholder = t(key);
+        }
+    });
+    
+    // Hero
+    const heroTitle = document.querySelector('.hero-title');
+    const heroSubtitle = document.querySelector('.hero-subtitle');
+    if (heroTitle) heroTitle.textContent = t('heroTitle');
+    if (heroSubtitle) heroSubtitle.textContent = t('heroSubtitle');
+    
+    // Search
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchInput) searchInput.placeholder = t('searchPlaceholder');
+    if (searchBtn) searchBtn.textContent = t('searchButton');
+    
+    // Toolbar buttons with icons
+    const addBtn = document.getElementById('addBookmarkBtn');
+    if (addBtn) {
+        const icon = addBtn.querySelector('i');
+        addBtn.innerHTML = '';
+        if (icon) addBtn.appendChild(icon.cloneNode(true));
+        addBtn.appendChild(document.createTextNode(' ' + t('addBookmark')));
+    }
+    
+    const manageCatBtn = document.getElementById('manageCategoriesBtn');
+    if (manageCatBtn) {
+        const icon = manageCatBtn.querySelector('i');
+        manageCatBtn.innerHTML = '';
+        if (icon) manageCatBtn.appendChild(icon.cloneNode(true));
+        manageCatBtn.appendChild(document.createTextNode(' ' + t('manageCategories')));
+    }
+    
+    const settingsBtn = document.getElementById('settingsBtn');
+    if (settingsBtn) {
+        const icon = settingsBtn.querySelector('i');
+        settingsBtn.innerHTML = '';
+        if (icon) settingsBtn.appendChild(icon.cloneNode(true));
+        settingsBtn.appendChild(document.createTextNode(' ' + t('settings')));
+    }
+    
+    // Bookmarks header
+    const bookmarkHeader = document.querySelector('.bookmark-card__header h2');
+    const bookmarkDesc = document.querySelector('.bookmark-card__header p');
+    if (bookmarkHeader) bookmarkHeader.textContent = t('myBookmarks');
+    if (bookmarkDesc) bookmarkDesc.textContent = t('bookmarksDesc');
+    
+    // Update gradient select options
+    const gradientSelect = document.getElementById('gradientPreset');
+    if (gradientSelect) {
+        const currentValue = gradientSelect.value;
+        gradientSelect.innerHTML = `
+            <option value="default">${t('gradientDefault')}</option>
+            <option value="sunset">${t('gradientSunset')}</option>
+            <option value="ocean">${t('gradientOcean')}</option>
+            <option value="purple">${t('gradientPurple')}</option>
+            <option value="green">${t('gradientGreen')}</option>
+            <option value="dark">${t('gradientDark')}</option>
+        `;
+        gradientSelect.value = currentValue || 'default';
+    }
+    
+    // Update overlay select options
+    const overlaySelect = document.getElementById('overlaySelect');
+    if (overlaySelect) {
+        const currentValue = overlaySelect.value;
+        overlaySelect.innerHTML = `
+            <option value="none">${t('filterNone')}</option>
+            <option value="white">${t('filterWhite')}</option>
+            <option value="black">${t('filterBlack')}</option>
+        `;
+        overlaySelect.value = currentValue || 'none';
+    }
+    
+    // Update language select
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect) langSelect.value = currentLanguage;
+    
+    // Reinitialize lucide icons
+    if (window.lucide) window.lucide.createIcons();
+}
 
 // 載入設定
 function loadSettings() {
@@ -40,7 +447,8 @@ function loadSettings() {
     const customUrl = localStorage.getItem('customSearchUrl') || '';
     
     currentSearchEngine = savedEngine;
-    document.getElementById('customSearchUrl').value = customUrl;
+    const customUrlInput = document.getElementById('customSearchUrl');
+    if (customUrlInput) customUrlInput.value = customUrl;
     
     if (savedEngine === 'custom') {
         searchEngines.custom.url = customUrl;
@@ -131,6 +539,12 @@ function saveSettings() {
     
     // 也儲存外觀設定
     saveAppearanceSettings();
+    
+    // 儲存語言設定
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect && langSelect.value !== currentLanguage) {
+        changeLanguage(langSelect.value);
+    }
 
     closeModal('settingsModal');
 }
@@ -251,6 +665,39 @@ function initEventListeners() {
     const autoIconBtn = document.getElementById('autoIconBtn');
     if (autoIconBtn) autoIconBtn.addEventListener('click', fetchFavicon);
     
+    // 圖標搜索按鈕
+    const iconSearchBtn = document.getElementById('iconSearchBtn');
+    if (iconSearchBtn) iconSearchBtn.addEventListener('click', openIconSearch);
+    
+    // 快速設置按鈕
+    const quickLangBtn = document.getElementById('quickLangBtn');
+    if (quickLangBtn) {
+        quickLangBtn.addEventListener('click', cycleLanguage);
+    }
+    
+    const quickDarkModeBtn = document.getElementById('quickDarkModeBtn');
+    if (quickDarkModeBtn) {
+        quickDarkModeBtn.addEventListener('click', toggleDarkMode);
+    }
+    
+    // 夜間模式切換
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('change', function() {
+            toggleDarkMode(this.checked);
+            document.getElementById('darkModeSettings').style.display = this.checked ? 'block' : 'none';
+        });
+    }
+    
+    // 夜間模式深度調整
+    const darkModeDepth = document.getElementById('darkModeDepth');
+    if (darkModeDepth) {
+        darkModeDepth.addEventListener('input', function() {
+            updateDarkModeDepth(this.value);
+            document.getElementById('darkModeDepthValue').textContent = this.value + '%';
+        });
+    }
+    
     // 管理分類按鈕
     document.getElementById('manageCategoriesBtn').addEventListener('click', function() {
         openCategoryManagement();
@@ -269,6 +716,30 @@ function initEventListeners() {
             newCategoryInput.classList.add('hidden');
         }
     });
+    
+    // 語言選擇器
+    const languageSelect = document.getElementById('languageSelect');
+    if (languageSelect) {
+        languageSelect.addEventListener('change', function() {
+            changeLanguage(this.value);
+        });
+    }
+    
+    // 濾鏡選擇器
+    const overlaySelect = document.getElementById('overlaySelect');
+    if (overlaySelect) {
+        overlaySelect.addEventListener('change', function() {
+            applyOverlay(this.value);
+        });
+    }
+    
+    // 濾鏡透明度滑桿
+    const overlayOpacity = document.getElementById('overlayOpacity');
+    if (overlayOpacity) {
+        overlayOpacity.addEventListener('input', function() {
+            updateOverlayOpacity(this.value);
+        });
+    }
     
     // 點擊外部關閉彈窗
     window.addEventListener('click', function(e) {
@@ -291,10 +762,17 @@ function setActiveEngineTab(engine) {
 function updateSearchIcon() {
     const el = document.getElementById('searchEngineIcon');
     if (!el) return;
-    const iconName = searchEngines[currentSearchEngine].icon;
-    el.innerHTML = `<i data-lucide="${iconName}"></i>`;
-    // reinitialize lucide icons
-    if (window.lucide) window.lucide.createIcons();
+    const iconData = searchEngines[currentSearchEngine].icon;
+    
+    // 檢查是否為 Lucide 圖標
+    if (iconData.startsWith('lucide:')) {
+        const iconName = iconData.replace('lucide:', '');
+        el.innerHTML = `<i data-lucide="${iconName}"></i>`;
+        if (window.lucide) window.lucide.createIcons();
+    } else {
+        // 使用品牌圖標 URL
+        el.innerHTML = `<img src="${iconData}" alt="${currentSearchEngine}" style="width:20px;height:20px;">`;
+    }
 }
 
 // 執行搜尋
@@ -305,7 +783,7 @@ function performSearch() {
     let searchUrl = searchEngines[currentSearchEngine].url;
     
     if (currentSearchEngine === 'custom' && !searchUrl) {
-        alert('請先設定自訂搜尋引擎 URL');
+        alert(t('alertSetCustomUrl'));
         openModal('settingsModal');
         return;
     }
@@ -327,11 +805,12 @@ function saveCategories() {
 
 function updateCategorySelect() {
     const select = document.getElementById('bookmarkCategory');
-    select.innerHTML = '<option value="">主列表（不分類）</option>';
+    if (!select) return;
+    select.innerHTML = `<option value="">${t('mainList')}</option>`;
     categories.forEach(cat => {
         select.innerHTML += `<option value="${cat}">${cat}</option>`;
     });
-    select.innerHTML += '<option value="new">+ 建立新分類</option>';
+    select.innerHTML += `<option value="new">${t('newCategory')}</option>`;
 }
 
 // 書籤管理
@@ -384,7 +863,7 @@ function renderBookmarks() {
     
     // 如果沒有主書籤，顯示提示
     if (mainBookmarks.length === 0) {
-        mainGrid.innerHTML = '<p style="text-align:center; color: var(--text-subtle); padding: 40px;">還沒有書籤，點擊上方按鈕新增！</p>';
+        mainGrid.innerHTML = `<p style="text-align:center; color: var(--text-subtle); padding: 40px;">${t('noBookmarks')}</p>`;
     }
     
     // 渲染分類書籤
@@ -468,17 +947,17 @@ function openBookmarkModal(bookmark = null, defaultCategory = '') {
     const urlInput = document.getElementById('bookmarkUrl');
     const iconInput = document.getElementById('bookmarkIcon');
     
-    title.textContent = bookmark ? '編輯書籤' : '新增書籤';
-    categorySelect.value = bookmark ? bookmark.category : defaultCategory;
-    nameInput.value = bookmark ? bookmark.name : '';
-    urlInput.value = bookmark ? bookmark.url : '';
-    iconInput.value = bookmark ? bookmark.icon : '';
+    if (title) title.textContent = bookmark ? t('editBookmarkTitle') : t('addBookmarkTitle');
+    if (categorySelect) categorySelect.value = bookmark ? bookmark.category : defaultCategory;
+    if (nameInput) nameInput.value = bookmark ? bookmark.name : '';
+    if (urlInput) urlInput.value = bookmark ? bookmark.url : '';
+    if (iconInput) iconInput.value = bookmark ? bookmark.icon : '';
     
     const newCat = document.getElementById('newCategoryInput');
     if (newCat) newCat.classList.add('hidden');
     
     openModal('bookmarkModal');
-    nameInput.focus();
+    if (nameInput) nameInput.focus();
 }
 
 function saveBookmark() {
@@ -486,10 +965,10 @@ function saveBookmark() {
     const newCategoryInput = document.getElementById('newCategoryInput');
     const name = document.getElementById('bookmarkName').value.trim();
     const url = document.getElementById('bookmarkUrl').value.trim();
-    const icon = document.getElementById('bookmarkIcon').value.trim() || '🌐';
+    const icon = document.getElementById('bookmarkIcon').value.trim() || '';
     
     if (!name || !url) {
-        alert('請填寫名稱和網址');
+        alert(t('alertFillRequired'));
         return;
     }
     
@@ -497,7 +976,7 @@ function saveBookmark() {
     if (category === 'new') {
         category = newCategoryInput.value.trim();
         if (!category) {
-            alert('請輸入新分類名稱');
+            alert(t('alertEnterCategory'));
             return;
         }
         if (!categories.includes(category)) {
@@ -545,7 +1024,7 @@ function editBookmark(id) {
 }
 
 function deleteBookmark(id) {
-    if (confirm('確定要刪除這個書籤嗎？')) {
+    if (confirm(t('alertDeleteBookmark'))) {
         bookmarks = bookmarks.filter(b => b.id !== id);
         saveBookmarksToStorage();
         renderBookmarks();
@@ -553,7 +1032,8 @@ function deleteBookmark(id) {
 }
 
 function deleteCategory(category) {
-    if (confirm(`確定要刪除「${category}」分類嗎？\n此分類下的書籤將移至主列表。`)) {
+    const msg = t('alertDeleteCategory').replace('{category}', category);
+    if (confirm(msg)) {
         // 將該分類的書籤移至主列表
         bookmarks.forEach(bookmark => {
             if (bookmark.category === category) {
@@ -574,37 +1054,40 @@ function deleteCategory(category) {
 // 分類管理彈窗
 function openCategoryManagement() {
     const categoryList = document.getElementById('categoryList');
+    if (!categoryList) return;
     categoryList.innerHTML = '';
     
     if (categories.length === 0) {
-        categoryList.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 20px;">還沒有分類</p>';
+        categoryList.innerHTML = `<p style="text-align:center; color: var(--text-subtle); padding: 20px;">${t('noCategories')}</p>`;
     } else {
         categories.forEach(cat => {
             const item = document.createElement('div');
             item.className = 'category-item';
             item.innerHTML = `
                 <span class="category-item-name">📁 ${cat}</span>
-                <button onclick="deleteCategoryFromModal('${cat}')" class="btn" style="padding: 6px 12px; font-size: 12px;">刪除</button>
+                <button onclick="deleteCategoryFromModal('${cat}')" class="btn" style="padding: 6px 12px; font-size: 12px;">${t('deleteCategory')}</button>
             `;
             categoryList.appendChild(item);
         });
     }
     
-    document.getElementById('newCategoryName').value = '';
+    const newCatInput = document.getElementById('newCategoryName');
+    if (newCatInput) newCatInput.value = '';
     openModal('categoryModal');
 }
 
 function addNewCategory() {
     const input = document.getElementById('newCategoryName');
+    if (!input) return;
     const newCat = input.value.trim();
     
     if (!newCat) {
-        alert('請輸入分類名稱');
+        alert(t('alertEnterCategory'));
         return;
     }
     
     if (categories.includes(newCat)) {
-        alert('此分類已存在');
+        alert(t('alertCategoryExists'));
         return;
     }
     
@@ -644,10 +1127,10 @@ async function fetchFavicon() {
         
         // 使用第一個方法（Google favicon 服務）
         iconInput.value = faviconUrls[0];
-        alert('已自動填入網站圖示！');
+        alert(t('alertIconFetched'));
         
     } catch (error) {
-        alert('無法獲取圖示，請確認網址格式正確');
+        alert(t('alertInvalidUrl'));
     }
 }
 
@@ -660,9 +1143,120 @@ function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
 }
 
+// 夜間模式功能
+function toggleDarkMode(forceState) {
+    const isDark = forceState !== undefined ? forceState : !document.body.classList.contains('dark-mode');
+    document.body.classList.toggle('dark-mode', isDark);
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+    
+    // 更新按鈕狀態
+    const quickBtn = document.getElementById('quickDarkModeBtn');
+    if (quickBtn) {
+        quickBtn.classList.toggle('active', isDark);
+        const icon = quickBtn.querySelector('i');
+        if (icon) {
+            icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            if (window.lucide) window.lucide.createIcons();
+        }
+    }
+    
+    // 更新設置面板的 checkbox
+    const toggle = document.getElementById('darkModeToggle');
+    if (toggle) toggle.checked = isDark;
+    
+    // 顯示/隱藏深度設置
+    const settings = document.getElementById('darkModeSettings');
+    if (settings) settings.style.display = isDark ? 'block' : 'none';
+}
+
+function updateDarkModeDepth(depth) {
+    const opacity = depth / 100;
+    document.documentElement.style.setProperty('--dark-overlay-opacity', opacity);
+    localStorage.setItem('darkModeDepth', depth);
+}
+
+function loadDarkMode() {
+    const darkMode = localStorage.getItem('darkMode');
+    const depth = localStorage.getItem('darkModeDepth') || '80';
+    
+    if (darkMode === 'enabled') {
+        toggleDarkMode(true);
+    }
+    
+    const depthInput = document.getElementById('darkModeDepth');
+    if (depthInput) {
+        depthInput.value = depth;
+        document.getElementById('darkModeDepthValue').textContent = depth + '%';
+    }
+    updateDarkModeDepth(depth);
+}
+
+// 語言循環切換
+function cycleLanguage() {
+    const languages = ['en', 'zh-CN', 'zh-TW'];
+    const currentIndex = languages.indexOf(currentLanguage);
+    const nextIndex = (currentIndex + 1) % languages.length;
+    changeLanguage(languages[nextIndex]);
+}
+
+// 圖標搜索功能
+function openIconSearch() {
+    openModal('iconSearchModal');
+    
+    // 常用品牌圖標
+    const popularIcons = [
+        'github', 'google', 'facebook', 'twitter', 'instagram', 'youtube',
+        'linkedin', 'reddit', 'discord', 'slack', 'spotify', 'netflix',
+        'amazon', 'apple', 'microsoft', 'dropbox', 'notion', 'figma',
+        'steam', 'twitch', 'tiktok', 'pinterest', 'telegram', 'whatsapp',
+        'gmail', 'outlook', 'yahoo', 'medium', 'stackoverflow', 'wikipedia'
+    ];
+    
+    renderIconGrid(popularIcons);
+    
+    // 搜索輸入
+    const searchInput = document.getElementById('iconSearchInput');
+    if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+        searchInput.oninput = function() {
+            const query = this.value.toLowerCase().trim();
+            if (query) {
+                const filtered = popularIcons.filter(icon => icon.includes(query));
+                renderIconGrid(filtered.length > 0 ? filtered : [query]);
+            } else {
+                renderIconGrid(popularIcons);
+            }
+        };
+    }
+}
+
+function renderIconGrid(icons) {
+    const grid = document.getElementById('iconSearchResults');
+    if (!grid) return;
+    
+    grid.innerHTML = icons.map(icon => `
+        <div class="icon-grid-item" onclick="selectIcon('${icon}')">
+            <img src="https://cdn.simpleicons.org/${icon}" alt="${icon}" onerror="this.style.display='none'">
+            <span>${icon}</span>
+        </div>
+    `).join('');
+}
+
+function selectIcon(iconName) {
+    const iconUrl = `https://cdn.simpleicons.org/${iconName}`;
+    const iconInput = document.getElementById('bookmarkIcon');
+    if (iconInput) {
+        iconInput.value = iconUrl;
+    }
+    closeModal('iconSearchModal');
+    alert(`已選擇圖標：${iconName}`);
+}
+
 // 暴露全局函數
 window.openBookmarkModal = openBookmarkModal;
 window.editBookmark = editBookmark;
 window.deleteBookmark = deleteBookmark;
 window.deleteCategory = deleteCategory;
 window.deleteCategoryFromModal = deleteCategoryFromModal;
+window.selectIcon = selectIcon;

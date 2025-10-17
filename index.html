@@ -11,6 +11,17 @@
     <body>
     <div class="background-layer" aria-hidden="true"></div>
     <div id="backgroundOverlay" class="background-overlay" aria-hidden="true"></div>
+    
+    <!-- 右上角快速設置 -->
+    <div class="quick-settings">
+        <button id="quickLangBtn" class="quick-btn" aria-label="語言" title="切換語言">
+            <i data-lucide="globe-2"></i>
+        </button>
+        <button id="quickDarkModeBtn" class="quick-btn" aria-label="夜間模式" title="切換夜間模式">
+            <i data-lucide="moon"></i>
+        </button>
+    </div>
+    
         <main class="app">
             <section class="hero">
                 <div class="hero-header">
@@ -20,19 +31,19 @@
                 <div class="search-card">
                     <div class="engine-list" id="engineTabs" role="tablist" aria-label="搜尋引擎">
                         <button class="engine-pill active" data-engine="google" role="tab" aria-selected="true">
-                            <i data-lucide="search" class="pill-icon"></i>
+                            <img src="https://cdn.simpleicons.org/google/4285F4" alt="Google" class="pill-icon" style="width:20px;height:20px;">
                             Google
                         </button>
                         <button class="engine-pill" data-engine="bing" role="tab" aria-selected="false">
-                            <i data-lucide="compass" class="pill-icon"></i>
+                            <img src="https://cdn.simpleicons.org/microsoftbing/008373" alt="Bing" class="pill-icon" style="width:20px;height:20px;">
                             Bing
                         </button>
                         <button class="engine-pill" data-engine="duckduckgo" role="tab" aria-selected="false">
-                            <i data-lucide="shield" class="pill-icon"></i>
+                            <img src="https://cdn.simpleicons.org/duckduckgo/DE5833" alt="DuckDuckGo" class="pill-icon" style="width:20px;height:20px;">
                             DuckDuckGo
                         </button>
                         <button class="engine-pill" data-engine="baidu" role="tab" aria-selected="false">
-                            <i data-lucide="globe" class="pill-icon"></i>
+                            <img src="https://cdn.simpleicons.org/baidu/2319DC" alt="Baidu" class="pill-icon" style="width:20px;height:20px;">
                             百度
                         </button>
                         <button class="engine-pill" data-engine="custom" role="tab" aria-selected="false">
@@ -42,8 +53,8 @@
                     </div>
                     <div class="search-bar">
                         <div class="search-icon" id="searchEngineIcon"><i data-lucide="search"></i></div>
-                        <input id="searchInput" type="text" placeholder="搜尋任何內容..." autocomplete="off" />
-                        <button id="searchBtn" class="search-btn" aria-label="搜尋">
+                        <input id="searchInput" type="text" placeholder="搜尋任何內容..." data-i18n-placeholder="searchPlaceholder" autocomplete="off" />
+                        <button id="searchBtn" class="search-btn" aria-label="搜尋" data-i18n="searchButton">
                             搜尋
                         </button>
                     </div>
@@ -61,8 +72,8 @@
             <section class="bookmarks" aria-label="書籤列表">
                 <div class="bookmark-card">
                     <header class="bookmark-card__header">
-                        <h2>📑 我的書籤</h2>
-                        <p>常用網站都在這裡，點擊即可開啟。</p>
+                        <h2><i data-lucide="bookmark" style="width:20px;height:20px;margin-right:8px;vertical-align:text-bottom;"></i><span data-i18n="myBookmarks">我的書籤</span></h2>
+                        <p data-i18n="bookmarksDesc">常用網站都在這裡，點擊即可開啟。</p>
                     </header>
                     <div id="bookmarkGrid" class="bookmark-grid" aria-live="polite"></div>
                 </div>
@@ -74,28 +85,28 @@
         <div id="settingsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
             <div class="modal-panel">
                 <header class="modal-header">
-                    <h3 id="settingsTitle">⚙️ 設定</h3>
+                    <h3 id="settingsTitle"><i data-lucide="settings" style="width:18px;height:18px;margin-right:6px;"></i><span data-i18n="settingsTitle">設定</span></h3>
                     <button class="modal-close" data-close="settingsModal" aria-label="關閉設定">×</button>
                 </header>
                 <div class="modal-body">
                     <section class="settings-block">
-                        <h4>🔍 搜尋引擎</h4>
-                        <label for="customSearchUrl">自訂搜尋引擎 URL</label>
+                        <h4><i data-lucide="search" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="searchEngineSection">搜尋引擎</span></h4>
+                        <label for="customSearchUrl" data-i18n="customSearchUrl">自訂搜尋引擎 URL</label>
                         <input id="customSearchUrl" type="text" placeholder="https://example.com/search?q={query}" />
-                        <span class="hint">使用 {query} 作為搜尋關鍵字的佔位符</span>
+                        <span class="hint" data-i18n="customSearchHint">使用 {query} 作為搜尋關鍵字的佔位符</span>
                     </section>
                     <section class="settings-block">
-                        <h4>🎨 背景設定</h4>
+                        <h4><i data-lucide="palette" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="backgroundSection">背景設定</span></h4>
                         <div class="settings-field">
-                            <label>背景類型</label>
+                            <label data-i18n="backgroundType">背景類型</label>
                             <div class="radio-list" id="bgTypeRadios">
-                                <label><input type="radio" name="bgType" value="gradient" checked /> 漸層</label>
-                                <label><input type="radio" name="bgType" value="image" /> 圖片</label>
-                                <label><input type="radio" name="bgType" value="color" /> 純色</label>
+                                <label><input type="radio" name="bgType" value="gradient" checked /> <span data-i18n="gradient">漸層</span></label>
+                                <label><input type="radio" name="bgType" value="image" /> <span data-i18n="image">圖片</span></label>
+                                <label><input type="radio" name="bgType" value="color" /> <span data-i18n="solidColor">純色</span></label>
                             </div>
                         </div>
                         <div class="settings-field" id="gradientSettings">
-                            <label for="gradientPreset">選擇漸層</label>
+                            <label for="gradientPreset" data-i18n="selectGradient">選擇漸層</label>
                             <select id="gradientPreset">
                                 <option value="default">天空藍</option>
                                 <option value="sunset">日落橘紅</option>
@@ -106,40 +117,65 @@
                             </select>
                         </div>
                         <div class="settings-field hidden" id="imageSettings">
-                            <label for="bgImageUrl">圖片網址</label>
+                            <label for="bgImageUrl" data-i18n="imageUrl">圖片網址</label>
                             <input id="bgImageUrl" type="text" placeholder="https://example.com/image.jpg" />
-                            <span class="hint">提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature</span>
+                            <span class="hint" data-i18n="imageHint">提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature</span>
                         </div>
                         <div class="settings-field hidden" id="colorSettings">
-                            <label for="bgColor">選擇顏色</label>
+                            <label for="bgColor" data-i18n="selectColor">選擇顏色</label>
                             <input id="bgColor" type="color" value="#1a1a2e" />
                         </div>
                     </section>
                     <section class="settings-block">
-                        <h4>🖼️ 顯示效果（外觀）</h4>
+                        <h4><i data-lucide="image" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="appearanceSection">顯示效果（外觀）</span></h4>
                         <div class="settings-field">
-                            <label>背景模糊</label>
+                            <label data-i18n="backgroundBlur">背景模糊</label>
                             <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
                                 <input id="blurToggle" type="checkbox" />
-                                <label for="blurToggle" style="font-weight:600;">啟用背景模糊</label>
+                                <label for="blurToggle" style="font-weight:600;" data-i18n="enableBlur">啟用背景模糊</label>
                             </div>
                             <input id="blurRange" type="range" min="0" max="40" value="16" style="width:100%; margin-top:8px;" />
-                            <div class="hint">模糊深度: <span id="blurValue">16</span>px</div>
+                            <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">16</span>px</div>
                         </div>
                         <div class="settings-field" style="margin-top:10px;">
-                            <label>背景濾鏡</label>
+                            <label data-i18n="backgroundFilter">背景濾鏡</label>
                             <select id="overlaySelect" style="margin-top:6px;">
-                                <option value="none">無</option>
-                                <option value="white">白色濾鏡</option>
-                                <option value="black">黑色濾鏡</option>
+                                <option value="none" data-i18n="filterNone">無</option>
+                                <option value="white" data-i18n="filterWhite">白色濾鏡</option>
+                                <option value="black" data-i18n="filterBlack">黑色濾鏡</option>
                             </select>
                             <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" style="width:100%; margin-top:8px;" />
-                            <div class="hint">濾鏡透明度: <span id="overlayValue">0.40</span></div>
+                            <div class="hint"><span data-i18n="filterOpacity">濾鏡透明度</span>: <span id="overlayValue">0.40</span></div>
+                        </div>
+                    </section>
+                    <section class="settings-block">
+                        <h4><i data-lucide="moon" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="darkModeSection">夜間模式</span></h4>
+                        <div class="settings-field">
+                            <label>
+                                <input type="checkbox" id="darkModeToggle" />
+                                <span data-i18n="enableDarkMode">啟用夜間模式</span>
+                            </label>
+                        </div>
+                        <div class="settings-field" id="darkModeSettings" style="display:none;">
+                            <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
+                            <input type="range" id="darkModeDepth" min="0" max="100" value="80" />
+                            <span class="range-value" id="darkModeDepthValue">80%</span>
+                        </div>
+                    </section>
+                    <section class="settings-block">
+                        <h4><i data-lucide="globe-2" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="languageSection">語言</span></h4>
+                        <div class="settings-field">
+                            <label for="languageSelect" data-i18n="selectLanguage">選擇語言</label>
+                            <select id="languageSelect" style="margin-top:6px;">
+                                <option value="en">English</option>
+                                <option value="zh-CN">简体中文</option>
+                                <option value="zh-TW">正體中文</option>
+                            </select>
                         </div>
                     </section>
                 </div>
                 <footer class="modal-footer">
-                    <button id="saveSettings" class="btn primary">儲存設定</button>
+                    <button id="saveSettings" class="btn primary" data-i18n="save">儲存設定</button>
                 </footer>
             </div>
         </div>
@@ -148,29 +184,30 @@
         <div id="bookmarkModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="bookmarkTitle">
             <div class="modal-panel">
                 <header class="modal-header">
-                    <h3 id="bookmarkTitle">新增書籤</h3>
+                    <h3 id="bookmarkTitle"><i data-lucide="bookmark-plus" style="width:18px;height:18px;margin-right:6px;"></i><span data-i18n="addBookmarkTitle">新增書籤</span></h3>
                     <button class="modal-close" data-close="bookmarkModal" aria-label="關閉書籤表單">×</button>
                 </header>
                 <div class="modal-body">
-                    <label for="bookmarkCategory">分類</label>
+                    <label for="bookmarkCategory" data-i18n="categoryLabel">分類</label>
                     <div class="category-picker">
                         <select id="bookmarkCategory"></select>
-                        <input id="newCategoryInput" type="text" placeholder="輸入新分類" class="hidden" />
+                        <input id="newCategoryInput" type="text" data-i18n-placeholder="enterNewCategory" placeholder="輸入新分類" class="hidden" />
                     </div>
-                    <label for="bookmarkName">名稱</label>
-                    <input id="bookmarkName" type="text" placeholder="網站名稱" />
-                    <label for="bookmarkUrl">網址</label>
-                    <input id="bookmarkUrl" type="text" placeholder="https://example.com" />
-                    <label for="bookmarkIcon">圖示</label>
+                    <label for="bookmarkName" data-i18n="nameLabel">名稱</label>
+                    <input id="bookmarkName" type="text" placeholder="網站名稱" data-i18n-placeholder="namePlaceholder" />
+                    <label for="bookmarkUrl" data-i18n="urlLabel">網址</label>
+                    <input id="bookmarkUrl" type="text" placeholder="https://example.com" data-i18n-placeholder="urlPlaceholder" />
+                    <label for="bookmarkIcon" data-i18n="iconLabel">圖示</label>
                     <div class="icon-row">
-                        <input id="bookmarkIcon" type="text" placeholder="🌐 Emoji 或圖片網址" />
-                        <button id="autoIconBtn" type="button" class="btn">自動抓取</button>
+                        <input id="bookmarkIcon" type="text" placeholder="🌐 Emoji 或圖片網址" data-i18n-placeholder="iconPlaceholder" />
+                        <button id="autoIconBtn" type="button" class="btn" data-i18n="autoFetch"><i data-lucide="sparkles" style="width:14px;height:14px;margin-right:4px;"></i>自動抓取</button>
+                        <button id="iconSearchBtn" type="button" class="btn" data-i18n="iconSearch"><i data-lucide="search" style="width:14px;height:14px;margin-right:4px;"></i>搜尋圖標</button>
                     </div>
-                    <span class="hint">可輸入 Emoji、圖片網址，或使用自動抓取</span>
+                    <span class="hint" data-i18n="iconHint">可輸入 Emoji、圖片網址，或使用自動抓取</span>
                 </div>
                 <footer class="modal-footer">
-                    <button id="saveBookmark" class="btn primary">儲存</button>
-                    <button data-close="bookmarkModal" class="btn">取消</button>
+                    <button id="saveBookmark" class="btn primary" data-i18n="save">儲存</button>
+                    <button data-close="bookmarkModal" class="btn" data-i18n="cancel">取消</button>
                 </footer>
             </div>
         </div>
@@ -179,19 +216,37 @@
         <div id="categoryModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="categoryTitle">
             <div class="modal-panel">
                 <header class="modal-header">
-                    <h3 id="categoryTitle">📁 管理分類</h3>
+                    <h3 id="categoryTitle"><i data-lucide="folder-open" style="width:18px;height:18px;margin-right:6px;"></i><span data-i18n="manageCategoriesTitle">管理分類</span></h3>
                     <button class="modal-close" data-close="categoryModal" aria-label="關閉分類管理">×</button>
                 </header>
                 <div class="modal-body">
-                    <p class="hint" style="margin-bottom: 16px;">建立分類來整理書籤。刪除分類時，書籤會回到主列表。</p>
+                    <p class="hint" style="margin-bottom: 16px;" data-i18n="categoriesDesc">建立分類來整理書籤。刪除分類時，書籤會回到主列表。</p>
                     <div id="categoryList" class="category-list"></div>
                     <div class="icon-row" style="margin-top: 16px;">
-                        <input id="newCategoryName" type="text" placeholder="輸入新分類名稱" />
-                        <button id="addCategoryBtn" type="button" class="btn primary">+ 新增</button>
+                        <input id="newCategoryName" type="text" data-i18n-placeholder="enterCategoryName" placeholder="輸入新分類名稱" />
+                        <button id="addCategoryBtn" type="button" class="btn primary" data-i18n="addCategoryBtn">+ 新增</button>
                     </div>
                 </div>
                 <footer class="modal-footer">
-                    <button data-close="categoryModal" class="btn primary">完成</button>
+                    <button data-close="categoryModal" class="btn primary" data-i18n="done">完成</button>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 圖標搜索彈窗 -->
+        <div id="iconSearchModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="iconSearchTitle">
+            <div class="modal-panel">
+                <header class="modal-header">
+                    <h3 id="iconSearchTitle"><i data-lucide="search" style="width:18px;height:18px;margin-right:6px;"></i><span data-i18n="iconSearch">搜尋圖標</span></h3>
+                    <button class="modal-close" data-close="iconSearchModal" aria-label="關閉圖標搜索">×</button>
+                </header>
+                <div class="modal-body">
+                    <p class="hint" style="margin-bottom: 12px;">從 Simple Icons 搜索品牌圖標，例如：github, google, facebook, youtube 等</p>
+                    <input id="iconSearchInput" type="text" placeholder="輸入品牌名稱..." style="margin-bottom: 16px;" />
+                    <div id="iconSearchResults" class="icon-grid"></div>
+                </div>
+                <footer class="modal-footer">
+                    <button data-close="iconSearchModal" class="btn" data-i18n="cancel">取消</button>
                 </footer>
             </div>
         </div>
