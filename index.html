@@ -74,35 +74,31 @@
                     <p class="hero-subtitle">快速搜尋、管理收藏，一切從這裡開始。</p>
                 </div>
                 <div class="search-card">
-                    <div class="engine-list" id="engineTabs" role="tablist" aria-label="搜尋引擎">
-                        <button class="engine-pill active" data-engine="google" role="tab" aria-selected="true">
-                            <img src="https://cdn.simpleicons.org/google" alt="Google" class="pill-icon" style="width:20px;height:20px;">
-                            Google
+                    <div class="search-header">
+                        <button id="engineSelector" class="engine-selector" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="engine-selector__icon" id="engineSelectorIcon"><i data-lucide="search"></i></span>
+                            <span class="engine-selector__label" id="engineSelectorLabel">Google</span>
+                            <i data-lucide="chevron-down" class="engine-selector__chevron"></i>
                         </button>
-                        <button class="engine-pill" data-engine="bing" role="tab" aria-selected="false">
-                            <img src="https://www.bing.com/favicon.ico" alt="Bing" class="pill-icon" style="width:20px;height:20px;" onerror="this.src='https://api.iconify.design/simple-icons:bing.svg?color=%23008373'">
-                            Bing
-                        </button>
-                        <button class="engine-pill" data-engine="duckduckgo" role="tab" aria-selected="false">
-                            <img src="https://cdn.simpleicons.org/duckduckgo/DE5833" alt="DuckDuckGo" class="pill-icon" style="width:20px;height:20px;">
-                            DuckDuckGo
-                        </button>
-                        <button class="engine-pill" data-engine="baidu" role="tab" aria-selected="false">
-                            <img src="https://cdn.simpleicons.org/baidu/2319DC" alt="Baidu" class="pill-icon" style="width:20px;height:20px;">
-                            百度
-                        </button>
-                        <button class="engine-pill" data-engine="custom" role="tab" aria-selected="false">
-                            <i data-lucide="settings" class="pill-icon"></i>
-                            自訂
-                        </button>
+                        <div id="engineDropdown" class="engine-dropdown" role="listbox" aria-label="搜尋引擎"></div>
                     </div>
-                    <div class="search-bar">
-                        <div class="search-icon" id="searchEngineIcon"><i data-lucide="search"></i></div>
-                        <input id="searchInput" type="text" placeholder="搜尋任何內容..." data-i18n-placeholder="searchPlaceholder" autocomplete="off" />
-                        <button id="searchBtn" class="search-btn" aria-label="搜尋" data-i18n="searchButton">
-                            搜尋
-                        </button>
+                    <div class="search-input-group">
+                        <div class="search-input-wrapper">
+                            <div class="search-icon" id="searchEngineIcon"><i data-lucide="search"></i></div>
+                            <input id="searchInput" type="text" placeholder="搜尋任何內容..." data-i18n-placeholder="searchPlaceholder" autocomplete="off" />
+                            <div class="search-actions">
+                                <button id="openUrlBtn" type="button" class="search-action secondary hidden" data-i18n="searchOpenLink">打開連結</button>
+                                <button id="searchBtn" type="button" class="search-action primary" data-i18n="searchButton">搜尋</button>
+                            </div>
+                        </div>
+                        <div id="customEngineConfig" class="custom-engine hidden">
+                            <label for="customSearchInline" data-i18n="customSearchInlineLabel">自訂搜尋引擎 URL</label>
+                            <input id="customSearchInline" type="url" placeholder="https://example.com/search?q={query}" data-i18n-placeholder="customSearchPlaceholder" />
+                            <span class="hint" data-i18n="customSearchInlineHint">使用 {query} 作為搜尋關鍵字的佔位符</span>
+                            <button id="saveCustomEngineInline" type="button" class="btn primary" data-i18n="customSearchSave">儲存並套用</button>
+                        </div>
                     </div>
+                    <div id="searchSuggestions" class="search-suggestions" aria-live="polite"></div>
                 </div>
             </section>
 

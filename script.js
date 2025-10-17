@@ -7,6 +7,8 @@ const translations = {
         // Search
         searchPlaceholder: 'Search anything...',
         searchButton: 'Search',
+    searchOpenLink: 'Open link',
+    searchSuggestionsTitle: 'Suggestions',
         // Toolbar
         addBookmark: 'Add Bookmark',
         manageCategories: 'Manage Categories',
@@ -50,8 +52,17 @@ const translations = {
         // Settings
         settingsTitle: 'Settings',
         searchEngineSection: 'Search Engine',
+    engineGoogle: 'Google',
+    engineBing: 'Bing',
+    engineDuckDuckGo: 'DuckDuckGo',
+    engineBaidu: 'Baidu',
+    engineCustom: 'Custom',
         customSearchUrl: 'Custom Search Engine URL',
         customSearchHint: 'Use {query} as the search keyword placeholder',
+    customSearchInlineLabel: 'Custom search engine URL',
+    customSearchInlineHint: 'Use {query} as the search keyword placeholder',
+    customSearchSave: 'Save and apply',
+    customSearchPlaceholder: 'https://example.com/search?q={query}',
         backgroundSection: 'Background Settings',
         backgroundType: 'Background Type',
         gradient: 'Gradient',
@@ -108,6 +119,8 @@ const translations = {
         // Search
         searchPlaceholder: '搜索任何内容...',
         searchButton: '搜索',
+    searchOpenLink: '打开链接',
+    searchSuggestionsTitle: '猜你想搜',
         // Toolbar
         addBookmark: '新增书签',
         manageCategories: '管理分类',
@@ -151,8 +164,17 @@ const translations = {
         // Settings
         settingsTitle: '设置',
         searchEngineSection: '搜索引擎',
+    engineGoogle: 'Google',
+    engineBing: 'Bing',
+    engineDuckDuckGo: 'DuckDuckGo',
+    engineBaidu: '百度',
+    engineCustom: '自定义',
         customSearchUrl: '自定义搜索引擎 URL',
         customSearchHint: '使用 {query} 作为搜索关键字的占位符',
+    customSearchInlineLabel: '自定义搜索引擎 URL',
+    customSearchInlineHint: '使用 {query} 作为搜索关键字的占位符',
+    customSearchSave: '保存并应用',
+    customSearchPlaceholder: 'https://example.com/search?q={query}',
         backgroundSection: '背景设置',
         backgroundType: '背景类型',
         gradient: '渐层',
@@ -209,6 +231,8 @@ const translations = {
         // Search
         searchPlaceholder: '搜尋任何內容...',
         searchButton: '搜尋',
+    searchOpenLink: '打開連結',
+    searchSuggestionsTitle: '猜你想搜尋',
         // Toolbar
         addBookmark: '新增書籤',
         manageCategories: '管理分類',
@@ -252,8 +276,17 @@ const translations = {
         // Settings
         settingsTitle: '設定',
         searchEngineSection: '搜尋引擎',
+    engineGoogle: 'Google',
+    engineBing: 'Bing',
+    engineDuckDuckGo: 'DuckDuckGo',
+    engineBaidu: '百度',
+    engineCustom: '自訂',
         customSearchUrl: '自訂搜尋引擎 URL',
         customSearchHint: '使用 {query} 作為搜尋關鍵字的佔位符',
+    customSearchInlineLabel: '自訂搜尋引擎 URL',
+    customSearchInlineHint: '使用 {query} 作為搜尋關鍵字的佔位符',
+    customSearchSave: '儲存並套用',
+    customSearchPlaceholder: 'https://example.com/search?q={query}',
         backgroundSection: '背景設定',
         backgroundType: '背景類型',
         gradient: '漸層',
@@ -315,27 +348,91 @@ function t(key) {
 
 // 搜尋引擎配置（使用真實品牌圖標）
 const searchEngines = {
-    google: { 
-        url: 'https://www.google.com/search?q={query}', 
-        icon: 'https://cdn.simpleicons.org/google'
+    google: {
+        url: 'https://www.google.com/search?q={query}',
+        icon: 'google',
+        labelKey: 'engineGoogle'
     },
-    bing: { 
-        url: 'https://www.bing.com/search?q={query}', 
-        icon: 'https://www.bing.com/favicon.ico'
+    bing: {
+        url: 'https://www.bing.com/search?q={query}',
+        icon: 'bing',
+        labelKey: 'engineBing'
     },
-    duckduckgo: { 
-        url: 'https://duckduckgo.com/?q={query}', 
-        icon: 'https://cdn.simpleicons.org/duckduckgo/DE5833'
+    duckduckgo: {
+        url: 'https://duckduckgo.com/?q={query}',
+        icon: 'duckduckgo',
+        labelKey: 'engineDuckDuckGo'
     },
-    baidu: { 
-        url: 'https://www.baidu.com/s?wd={query}', 
-        icon: 'https://cdn.simpleicons.org/baidu/2319DC'
+    baidu: {
+        url: 'https://www.baidu.com/s?wd={query}',
+        icon: 'baidu',
+        labelKey: 'engineBaidu'
     },
-    custom: { 
-        url: '', 
-        icon: 'lucide:settings' // 保留 Lucide 圖標
+    custom: {
+        url: '',
+        icon: 'lucide:settings',
+        labelKey: 'engineCustom'
     }
 };
+
+function getBrandIconUrl(slug, color) {
+    if (!slug) return '';
+    const resolved = resolveIconSlug(slug);
+    const encoded = encodeURIComponent(resolved);
+    return color ? `https://cdn.simpleicons.org/${encoded}/${color}` : `https://cdn.simpleicons.org/${encoded}`;
+}
+
+function getIconMarkup(descriptor, size = 20, label = '') {
+    if (!descriptor) return '';
+    if (descriptor.startsWith('lucide:')) {
+        const iconName = descriptor.slice(7);
+        return `<i data-lucide="${iconName}" style="width:${size}px;height:${size}px;"></i>`;
+    }
+    if (descriptor.startsWith('http')) {
+        return `<img src="${descriptor}" alt="${escapeHtml(label || descriptor)}" style="width:${size}px;height:${size}px;object-fit:contain;" loading="lazy">`;
+    }
+    const altText = escapeHtml(label || descriptor);
+    return `<img src="${getBrandIconUrl(descriptor)}" alt="${altText}" style="width:${size}px;height:${size}px;object-fit:contain;" loading="lazy">`;
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function escapeAttribute(value) {
+    return escapeHtml(value);
+}
+
+function normalizeIconKey(value) {
+    return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function resolveIconSlug(input) {
+    if (!input) return '';
+    const trimmed = String(input).trim();
+    if (!trimmed) return '';
+    const lower = trimmed.toLowerCase();
+    if (ICON_ALIAS_OVERRIDES[lower]) return ICON_ALIAS_OVERRIDES[lower];
+    if (iconAliasLookup.has(lower)) return iconAliasLookup.get(lower);
+
+    const normalized = normalizeIconKey(trimmed);
+    if (ICON_ALIAS_OVERRIDES[normalized]) return ICON_ALIAS_OVERRIDES[normalized];
+    if (iconAliasLookup.has(normalized)) return iconAliasLookup.get(normalized);
+
+    return trimmed.replace(/\s+/g, '').toLowerCase();
+}
+
+function registerIconAlias(alias, slug) {
+    if (!alias || !slug) return;
+    const lower = alias.toLowerCase();
+    iconAliasLookup.set(lower, slug);
+    iconAliasLookup.set(normalizeIconKey(alias), slug);
+}
 
 // 背景漸層預設
 const gradientPresets = {
@@ -352,27 +449,72 @@ let bookmarks = [];
 let categories = [];
 let editingBookmarkId = null;
 let currentSearchEngine = 'google';
+let searchHistory = [];
+
 let iconLibrary = [];
 let iconLibraryPromise = null;
 let iconResultsLimit = 60;
+let iconAliasLookup = new Map();
+
+let engineDropdownOpen = false;
+
+const MAX_SEARCH_HISTORY = 12;
+
+const ICON_ALIAS_OVERRIDES = {
+    outlook: 'microsoftoutlook',
+    'ms outlook': 'microsoftoutlook',
+    msoutlook: 'microsoftoutlook',
+    'office outlook': 'microsoftoutlook',
+    officeoutlook: 'microsoftoutlook',
+    'microsoft outlook': 'microsoftoutlook',
+    'microsoft-outlook': 'microsoftoutlook',
+    microsoftoutlook: 'microsoftoutlook'
+};
 
 const POPULAR_ICON_FALLBACK = [
-    'github', 'google', 'facebook', 'twitter', 'instagram', 'youtube',
-    'linkedin', 'reddit', 'discord', 'slack', 'spotify', 'netflix',
-    'amazon', 'apple', 'microsoft', 'dropbox', 'notion', 'figma',
-    'steam', 'twitch', 'tiktok', 'pinterest', 'telegram', 'whatsapp',
-    'gmail', 'outlook', 'yahoo', 'medium', 'stackoverflow', 'wikipedia'
+    { slug: 'github', title: 'GitHub' },
+    { slug: 'google', title: 'Google' },
+    { slug: 'facebook', title: 'Facebook' },
+    { slug: 'x', title: 'X (Twitter)' },
+    { slug: 'instagram', title: 'Instagram' },
+    { slug: 'youtube', title: 'YouTube' },
+    { slug: 'microsoftoutlook', title: 'Microsoft Outlook', aliases: ['outlook'] },
+    { slug: 'linkedin', title: 'LinkedIn' },
+    { slug: 'reddit', title: 'Reddit' },
+    { slug: 'discord', title: 'Discord' },
+    { slug: 'slack', title: 'Slack' },
+    { slug: 'spotify', title: 'Spotify' },
+    { slug: 'netflix', title: 'Netflix' },
+    { slug: 'amazon', title: 'Amazon' },
+    { slug: 'apple', title: 'Apple' },
+    { slug: 'microsoft', title: 'Microsoft' },
+    { slug: 'dropbox', title: 'Dropbox' },
+    { slug: 'notion', title: 'Notion' },
+    { slug: 'figma', title: 'Figma' },
+    { slug: 'steam', title: 'Steam' },
+    { slug: 'twitch', title: 'Twitch' },
+    { slug: 'tiktok', title: 'TikTok' },
+    { slug: 'pinterest', title: 'Pinterest' },
+    { slug: 'telegram', title: 'Telegram' },
+    { slug: 'whatsapp', title: 'WhatsApp' },
+    { slug: 'gmail', title: 'Gmail' },
+    { slug: 'yahoo', title: 'Yahoo!' },
+    { slug: 'medium', title: 'Medium' },
+    { slug: 'stackoverflow', title: 'Stack Overflow' },
+    { slug: 'wikipedia', title: 'Wikipedia' }
 ];
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
     loadLanguage();
+    loadSearchHistory();
     loadSettings();
     loadCategories();
     loadBookmarks();
     loadDarkMode();
+    initializeSearchUI();
+    setCurrentSearchEngine(currentSearchEngine, { persist: false });
     initEventListeners();
-    updateSearchIcon();
     updateUILanguage();
     // initialize lucide icons
     if (window.lucide) window.lucide.createIcons();
@@ -509,17 +651,16 @@ function updateUILanguage() {
 function loadSettings() {
     const savedEngine = localStorage.getItem('searchEngine') || 'google';
     const customUrl = localStorage.getItem('customSearchUrl') || '';
-    
-    currentSearchEngine = savedEngine;
+
+    currentSearchEngine = searchEngines[savedEngine] ? savedEngine : 'google';
     const customUrlInput = document.getElementById('customSearchUrl');
     if (customUrlInput) customUrlInput.value = customUrl;
-    
+
     if (savedEngine === 'custom') {
         searchEngines.custom.url = customUrl;
     }
-    
-    // 設置活動標籤
-    setActiveEngineTab(savedEngine);
+
+    syncCustomSearchInputs(customUrl);
     
     // 載入背景設定
     loadBackgroundSettings();
@@ -731,28 +872,66 @@ function handleImageUpload(event) {
 
 // 初始化事件監聽
 function initEventListeners() {
-    // 搜尋功能
-    document.getElementById('searchInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            performSearch();
-        }
-    });
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', handleSearchInputChange);
+        searchInput.addEventListener('focus', () => updateSearchSuggestions(searchInput.value));
+        searchInput.addEventListener('keydown', handleSearchInputKeydown);
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                const suggestions = document.getElementById('searchSuggestions');
+                if (suggestions && !suggestions.matches(':hover')) {
+                    suggestions.classList.add('hidden');
+                }
+            }, 120);
+        });
+    }
+
     const searchBtn = document.getElementById('searchBtn');
-    if (searchBtn) searchBtn.addEventListener('click', performSearch);
-    
-    // 搜尋引擎標籤切換
-    document.querySelectorAll('#engineTabs .engine-pill').forEach(pill => {
-        pill.addEventListener('click', function() {
-            const engine = this.dataset.engine;
-            currentSearchEngine = engine;
-            localStorage.setItem('searchEngine', engine);
-            setActiveEngineTab(engine);
-            updateSearchIcon();
-            if (engine === 'custom' && !searchEngines.custom.url) {
-                openModal('settingsModal');
+    if (searchBtn) searchBtn.addEventListener('click', () => performSearch());
+
+    const openUrlBtn = document.getElementById('openUrlBtn');
+    if (openUrlBtn) openUrlBtn.addEventListener('click', () => {
+        const query = document.getElementById('searchInput')?.value.trim() || '';
+        if (query) openQueryUrl(query);
+    });
+
+    const engineSelector = document.getElementById('engineSelector');
+    if (engineSelector) engineSelector.addEventListener('click', toggleEngineDropdown);
+
+    const engineDropdown = document.getElementById('engineDropdown');
+    if (engineDropdown) engineDropdown.addEventListener('click', handleEngineDropdownClick);
+
+    document.addEventListener('click', handleGlobalClickForDropdowns);
+
+    const suggestions = document.getElementById('searchSuggestions');
+    if (suggestions) suggestions.addEventListener('click', handleSuggestionClick);
+
+    const saveCustomInline = document.getElementById('saveCustomEngineInline');
+    if (saveCustomInline) saveCustomInline.addEventListener('click', saveCustomSearchInline);
+
+    const customInlineInput = document.getElementById('customSearchInline');
+    if (customInlineInput) {
+        customInlineInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveCustomSearchInline();
             }
         });
-    });
+    }
+
+    const customUrlInput = document.getElementById('customSearchUrl');
+    if (customUrlInput) {
+        customUrlInput.addEventListener('input', function() {
+            syncCustomSearchInputs(this.value);
+            if (currentSearchEngine === 'custom') {
+                searchEngines.custom.url = this.value;
+            }
+        });
+    }
+
+    const suggestionContainer = document.getElementById('searchSuggestions');
+    if (suggestionContainer) suggestionContainer.addEventListener('click', handleSuggestionClick);
     
     // 設定按鈕
     document.getElementById('settingsBtn').addEventListener('click', function() {
@@ -941,35 +1120,327 @@ function initEventListeners() {
     });
 }
 
-// 設置活動標籤
-function setActiveEngineTab(engine) {
-    document.querySelectorAll('#engineTabs .engine-pill').forEach(pill => {
-        const isActive = pill.dataset.engine === engine;
-        pill.classList.toggle('active', isActive);
-        pill.setAttribute('aria-selected', String(isActive));
-    });
+// 搜尋 UI 初始化
+function initializeSearchUI() {
+    renderEngineDropdown();
+    updateEngineSelector();
+    updateOpenButtonState('');
+}
+
+// 搜尋歷史
+function loadSearchHistory() {
+    try {
+        const stored = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+        searchHistory = Array.isArray(stored) ? stored.slice(0, MAX_SEARCH_HISTORY) : [];
+    } catch (error) {
+        searchHistory = [];
+    }
+}
+
+function saveSearchHistory() {
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory.slice(0, MAX_SEARCH_HISTORY)));
+}
+
+function addSearchHistoryEntry(entry) {
+    const value = entry.trim();
+    if (!value) return;
+    searchHistory = searchHistory.filter(item => item.toLowerCase() !== value.toLowerCase());
+    searchHistory.unshift(value);
+    if (searchHistory.length > MAX_SEARCH_HISTORY) {
+        searchHistory = searchHistory.slice(0, MAX_SEARCH_HISTORY);
+    }
+    saveSearchHistory();
+}
+
+function handleSearchInputChange(event) {
+    const value = event.target.value;
+    updateOpenButtonState(value);
+    updateSearchSuggestions(value);
+}
+
+function handleSearchInputKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const value = event.target.value.trim();
+        if (!value) return;
+        if (isLikelyUrl(value)) {
+            openQueryUrl(value);
+        } else {
+            performSearch();
+        }
+    } else if (event.key === 'Escape') {
+        closeEngineDropdown();
+    }
+}
+
+function handleSuggestionClick(event) {
+    const button = event.target.closest('.suggestion-item');
+    if (!button) return;
+    const value = button.dataset.value || button.textContent || '';
+    if (!value) return;
+    const input = document.getElementById('searchInput');
+    if (input) {
+        input.value = value;
+        input.focus();
+    }
+    updateOpenButtonState(value);
+    if (isLikelyUrl(value)) {
+        openQueryUrl(value);
+    } else {
+        performSearch();
+    }
+}
+
+function updateSearchSuggestions(query) {
+    const container = document.getElementById('searchSuggestions');
+    if (!container) return;
+    const suggestions = buildSearchSuggestions(query);
+    if (!suggestions.length) {
+        container.innerHTML = '';
+        container.classList.add('hidden');
+        return;
+    }
+    const title = `<div class="suggestions-title">${t('searchSuggestionsTitle')}</div>`;
+    const list = suggestions.map(item => {
+        const value = escapeAttribute(item);
+        const label = escapeHtml(item);
+        return `<button type="button" class="suggestion-item" data-value="${value}">${label}</button>`;
+    }).join('');
+    container.innerHTML = `${title}<div class="suggestion-list">${list}</div>`;
+    container.classList.remove('hidden');
+}
+
+function buildSearchSuggestions(query) {
+    const suggestions = [];
+    const seen = new Set();
+    const value = (query || '').trim().toLowerCase();
+
+    const addSuggestion = (text) => {
+        if (!text) return;
+        const key = text.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        suggestions.push(text);
+    };
+
+    if (!value) {
+        searchHistory.forEach(addSuggestion);
+        bookmarks.forEach(bookmark => {
+            addSuggestion(bookmark.name);
+            try {
+                const hostname = new URL(bookmark.url).hostname;
+                addSuggestion(hostname);
+            } catch (error) {
+                // ignore invalid urls
+            }
+        });
+    } else {
+        searchHistory.forEach(item => {
+            if (item.toLowerCase().includes(value)) addSuggestion(item);
+        });
+        bookmarks.forEach(bookmark => {
+            if (bookmark.name && bookmark.name.toLowerCase().includes(value)) addSuggestion(bookmark.name);
+            if (bookmark.url && bookmark.url.toLowerCase().includes(value)) addSuggestion(bookmark.url);
+            try {
+                const hostname = new URL(bookmark.url).hostname;
+                if (hostname && hostname.toLowerCase().includes(value)) addSuggestion(hostname);
+            } catch (error) {
+                // ignore invalid urls
+            }
+        });
+        const engineLabel = t(searchEngines[currentSearchEngine].labelKey || currentSearchEngine);
+        addSuggestion(`${query} ${engineLabel}`);
+    }
+
+    return suggestions.slice(0, 8);
+}
+
+function setCurrentSearchEngine(engineKey, { persist = true } = {}) {
+    if (!searchEngines[engineKey]) {
+        engineKey = 'google';
+    }
+
+    if (persist) {
+        localStorage.setItem('searchEngine', engineKey);
+    }
+
+    currentSearchEngine = engineKey;
+    renderEngineDropdown();
+    updateEngineSelector();
+    updateSearchIcon();
+    toggleCustomEngineConfig(engineKey === 'custom');
+
+    if (engineKey === 'custom' && !searchEngines.custom.url) {
+        const inline = document.getElementById('customSearchInline');
+        if (inline) inline.focus();
+    }
+}
+
+function renderEngineDropdown() {
+    const dropdown = document.getElementById('engineDropdown');
+    if (!dropdown) return;
+    dropdown.innerHTML = Object.keys(searchEngines).map(key => {
+        const engine = searchEngines[key];
+        const label = t(engine.labelKey || key);
+        return `
+            <button type="button" class="engine-option${key === currentSearchEngine ? ' active' : ''}" data-engine="${key}" role="option" aria-selected="${key === currentSearchEngine}">
+                <span class="engine-option__icon">${getIconMarkup(engine.icon, 18, label)}</span>
+                <span class="engine-option__name">${escapeHtml(label)}</span>
+            </button>
+        `;
+    }).join('');
+    if (window.lucide) window.lucide.createIcons();
+}
+
+function updateEngineSelector() {
+    const selector = document.getElementById('engineSelector');
+    const iconTarget = document.getElementById('engineSelectorIcon');
+    const labelTarget = document.getElementById('engineSelectorLabel');
+    const engine = searchEngines[currentSearchEngine];
+    if (selector) {
+        selector.setAttribute('aria-expanded', engineDropdownOpen ? 'true' : 'false');
+    }
+    if (labelTarget && engine) {
+        labelTarget.textContent = t(engine.labelKey || currentSearchEngine);
+    }
+    if (iconTarget && engine) {
+        iconTarget.innerHTML = getIconMarkup(engine.icon, 20, t(engine.labelKey || currentSearchEngine));
+        if (window.lucide) window.lucide.createIcons();
+    }
+}
+
+function toggleEngineDropdown(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    engineDropdownOpen = !engineDropdownOpen;
+    const dropdown = document.getElementById('engineDropdown');
+    const selector = document.getElementById('engineSelector');
+    if (dropdown) dropdown.classList.toggle('show', engineDropdownOpen);
+    if (selector) selector.setAttribute('aria-expanded', engineDropdownOpen ? 'true' : 'false');
+}
+
+function closeEngineDropdown() {
+    if (!engineDropdownOpen) return;
+    engineDropdownOpen = false;
+    const dropdown = document.getElementById('engineDropdown');
+    const selector = document.getElementById('engineSelector');
+    if (dropdown) dropdown.classList.remove('show');
+    if (selector) selector.setAttribute('aria-expanded', 'false');
+}
+
+function handleEngineDropdownClick(event) {
+    const option = event.target.closest('.engine-option');
+    if (!option) return;
+    const engineKey = option.dataset.engine;
+    setCurrentSearchEngine(engineKey);
+    closeEngineDropdown();
+}
+
+function handleGlobalClickForDropdowns(event) {
+    const dropdown = document.getElementById('engineDropdown');
+    const selector = document.getElementById('engineSelector');
+    if (dropdown && selector && engineDropdownOpen && !dropdown.contains(event.target) && !selector.contains(event.target)) {
+        closeEngineDropdown();
+    }
+
+    const suggestions = document.getElementById('searchSuggestions');
+    const searchWrapper = document.querySelector('.search-input-wrapper');
+    if (suggestions && !suggestions.classList.contains('hidden')) {
+        const clickedInsideSearch = searchWrapper?.contains(event.target) || suggestions.contains(event.target);
+        if (!clickedInsideSearch) {
+            suggestions.classList.add('hidden');
+            suggestions.innerHTML = '';
+        }
+    }
+}
+
+function toggleCustomEngineConfig(show) {
+    const config = document.getElementById('customEngineConfig');
+    if (!config) return;
+    config.classList.toggle('hidden', !show);
+}
+
+function syncCustomSearchInputs(value) {
+    const inline = document.getElementById('customSearchInline');
+    if (inline && inline.value !== value) {
+        inline.value = value;
+    }
+}
+
+function saveCustomSearchInline() {
+    const inline = document.getElementById('customSearchInline');
+    if (!inline) return;
+    const template = inline.value.trim();
+    if (!template || !template.includes('{query}')) {
+        alert(t('customSearchInlineHint'));
+        inline.focus();
+        return;
+    }
+    searchEngines.custom.url = template;
+    localStorage.setItem('customSearchUrl', template);
+    const settingsInput = document.getElementById('customSearchUrl');
+    if (settingsInput) settingsInput.value = template;
+    setCurrentSearchEngine('custom');
+    updateSearchSuggestions(document.getElementById('searchInput')?.value || '');
+}
+
+function updateOpenButtonState(value) {
+    const button = document.getElementById('openUrlBtn');
+    if (!button) return;
+    button.classList.toggle('hidden', !isLikelyUrl(value.trim()));
+}
+
+function openQueryUrl(query) {
+    const normalized = normalizeUrl(query);
+    if (!normalized) return;
+    addSearchHistoryEntry(query);
+    window.open(normalized, '_blank', 'noopener');
+    updateSearchSuggestions(document.getElementById('searchInput')?.value || '');
+}
+
+function normalizeUrl(value) {
+    let url = value.trim();
+    if (!url) return '';
+    if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(url)) {
+        url = `https://${url}`;
+    }
+    try {
+        const parsed = new URL(url);
+        return parsed.href;
+    } catch (error) {
+        return '';
+    }
+}
+
+function isLikelyUrl(value) {
+    if (!value || /\s/.test(value)) return false;
+    if (/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) {
+        try {
+            new URL(value);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+    return /^([\w-]+\.)+[\w-]{2,}(\/.*)?$/.test(value);
 }
 
 // 更新搜尋圖示
 function updateSearchIcon() {
     const el = document.getElementById('searchEngineIcon');
     if (!el) return;
-    const iconData = searchEngines[currentSearchEngine].icon;
-    
-    // 檢查是否為 Lucide 圖標
-    if (iconData.startsWith('lucide:')) {
-        const iconName = iconData.replace('lucide:', '');
-        el.innerHTML = `<i data-lucide="${iconName}"></i>`;
-        if (window.lucide) window.lucide.createIcons();
-    } else {
-        // 使用品牌圖標 URL
-        el.innerHTML = `<img src="${iconData}" alt="${currentSearchEngine}" style="width:20px;height:20px;">`;
-    }
+    const engine = searchEngines[currentSearchEngine];
+    if (!engine) return;
+    el.innerHTML = getIconMarkup(engine.icon, 20, t(engine.labelKey || currentSearchEngine));
+    if (window.lucide) window.lucide.createIcons();
 }
 
 // 執行搜尋
 function performSearch() {
-    const query = document.getElementById('searchInput').value.trim();
+    const input = document.getElementById('searchInput');
+    const query = input ? input.value.trim() : '';
     if (!query) return;
     
     let searchUrl = searchEngines[currentSearchEngine].url;
@@ -980,6 +1451,9 @@ function performSearch() {
         return;
     }
     
+    addSearchHistoryEntry(query);
+    updateSearchSuggestions(query);
+
     searchUrl = searchUrl.replace('{query}', encodeURIComponent(query));
     window.location.href = searchUrl;
 }
@@ -1014,12 +1488,12 @@ function loadBookmarks() {
 
 function getDefaultBookmarks() {
     return [
-        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: 'https://cdn.simpleicons.org/github', category: '' },
-        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: 'https://cdn.simpleicons.org/youtube', category: '' },
-        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: 'https://cdn.simpleicons.org/gmail', category: '' },
-        { id: Date.now() + 3, name: 'X', url: 'https://x.com', icon: 'https://cdn.simpleicons.org/x', category: '' },
-        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: 'https://cdn.simpleicons.org/notion', category: '' },
-        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'https://cdn.simpleicons.org/instagram', category: '' }
+        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: 'github', category: '' },
+        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: 'youtube', category: '' },
+        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: 'gmail', category: '' },
+        { id: Date.now() + 3, name: 'X', url: 'https://x.com', icon: 'x', category: '' },
+        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: 'notion', category: '' },
+        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'instagram', category: '' }
     ];
 }
 
@@ -1106,13 +1580,16 @@ function createBookmarkElement(bookmark) {
     // allow explicit null/empty to mean no icon
     if (!bookmark.icon) {
         iconHtml = '';
+    } else if (bookmark.icon.startsWith('lucide:')) {
+        iconHtml = getIconMarkup(bookmark.icon, 32, bookmark.name);
     } else if (bookmark.icon.startsWith('http')) {
         iconHtml = `<img src="${bookmark.icon}" alt="${bookmark.name}" onerror="this.parentElement.innerHTML='';">`;
     } else if (bookmark.icon.includes('favicon')) {
         iconHtml = `<img src="${bookmark.icon}" alt="${bookmark.name}" onerror="this.parentElement.innerHTML='';">`;
-    } else {
-        // fallback to text or svg string
+    } else if (/^<svg/i.test(bookmark.icon)) {
         iconHtml = bookmark.icon;
+    } else {
+        iconHtml = getIconMarkup(bookmark.icon, 32, bookmark.name);
     }
     
     div.innerHTML = `
@@ -1451,6 +1928,57 @@ function ensureIconLibrary() {
     if (iconLibraryPromise) {
         return iconLibraryPromise;
     }
+
+    const primeAliasOverrides = () => {
+        iconAliasLookup = new Map();
+        Object.entries(ICON_ALIAS_OVERRIDES).forEach(([alias, target]) => {
+            registerIconAlias(alias, target);
+        });
+    };
+
+    const hydrateLibrary = (icons) => {
+        if (!Array.isArray(icons) || !icons.length) {
+            const fallback = POPULAR_ICON_FALLBACK.map(item => ({
+                slug: item.slug,
+                title: item.title || item.slug,
+                aliases: item.aliases || []
+            }));
+            primeAliasOverrides();
+            fallback.forEach(icon => {
+                registerIconAlias(icon.slug, icon.slug);
+                registerIconAlias(icon.title, icon.slug);
+                (icon.aliases || []).forEach(alias => registerIconAlias(alias, icon.slug));
+            });
+            iconLibrary = fallback.sort((a, b) => a.title.localeCompare(b.title));
+            return iconLibrary;
+        }
+
+        primeAliasOverrides();
+
+        iconLibrary = icons
+            .map(icon => {
+                if (!icon?.slug) return null;
+                const slug = icon.slug;
+                const title = icon.title || slug;
+                const aliases = Array.isArray(icon.aliases)
+                    ? icon.aliases
+                    : (typeof icon.aliases === 'string' ? icon.aliases.split(',').map(a => a.trim()).filter(Boolean) : []);
+                registerIconAlias(slug, slug);
+                registerIconAlias(title, slug);
+                aliases.forEach(alias => registerIconAlias(alias, slug));
+                return {
+                    slug,
+                    title,
+                    hex: icon.hex || '',
+                    aliases
+                };
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.title.localeCompare(b.title));
+
+        return iconLibrary;
+    };
+
     iconLibraryPromise = fetch('https://unpkg.com/simple-icons@latest/_data/simple-icons.json')
         .then(response => {
             if (!response.ok) {
@@ -1458,22 +1986,12 @@ function ensureIconLibrary() {
             }
             return response.json();
         })
-        .then(data => {
-            const icons = Array.isArray(data?.icons) ? data.icons : [];
-            iconLibrary = icons
-                .map(icon => icon.slug)
-                .filter(Boolean)
-                .sort((a, b) => a.localeCompare(b));
-            if (!iconLibrary.length) {
-                iconLibrary = [...POPULAR_ICON_FALLBACK].sort((a, b) => a.localeCompare(b));
-            }
-            return iconLibrary;
-        })
+        .then(data => hydrateLibrary(data?.icons))
         .catch(error => {
             console.error('Icon library load failed:', error);
-            iconLibrary = [...POPULAR_ICON_FALLBACK].sort((a, b) => a.localeCompare(b));
-            return iconLibrary;
+            return hydrateLibrary(null);
         });
+
     return iconLibraryPromise;
 }
 
@@ -1504,7 +2022,12 @@ async function openIconSearch() {
         searchInput.oninput = function() {
             const query = this.value.toLowerCase().trim();
             if (query) {
-                const filtered = iconLibrary.filter(icon => icon.includes(query));
+                const filtered = iconLibrary.filter(icon => {
+                    const slugMatch = icon.slug.toLowerCase().includes(query);
+                    const titleMatch = icon.title?.toLowerCase().includes(query);
+                    const aliasMatch = (icon.aliases || []).some(alias => alias.toLowerCase().includes(query));
+                    return slugMatch || titleMatch || aliasMatch;
+                });
                 renderIconGrid(filtered, true, query);
             } else {
                 renderIconGrid(iconLibrary, true);
@@ -1532,12 +2055,17 @@ function renderIconGrid(icons, resetLimit = false, query = '') {
     const limitedIcons = icons.slice(0, iconResultsLimit);
 
     grid.innerHTML = limitedIcons.map(icon => {
-        const safeIcon = icon.replace(/'/g, "\\'");
+        const originalSlug = icon.slug || icon;
+        const slug = resolveIconSlug(originalSlug);
+        const safeSlug = slug.replace(/'/g, "\\'");
+        const displayName = escapeHtml(icon.title || originalSlug);
+        const subtitle = icon.title && icon.title.toLowerCase() !== slug.toLowerCase() ? `<span class="icon-subtitle">${escapeHtml(slug)}</span>` : '';
         return `
-            <div class="icon-grid-item" onclick="selectIcon('${safeIcon}')">
-                <img src="https://cdn.simpleicons.org/${icon}" alt="${icon}" onerror="if(!this.dataset.alt){this.dataset.alt='1';this.src='https://api.iconify.design/simple-icons:${icon}.svg';}else{this.remove();}">
-                <span>${icon}</span>
-            </div>
+            <button type="button" class="icon-grid-item" onclick="selectIcon('${safeSlug}')">
+                <img src="https://cdn.simpleicons.org/${slug}" alt="${displayName}" onerror="if(!this.dataset.alt){this.dataset.alt='1';this.src='https://api.iconify.design/simple-icons:${slug}.svg';}else{this.remove();}">
+                <span>${displayName}</span>
+                ${subtitle}
+            </button>
         `;
     }).join('');
 
