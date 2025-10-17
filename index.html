@@ -1,185 +1,176 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的起始頁</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="background-overlay"></div>
-    <div class="container">
-        <!-- 搜尋區域 -->
-        <div class="search-section">
-            <h1 class="logo">Start Page</h1>
-            <div class="search-container">
-                <div class="search-box">
-                    <div class="search-engine-icon" id="searchEngineIcon">🔍</div>
-                    <input type="text" id="searchInput" placeholder="搜尋任何內容..." autocomplete="off">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>我的起始頁</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="background-layer" aria-hidden="true"></div>
+        <main class="app">
+            <section class="hero">
+                <div class="hero-header">
+                    <h1 class="hero-title">Start Page</h1>
+                    <p class="hero-subtitle">快速搜尋、管理收藏，一切從這裡開始。</p>
                 </div>
-                <div class="search-engine-tabs">
-                    <button class="engine-tab active" data-engine="google">
-                        <span class="engine-icon">🔍</span>
-                        <span>Google</span>
-                    </button>
-                    <button class="engine-tab" data-engine="bing">
-                        <span class="engine-icon">🔎</span>
-                        <span>Bing</span>
-                    </button>
-                    <button class="engine-tab" data-engine="duckduckgo">
-                        <span class="engine-icon">🦆</span>
-                        <span>DuckDuckGo</span>
-                    </button>
-                    <button class="engine-tab" data-engine="baidu">
-                        <span class="engine-icon">📍</span>
-                        <span>百度</span>
-                    </button>
-                    <button class="engine-tab" data-engine="custom">
-                        <span class="engine-icon">⚙️</span>
-                        <span>自訂</span>
-                    </button>
+                <div class="search-card">
+                    <div class="engine-list" id="engineTabs" role="tablist" aria-label="搜尋引擎">
+                        <button class="engine-pill active" data-engine="google" role="tab" aria-selected="true">
+                            <span>🔍</span>
+                            Google
+                        </button>
+                        <button class="engine-pill" data-engine="bing" role="tab" aria-selected="false">
+                            <span>🔎</span>
+                            Bing
+                        </button>
+                        <button class="engine-pill" data-engine="duckduckgo" role="tab" aria-selected="false">
+                            <span>🦆</span>
+                            DuckDuckGo
+                        </button>
+                        <button class="engine-pill" data-engine="baidu" role="tab" aria-selected="false">
+                            <span>📍</span>
+                            百度
+                        </button>
+                        <button class="engine-pill" data-engine="custom" role="tab" aria-selected="false">
+                            <span>⚙️</span>
+                            自訂
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <div class="search-icon" id="searchEngineIcon">🔍</div>
+                        <input id="searchInput" type="text" placeholder="搜尋任何內容..." autocomplete="off" />
+                        <button id="searchBtn" class="search-btn" aria-label="搜尋">
+                            搜尋
+                        </button>
+                    </div>
                 </div>
+            </section>
+
+            <section class="toolbar" aria-label="快速操作">
+                <div class="toolbar-actions">
+                    <button id="addBookmarkBtn" class="toolbar-btn primary">+ 新增書籤</button>
+                    <button id="manageCategoriesBtn" class="toolbar-btn">📁 管理分類</button>
+                    <button id="settingsBtn" class="toolbar-btn">⚙️ 設定</button>
+                </div>
+            </section>
+
+            <section class="bookmarks" aria-label="書籤列表">
+                <div class="bookmark-card">
+                    <header class="bookmark-card__header">
+                        <h2>� 我的書籤</h2>
+                        <p>常用網站都在這裡，點擊即可開啟。</p>
+                    </header>
+                    <div id="bookmarkGrid" class="bookmark-grid" aria-live="polite"></div>
+                </div>
+                <div id="categorySection"></div>
+            </section>
+        </main>
+
+        <!-- 設定彈窗 -->
+        <div id="settingsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+            <div class="modal-panel">
+                <header class="modal-header">
+                    <h3 id="settingsTitle">⚙️ 設定</h3>
+                    <button class="modal-close" data-close="settingsModal" aria-label="關閉設定">×</button>
+                </header>
+                <div class="modal-body">
+                    <section class="settings-block">
+                        <h4>🔍 搜尋引擎</h4>
+                        <label for="customSearchUrl">自訂搜尋引擎 URL</label>
+                        <input id="customSearchUrl" type="text" placeholder="https://example.com/search?q={query}" />
+                        <span class="hint">使用 {query} 作為搜尋關鍵字的佔位符</span>
+                    </section>
+                    <section class="settings-block">
+                        <h4>🎨 背景設定</h4>
+                        <div class="settings-field">
+                            <label>背景類型</label>
+                            <div class="radio-list" id="bgTypeRadios">
+                                <label><input type="radio" name="bgType" value="gradient" checked /> 漸層</label>
+                                <label><input type="radio" name="bgType" value="image" /> 圖片</label>
+                                <label><input type="radio" name="bgType" value="color" /> 純色</label>
+                            </div>
+                        </div>
+                        <div class="settings-field" id="gradientSettings">
+                            <label for="gradientPreset">選擇漸層</label>
+                            <select id="gradientPreset">
+                                <option value="default">天空藍</option>
+                                <option value="sunset">日落橘紅</option>
+                                <option value="ocean">海洋藍綠</option>
+                                <option value="purple">夢幻紫</option>
+                                <option value="green">森林綠</option>
+                                <option value="dark">星夜黑</option>
+                            </select>
+                        </div>
+                        <div class="settings-field hidden" id="imageSettings">
+                            <label for="bgImageUrl">圖片網址</label>
+                            <input id="bgImageUrl" type="text" placeholder="https://example.com/image.jpg" />
+                            <span class="hint">提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature</span>
+                        </div>
+                        <div class="settings-field hidden" id="colorSettings">
+                            <label for="bgColor">選擇顏色</label>
+                            <input id="bgColor" type="color" value="#1a1a2e" />
+                        </div>
+                    </section>
+                </div>
+                <footer class="modal-footer">
+                    <button id="saveSettings" class="btn primary">儲存設定</button>
+                </footer>
             </div>
         </div>
 
-        <!-- 設定按鈕 -->
-        <button id="settingsBtn" class="floating-settings-btn" title="設定">⚙️</button>
-
-        <!-- 書籤區域 -->
-        <div class="bookmarks-section">
-            <div class="main-bookmarks-container">
-                <div class="main-header">
-                    <div class="main-title">📌 我的書籤</div>
-                    <div class="main-actions">
-                        <button class="add-btn" id="addMainBookmarkBtn">+ 新增書籤</button>
-                        <button class="manage-btn" id="manageCategoriesBtn">📁 管理分類</button>
+        <!-- 書籤彈窗 -->
+        <div id="bookmarkModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="bookmarkTitle">
+            <div class="modal-panel">
+                <header class="modal-header">
+                    <h3 id="bookmarkTitle">新增書籤</h3>
+                    <button class="modal-close" data-close="bookmarkModal" aria-label="關閉書籤表單">×</button>
+                </header>
+                <div class="modal-body">
+                    <label for="bookmarkCategory">分類</label>
+                    <div class="category-picker">
+                        <select id="bookmarkCategory"></select>
+                        <input id="newCategoryInput" type="text" placeholder="輸入新分類" class="hidden" />
                     </div>
+                    <label for="bookmarkName">名稱</label>
+                    <input id="bookmarkName" type="text" placeholder="網站名稱" />
+                    <label for="bookmarkUrl">網址</label>
+                    <input id="bookmarkUrl" type="text" placeholder="https://example.com" />
+                    <label for="bookmarkIcon">圖示</label>
+                    <div class="icon-row">
+                        <input id="bookmarkIcon" type="text" placeholder="🌐 Emoji 或圖片網址" />
+                        <button id="autoIconBtn" type="button" class="btn">自動抓取</button>
+                    </div>
+                    <span class="hint">可輸入 Emoji、圖片網址，或使用自動抓取</span>
                 </div>
-                <div class="bookmarks-grid" id="mainBookmarksList"></div>
-            </div>
-            <div id="categoriesContainer"></div>
-        </div>
-    </div>
-
-    <!-- 設定彈窗 -->
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>⚙️ 設定</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="settings-section">
-                    <h4>🔍 搜尋引擎</h4>
-                    <label for="customSearchUrl">自訂搜尋引擎 URL：</label>
-                    <input type="text" id="customSearchUrl" placeholder="https://example.com/search?q={query}">
-                    <small>使用 {query} 作為搜尋關鍵字的佔位符</small>
-                </div>
-                
-                <div class="settings-section">
-                    <h4>🎨 背景設定</h4>
-                    <label>選擇背景類型：</label>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="bgType" value="gradient" checked> 漸層色
-                        </label>
-                        <label>
-                            <input type="radio" name="bgType" value="image"> 圖片
-                        </label>
-                        <label>
-                            <input type="radio" name="bgType" value="color"> 純色
-                        </label>
-                    </div>
-                    
-                    <div id="gradientOptions" class="bg-option">
-                        <label for="gradientPreset">選擇漸層：</label>
-                        <select id="gradientPreset">
-                            <option value="default">預設藍色</option>
-                            <option value="sunset">日落橘紅</option>
-                            <option value="ocean">海洋藍綠</option>
-                            <option value="purple">夢幻紫色</option>
-                            <option value="green">清新綠色</option>
-                            <option value="dark">深色模式</option>
-                        </select>
-                    </div>
-                    
-                    <div id="imageOptions" class="bg-option" style="display:none;">
-                        <label for="bgImageUrl">圖片網址：</label>
-                        <input type="text" id="bgImageUrl" placeholder="https://example.com/image.jpg">
-                        <small>或使用 Unsplash: https://source.unsplash.com/1920x1080/?nature</small>
-                    </div>
-                    
-                    <div id="colorOptions" class="bg-option" style="display:none;">
-                        <label for="bgColor">選擇顏色：</label>
-                        <input type="color" id="bgColor" value="#1a1a2e">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="saveSettings" class="btn-primary">儲存設定</button>
+                <footer class="modal-footer">
+                    <button id="saveBookmark" class="btn primary">儲存</button>
+                    <button data-close="bookmarkModal" class="btn">取消</button>
+                </footer>
             </div>
         </div>
-    </div>
 
-    <!-- 新增/編輯書籤彈窗 -->
-    <div id="bookmarkModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="bookmarkModalTitle">新增書籤</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <label for="bookmarkCategory">分類：</label>
-                <div class="category-input-group">
-                    <select id="bookmarkCategory">
-                        <option value="">選擇或新增分類...</option>
-                    </select>
-                    <input type="text" id="newCategory" placeholder="或輸入新分類" style="display:none;">
+        <!-- 分類彈窗 -->
+        <div id="categoryModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="categoryTitle">
+            <div class="modal-panel">
+                <header class="modal-header">
+                    <h3 id="categoryTitle">📁 管理分類</h3>
+                    <button class="modal-close" data-close="categoryModal" aria-label="關閉分類管理">×</button>
+                </header>
+                <div class="modal-body">
+                    <p class="hint" style="margin-bottom: 16px;">建立分類來整理書籤。刪除分類時，書籤會回到主列表。</p>
+                    <div id="categoryList" class="category-list"></div>
+                    <div class="icon-row" style="margin-top: 16px;">
+                        <input id="newCategoryName" type="text" placeholder="輸入新分類名稱" />
+                        <button id="addCategoryBtn" type="button" class="btn primary">+ 新增</button>
+                    </div>
                 </div>
-                
-                <label for="bookmarkName">名稱：</label>
-                <input type="text" id="bookmarkName" placeholder="網站名稱">
-                
-                <label for="bookmarkUrl">網址：</label>
-                <input type="text" id="bookmarkUrl" placeholder="https://example.com">
-                
-                <label for="bookmarkIcon">圖示：</label>
-                <div class="icon-input-group">
-                    <input type="text" id="bookmarkIcon" placeholder="🌐 emoji 或圖片網址">
-                    <button type="button" id="fetchIcon" class="btn-secondary">自動抓取</button>
-                </div>
-                <small>可輸入 emoji、圖片網址，或點擊「自動抓取」從網站獲取圖示</small>
-            </div>
-            <div class="modal-footer">
-                <button id="saveBookmark" class="btn-primary">儲存</button>
-                <button id="cancelBookmark" class="btn-secondary">取消</button>
+                <footer class="modal-footer">
+                    <button data-close="categoryModal" class="btn primary">完成</button>
+                </footer>
             </div>
         </div>
-    </div>
-    
-    <!-- 分類管理彈窗 -->
-    <div id="categoryModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>📁 管理分類</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p style="margin-bottom: 16px; color: var(--text-secondary); font-size: 14px;">
-                    建立分類來組織你的書籤。你可以將書籤從主列表移動到分類中。
-                </p>
-                <div id="categoryList"></div>
-                <div style="margin-top: 16px;">
-                    <input type="text" id="newCategoryName" placeholder="輸入新分類名稱" style="margin-bottom: 8px;">
-                    <button id="addCategoryBtn" class="btn-primary">+ 建立分類</button>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-primary close">完成</button>
-            </div>
-        </div>
-    </div>
 
-    <script src="script.js"></script>
-</body>
+        <script src="script.js"></script>
+    </body>
 </html>
