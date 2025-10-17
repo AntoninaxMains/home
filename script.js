@@ -10,6 +10,7 @@ const translations = {
     searchOpenLink: 'Open link',
     searchSuggestionsTitle: 'Suggestions',
     searchHistoryTitle: 'Search History',
+    noSearchHistory: 'No search history yet',
         // Toolbar
         addBookmark: 'Add Bookmark',
         manageCategories: 'Manage Categories',
@@ -129,6 +130,7 @@ const translations = {
     searchOpenLink: '打开链接',
     searchSuggestionsTitle: '猜你想搜',
     searchHistoryTitle: '搜索历史',
+    noSearchHistory: '暂无搜索历史',
         // Toolbar
         addBookmark: '新增书签',
         manageCategories: '管理分类',
@@ -248,6 +250,7 @@ const translations = {
     searchOpenLink: '打開連結',
     searchSuggestionsTitle: '猜你想搜尋',
     searchHistoryTitle: '搜尋歷史',
+    noSearchHistory: '暫無搜尋歷史',
         // Toolbar
         addBookmark: '新增書籤',
         manageCategories: '管理分類',
@@ -1010,7 +1013,8 @@ function initEventListeners() {
             setTimeout(() => {
                 const suggestions = document.getElementById('searchSuggestions');
                 if (suggestions && !suggestions.matches(':hover')) {
-                    suggestions.classList.add('hidden');
+                    // 不要隱藏，只在點擊外部時才隱藏
+                    // suggestions.classList.add('hidden');
                 }
             }, 120);
         });
@@ -1260,6 +1264,9 @@ function initializeSearchUI() {
     updateEngineSelector();
     const input = document.getElementById('searchInput');
     updateOpenButtonState(input ? input.value : '');
+    
+    // 初始化時顯示搜索歷史（如果有的話）
+    updateSearchSuggestions('');
 }
 
 // 搜尋歷史
@@ -1331,13 +1338,23 @@ async function updateSearchSuggestions(query) {
     if (!container) return;
 
     const callToken = ++latestSuggestQueryToken;
+    const trimmed = (query || '').trim();
+    
+    // 如果沒有輸入，只顯示搜索歷史
+    if (!trimmed) {
+        const historyOnly = searchHistory.slice(0, SEARCH_SUGGESTION_LIMIT);
+        renderSuggestionList(container, historyOnly, false);
+        return;
+    }
+
+    // 有輸入時，先顯示本地建議
     const localSuggestions = buildLocalSuggestions(query);
     const initialSuggestions = localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT);
-    renderSuggestionList(container, initialSuggestions);
+    renderSuggestionList(container, initialSuggestions, true);
 
-    const trimmed = (query || '').trim();
+    // 檢查是否需要遠端建議
     const minLength = getRemoteSuggestionMinLength();
-    if (!trimmed || trimmed.length < minLength || isLikelyUrl(trimmed)) {
+    if (trimmed.length < minLength || isLikelyUrl(trimmed)) {
         if (remoteSuggestCancel) {
             remoteSuggestCancel();
             remoteSuggestCancel = null;
@@ -1345,12 +1362,14 @@ async function updateSearchSuggestions(query) {
         return;
     }
 
+    // 獲取遠端建議並合併
     const remoteSuggestions = await fetchDuckDuckGoSuggestions(trimmed);
     if (callToken !== latestSuggestQueryToken) return;
-    if (!remoteSuggestions.length) return;
-
-    const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
-    renderSuggestionList(container, combined);
+    
+    if (remoteSuggestions && remoteSuggestions.length > 0) {
+        const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
+        renderSuggestionList(container, combined, true);
+    }
 }
 
 function buildLocalSuggestions(query) {
@@ -1366,47 +1385,51 @@ function buildLocalSuggestions(query) {
         suggestions.push(text);
     };
 
-    if (!value) {
-        searchHistory.forEach(addSuggestion);
-        bookmarks.forEach(bookmark => {
-            addSuggestion(bookmark.name);
-            try {
-                const hostname = new URL(bookmark.url).hostname;
-                addSuggestion(hostname);
-            } catch (error) {
-                // ignore invalid urls
-            }
-        });
-    } else {
+    // 只處理有輸入的情況
+    if (value) {
+        // 先添加匹配的搜索歷史
         searchHistory.forEach(item => {
             if (item.toLowerCase().includes(value)) addSuggestion(item);
         });
+        
+        // 再添加匹配的書籤
         bookmarks.forEach(bookmark => {
-            if (bookmark.name && bookmark.name.toLowerCase().includes(value)) addSuggestion(bookmark.name);
-            if (bookmark.url && bookmark.url.toLowerCase().includes(value)) addSuggestion(bookmark.url);
+            if (bookmark.name && bookmark.name.toLowerCase().includes(value)) {
+                addSuggestion(bookmark.name);
+            }
+            if (bookmark.url && bookmark.url.toLowerCase().includes(value)) {
+                addSuggestion(bookmark.url);
+            }
             try {
                 const hostname = new URL(bookmark.url).hostname;
-                if (hostname && hostname.toLowerCase().includes(value)) addSuggestion(hostname);
+                if (hostname && hostname.toLowerCase().includes(value)) {
+                    addSuggestion(hostname);
+                }
             } catch (error) {
                 // ignore invalid urls
             }
         });
-        const engineLabel = t(searchEngines[currentSearchEngine].labelKey || currentSearchEngine);
-        addSuggestion(`${query} ${engineLabel}`);
     }
 
     return suggestions;
 }
 
-function renderSuggestionList(container, suggestions) {
-    if (!suggestions.length) {
+function renderSuggestionList(container, suggestions, hasQuery = false) {
+    // 如果沒有建議
+    if (!suggestions || suggestions.length === 0) {
+        // 沒有輸入且沒有歷史記錄，顯示提示
+        if (!hasQuery && searchHistory.length === 0) {
+            container.innerHTML = `<div class="suggestions-title">${t('searchHistoryTitle')}</div><div class="suggestion-list"><div class="hint" style="padding: 12px; text-align: center;">${t('noSearchHistory') || '暫無搜尋歷史'}</div></div>`;
+            container.classList.remove('hidden');
+            return;
+        }
+        // 其他情況隱藏
         container.innerHTML = '';
         container.classList.add('hidden');
         return;
     }
     
-    const input = document.getElementById('searchInput');
-    const hasQuery = input && input.value.trim().length > 0;
+    // 根據是否有輸入決定標題
     const titleKey = hasQuery ? 'searchSuggestionsTitle' : 'searchHistoryTitle';
     const title = `<div class="suggestions-title">${t(titleKey)}</div>`;
     
@@ -1576,6 +1599,7 @@ async function fetchDuckDuckGoSuggestions(query) {
         window[callbackId] = (payload) => {
             try {
                 const suggestions = extractDuckDuckGoSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
+                console.log('DuckDuckGo 建議詞:', suggestions);
                 finalize(suggestions);
             } catch (err) {
                 console.warn('Failed to parse DuckDuckGo suggestions', err);
@@ -1733,11 +1757,13 @@ function handleGlobalClickForDropdowns(event) {
 
     const suggestions = document.getElementById('searchSuggestions');
     const searchWrapper = document.querySelector('.search-input-wrapper');
+    const searchInput = document.getElementById('searchInput');
+    
     if (suggestions && !suggestions.classList.contains('hidden')) {
         const clickedInsideSearch = searchWrapper?.contains(event.target) || suggestions.contains(event.target);
         if (!clickedInsideSearch) {
+            // 只隱藏，不清空內容，這樣重新聚焦時還能看到
             suggestions.classList.add('hidden');
-            suggestions.innerHTML = '';
         }
     }
 }

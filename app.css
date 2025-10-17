@@ -60,9 +60,9 @@ body {
 .engine-selector--inline { padding: 4px 8px; border: none; background: transparent; box-shadow: none; border-radius: var(--radius-sm); gap: 6px; align-self: stretch; }
 .engine-selector--inline:hover { transform: none; box-shadow: none; background: rgba(76,110,245,0.12); }
 .engine-selector--inline:focus-visible { outline: 2px solid rgba(76,110,245,0.45); outline-offset: 2px; }
-.engine-selector--inline .engine-selector__icon { width: 30px; height: 30px; border-radius: var(--radius-sm); background: rgba(76,110,245,0.12); }
+.engine-selector--inline .engine-selector__icon { width: 30px; height: 30px; border-radius: var(--radius-sm); background: rgba(76,110,245,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .engine-selector--inline .engine-selector__label { display: none; font-size: 13px; color: var(--text-subtle); }
-.engine-selector--inline .engine-selector__chevron { width: 18px; height: 18px; opacity: 0.45; }
+.engine-selector--inline .engine-selector__chevron { width: 18px; height: 18px; opacity: 0.45; flex-shrink: 0; }
 .engine-selector--inline .engine-selector__icon img,
 .engine-selector--inline .engine-selector__icon svg,
 .engine-selector--inline .engine-selector__icon i {
@@ -71,6 +71,7 @@ body {
   max-width: 100%;
   max-height: 100%;
   display: block;
+  object-fit: contain;
 }
 
 @media (min-width: 640px) {
@@ -758,13 +759,25 @@ body.dark-mode .toolbar-btn.primary {
 
 @media (max-width: 640px) {
   .search-input-wrapper {
-    grid-template-columns: 40px 1fr;
+    grid-template-columns: 48px 1fr;
     grid-template-rows: auto auto;
-    gap: 10px;
+    gap: 8px;
+  }
+  .engine-selector--inline {
+    padding: 4px;
   }
   .engine-selector--inline .engine-selector__icon {
     width: 40px;
     height: 40px;
+  }
+  .engine-selector--inline .engine-selector__icon img,
+  .engine-selector--inline .engine-selector__icon svg,
+  .engine-selector--inline .engine-selector__icon i {
+    width: 28px;
+    height: 28px;
+  }
+  .engine-selector--inline .engine-selector__chevron {
+    display: none;
   }
   .search-actions {
     grid-column: 1 / -1;
