@@ -29,7 +29,19 @@
         <button id="settingsBtn" class="floating-settings-btn" title="設定">⚙️</button>
 
         <!-- 書籤區域 -->
-        <div class="bookmarks-section" id="bookmarksContainer"></div>
+        <div class="bookmarks-section">
+            <div class="main-bookmarks-container">
+                <div class="main-header">
+                    <div class="main-title">📌 我的書籤</div>
+                    <div class="main-actions">
+                        <button class="add-btn" id="addMainBookmarkBtn">+ 新增書籤</button>
+                        <button class="manage-btn" id="manageCategoriesBtn">📁 管理分類</button>
+                    </div>
+                </div>
+                <div class="bookmarks-grid" id="mainBookmarksList"></div>
+            </div>
+            <div id="categoriesContainer"></div>
+        </div>
     </div>
 
     <!-- 設定彈窗 -->
@@ -132,12 +144,18 @@
     <div id="categoryModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>管理分類</h3>
+                <h3>📁 管理分類</h3>
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
+                <p style="margin-bottom: 16px; color: var(--text-secondary); font-size: 14px;">
+                    建立分類來組織你的書籤。你可以將書籤從主列表移動到分類中。
+                </p>
                 <div id="categoryList"></div>
-                <button id="addCategoryBtn" class="btn-secondary" style="margin-top: 16px;">+ 新增分類</button>
+                <div style="margin-top: 16px;">
+                    <input type="text" id="newCategoryName" placeholder="輸入新分類名稱" style="margin-bottom: 8px;">
+                    <button id="addCategoryBtn" class="btn-primary">+ 建立分類</button>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn-primary close">完成</button>

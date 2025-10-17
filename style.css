@@ -7,7 +7,7 @@
 :root {
     --primary-color: #4285f4;
     --secondary-color: #34a853;
-    --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --background: url('https://img.zakk.au/file/1758520685708_71119.jpg');
     --surface: rgba(255, 255, 255, 0.95);
     --text-primary: #202124;
     --text-secondary: #5f6368;
@@ -102,21 +102,31 @@ body {
 }
 
 .search-engine-select {
-    padding: 8px 16px;
-    border: 1px solid var(--border);
+    padding: 10px 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 30px;
-    background: white;
-    color: var(--text-primary);
-    font-size: 13px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
     outline: none;
-    transition: all 0.2s;
+    transition: all 0.3s;
     margin-right: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .search-engine-select:hover {
-    border-color: var(--primary-color);
-    background: var(--hover);
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
+}
+
+.search-engine-select option {
+    background: white;
+    color: var(--text-primary);
+    padding: 8px;
 }
 
 .floating-settings-btn {
@@ -145,8 +155,36 @@ body {
     margin-top: 40px;
 }
 
+.main-bookmarks-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+}
+
+.main-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.main-actions {
+    display: flex;
+    gap: 8px;
+}
+
 .category-section {
-    margin-bottom: 48px;
+    margin-bottom: 24px;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 16px;
     padding: 24px;

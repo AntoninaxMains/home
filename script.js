@@ -49,8 +49,8 @@ function loadSettings() {
 
 // 載入背景設定
 function loadBackgroundSettings() {
-    const bgType = localStorage.getItem('bgType') || 'gradient';
-    const bgValue = localStorage.getItem('bgValue') || 'default';
+    const bgType = localStorage.getItem('bgType') || 'image';
+    const bgValue = localStorage.getItem('bgValue') || 'https://img.zakk.au/file/1758520685708_71119.jpg';
     
     document.querySelector(`input[name="bgType"][value="${bgType}"]`).checked = true;
     showBgOptions(bgType);
@@ -150,6 +150,10 @@ function initEventListeners() {
     });
     
     // 書籤按鈕
+    document.getElementById('addMainBookmarkBtn').addEventListener('click', function() {
+        openBookmarkModal(null, '');
+    });
+    
     document.getElementById('saveBookmark').addEventListener('click', saveBookmark);
     document.getElementById('cancelBookmark').addEventListener('click', function() {
         closeModal('bookmarkModal');
@@ -157,6 +161,13 @@ function initEventListeners() {
     
     // 抓取圖示按鈕
     document.getElementById('fetchIcon').addEventListener('click', fetchFavicon);
+    
+    // 管理分類按鈕
+    document.getElementById('manageCategoriesBtn').addEventListener('click', function() {
+        openCategoryManagement();
+    });
+    
+    document.getElementById('addCategoryBtn').addEventListener('click', addNewCategory);
     
     // 分類選擇
     document.getElementById('bookmarkCategory').addEventListener('change', function(e) {
@@ -212,7 +223,7 @@ function performSearch() {
 // 分類管理
 function loadCategories() {
     const saved = localStorage.getItem('categories');
-    categories = saved ? JSON.parse(saved) : ['常用', '社交媒體', '工作', '娛樂'];
+    categories = saved ? JSON.parse(saved) : [];
     updateCategorySelect();
 }
 
@@ -238,12 +249,12 @@ function loadBookmarks() {
 
 function getDefaultBookmarks() {
     return [
-        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: '🐙', category: '工作' },
-        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: '📺', category: '娛樂' },
-        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: '📧', category: '常用' },
-        { id: Date.now() + 3, name: 'Twitter', url: 'https://twitter.com', icon: '🐦', category: '社交媒體' },
-        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: '📝', category: '工作' },
-        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: '📷', category: '社交媒體' }
+        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: '🐙', category: '' },
+        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: '📺', category: '' },
+        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: '📧', category: '' },
+        { id: Date.now() + 3, name: 'Twitter', url: 'https://twitter.com', icon: '🐦', category: '' },
+        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: '📝', category: '' },
+        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: '📷', category: '' }
     ];
 }
 
@@ -252,23 +263,40 @@ function saveBookmarksToStorage() {
 }
 
 function renderBookmarks() {
-    const container = document.getElementById('bookmarksContainer');
-    container.innerHTML = '';
+    const mainList = document.getElementById('mainBookmarksList');
+    const categoriesContainer = document.getElementById('categoriesContainer');
     
-    // 按分類分組
-    const bookmarksByCategory = {};
+    mainList.innerHTML = '';
+    categoriesContainer.innerHTML = '';
+    
+    // 分離主書籤和分類書籤
+    const mainBookmarks = bookmarks.filter(b => !b.category || b.category === '');
+    const categorizedBookmarks = {};
+    
     bookmarks.forEach(bookmark => {
-        const cat = bookmark.category || '未分類';
-        if (!bookmarksByCategory[cat]) {
-            bookmarksByCategory[cat] = [];
+        if (bookmark.category && bookmark.category !== '') {
+            if (!categorizedBookmarks[bookmark.category]) {
+                categorizedBookmarks[bookmark.category] = [];
+            }
+            categorizedBookmarks[bookmark.category].push(bookmark);
         }
-        bookmarksByCategory[cat].push(bookmark);
     });
     
-    // 渲染每個分類
-    Object.keys(bookmarksByCategory).forEach(category => {
-        const section = createCategorySection(category, bookmarksByCategory[category]);
-        container.appendChild(section);
+    // 渲染主書籤
+    mainBookmarks.forEach(bookmark => {
+        const bookmarkEl = createBookmarkElement(bookmark);
+        mainList.appendChild(bookmarkEl);
+    });
+    
+    // 如果沒有主書籤，顯示提示
+    if (mainBookmarks.length === 0) {
+        mainList.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 40px;">還沒有書籤，點擊上方按鈕新增！</p>';
+    }
+    
+    // 渲染分類書籤
+    Object.keys(categorizedBookmarks).forEach(category => {
+        const section = createCategorySection(category, categorizedBookmarks[category]);
+        categoriesContainer.appendChild(section);
     });
 }
 
@@ -377,8 +405,9 @@ function saveBookmark() {
         }
     }
     
+    // 空字串表示放在主列表
     if (!category) {
-        category = '未分類';
+        category = '';
     }
     
     // 確保 URL 有協議
@@ -422,11 +451,11 @@ function deleteBookmark(id) {
 }
 
 function deleteCategory(category) {
-    if (confirm(`確定要刪除「${category}」分類嗎？\n此分類下的書籤將移至「未分類」。`)) {
-        // 將該分類的書籤移至未分類
+    if (confirm(`確定要刪除「${category}」分類嗎？\n此分類下的書籤將移至主列表。`)) {
+        // 將該分類的書籤移至主列表
         bookmarks.forEach(bookmark => {
             if (bookmark.category === category) {
-                bookmark.category = '未分類';
+                bookmark.category = '';
             }
         });
         
@@ -438,6 +467,54 @@ function deleteCategory(category) {
         updateCategorySelect();
         renderBookmarks();
     }
+}
+
+// 分類管理彈窗
+function openCategoryManagement() {
+    const categoryList = document.getElementById('categoryList');
+    categoryList.innerHTML = '';
+    
+    if (categories.length === 0) {
+        categoryList.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 20px;">還沒有分類</p>';
+    } else {
+        categories.forEach(cat => {
+            const item = document.createElement('div');
+            item.className = 'category-item';
+            item.innerHTML = `
+                <span class="category-item-name">📁 ${cat}</span>
+                <button onclick="deleteCategoryFromModal('${cat}')" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">刪除</button>
+            `;
+            categoryList.appendChild(item);
+        });
+    }
+    
+    document.getElementById('newCategoryName').value = '';
+    openModal('categoryModal');
+}
+
+function addNewCategory() {
+    const input = document.getElementById('newCategoryName');
+    const newCat = input.value.trim();
+    
+    if (!newCat) {
+        alert('請輸入分類名稱');
+        return;
+    }
+    
+    if (categories.includes(newCat)) {
+        alert('此分類已存在');
+        return;
+    }
+    
+    categories.push(newCat);
+    saveCategories();
+    updateCategorySelect();
+    openCategoryManagement(); // 刷新列表
+}
+
+function deleteCategoryFromModal(category) {
+    deleteCategory(category);
+    openCategoryManagement(); // 刷新列表
 }
 
 // 抓取網站 favicon
@@ -486,3 +563,4 @@ window.openBookmarkModal = openBookmarkModal;
 window.editBookmark = editBookmark;
 window.deleteBookmark = deleteBookmark;
 window.deleteCategory = deleteCategory;
+window.deleteCategoryFromModal = deleteCategoryFromModal;
