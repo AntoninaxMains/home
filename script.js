@@ -9,6 +9,7 @@ const translations = {
         searchButton: 'Search',
     searchOpenLink: 'Open link',
     searchSuggestionsTitle: 'Suggestions',
+    searchHistoryTitle: 'Search History',
         // Toolbar
         addBookmark: 'Add Bookmark',
         manageCategories: 'Manage Categories',
@@ -127,6 +128,7 @@ const translations = {
         searchButton: '搜索',
     searchOpenLink: '打开链接',
     searchSuggestionsTitle: '猜你想搜',
+    searchHistoryTitle: '搜索历史',
         // Toolbar
         addBookmark: '新增书签',
         manageCategories: '管理分类',
@@ -245,6 +247,7 @@ const translations = {
         searchButton: '搜尋',
     searchOpenLink: '打開連結',
     searchSuggestionsTitle: '猜你想搜尋',
+    searchHistoryTitle: '搜尋歷史',
         // Toolbar
         addBookmark: '新增書籤',
         manageCategories: '管理分類',
@@ -1099,10 +1102,6 @@ function initEventListeners() {
     const autoIconBtn = document.getElementById('autoIconBtn');
     if (autoIconBtn) autoIconBtn.addEventListener('click', fetchFavicon);
     
-    // 圖標搜索按鈕
-    const iconSearchBtn = document.getElementById('iconSearchBtn');
-    if (iconSearchBtn) iconSearchBtn.addEventListener('click', openIconSearch);
-    
     // 快速設置按鈕 - 語言下拉選單
     const quickLangBtn = document.getElementById('quickLangBtn');
     const langMenu = document.getElementById('langMenu');
@@ -1405,7 +1404,12 @@ function renderSuggestionList(container, suggestions) {
         container.classList.add('hidden');
         return;
     }
-    const title = `<div class="suggestions-title">${t('searchSuggestionsTitle')}</div>`;
+    
+    const input = document.getElementById('searchInput');
+    const hasQuery = input && input.value.trim().length > 0;
+    const titleKey = hasQuery ? 'searchSuggestionsTitle' : 'searchHistoryTitle';
+    const title = `<div class="suggestions-title">${t(titleKey)}</div>`;
+    
     const list = suggestions.map(item => {
         const value = escapeAttribute(item);
         const label = escapeHtml(item);
@@ -2392,109 +2396,9 @@ function ensureIconLibrary() {
     return iconLibraryPromise;
 }
 
-// 圖標搜索功能
-async function openIconSearch() {
-    openModal('iconSearchModal');
-
-    const grid = document.getElementById('iconSearchResults');
-    if (grid) {
-        grid.innerHTML = `<div class="icon-grid-message icon-grid-loading">${t('iconLoading') || '載入圖標庫中…'}</div>`;
-    }
-
-    iconResultsLimit = 60;
-
-    try {
-        const icons = await ensureIconLibrary();
-        renderIconGrid(icons, true);
-    } catch (error) {
-        if (grid) {
-            grid.innerHTML = `<div class="icon-grid-message icon-grid-error">${t('iconLoadError') || '圖標庫載入失敗，請稍後再試。'}</div>`;
-        }
-    }
-
-    const searchInput = document.getElementById('iconSearchInput');
-    if (searchInput) {
-        searchInput.value = '';
-        searchInput.focus();
-        searchInput.oninput = function() {
-            const query = this.value.toLowerCase().trim();
-            if (query) {
-                const filtered = iconLibrary.filter(icon => {
-                    const slugMatch = icon.slug.toLowerCase().includes(query);
-                    const titleMatch = icon.title?.toLowerCase().includes(query);
-                    const aliasMatch = (icon.aliases || []).some(alias => alias.toLowerCase().includes(query));
-                    return slugMatch || titleMatch || aliasMatch;
-                });
-                renderIconGrid(filtered, true, query);
-            } else {
-                renderIconGrid(iconLibrary, true);
-            }
-        };
-    }
-}
-
-function renderIconGrid(icons, resetLimit = false, query = '') {
-    const grid = document.getElementById('iconSearchResults');
-    if (!grid) return;
-
-    if (resetLimit) {
-        iconResultsLimit = 60;
-    }
-
-    if (!icons || icons.length === 0) {
-        const message = query
-            ? (t('iconNoResultsWithQuery') || '找不到符合的圖標：{query}').replace('{query}', query)
-            : (t('iconNoResults') || '目前沒有可用的圖標');
-        grid.innerHTML = `<div class="icon-grid-message icon-grid-empty">${message}</div>`;
-        return;
-    }
-
-    const limitedIcons = icons.slice(0, iconResultsLimit);
-
-    grid.innerHTML = limitedIcons.map(icon => {
-        const originalSlug = icon.slug || icon;
-        const slug = resolveIconSlug(originalSlug);
-        const safeSlug = slug.replace(/'/g, "\\'");
-        const displayName = escapeHtml(icon.title || originalSlug);
-        const subtitle = icon.title && icon.title.toLowerCase() !== slug.toLowerCase() ? `<span class="icon-subtitle">${escapeHtml(slug)}</span>` : '';
-        return `
-            <button type="button" class="icon-grid-item" onclick="selectIcon('${safeSlug}')">
-                <img src="https://cdn.simpleicons.org/${slug}" alt="${displayName}" onerror="if(!this.dataset.alt){this.dataset.alt='1';this.src='https://api.iconify.design/simple-icons:${slug}.svg';}else{this.remove();}">
-                <span>${displayName}</span>
-                ${subtitle}
-            </button>
-        `;
-    }).join('');
-
-    if (icons.length > iconResultsLimit) {
-        const loadMoreBtn = document.createElement('button');
-        loadMoreBtn.className = 'icon-load-more';
-        loadMoreBtn.type = 'button';
-        loadMoreBtn.textContent = t('iconLoadMore') || '載入更多圖標';
-        loadMoreBtn.addEventListener('click', () => {
-            iconResultsLimit += 60;
-            renderIconGrid(icons, false, query);
-        });
-        grid.appendChild(loadMoreBtn);
-    }
-}
-
-function selectIcon(iconName) {
-    const iconInput = document.getElementById('bookmarkIcon');
-    if (iconInput) {
-        iconInput.value = iconName;
-    }
-    closeModal('iconSearchModal');
-    const iconMeta = iconLibrary.find(icon => icon.slug === iconName);
-    const display = iconMeta?.title || iconName;
-    const message = (t('alertIconSelected') || '已選擇圖標：{icon}').replace('{icon}', display);
-    alert(message);
-}
-
 // 暴露全局函數
 window.openBookmarkModal = openBookmarkModal;
 window.editBookmark = editBookmark;
 window.deleteBookmark = deleteBookmark;
 window.deleteCategory = deleteCategory;
 window.deleteCategoryFromModal = deleteCategoryFromModal;
-window.selectIcon = selectIcon;

@@ -260,9 +260,11 @@
                     <div class="icon-row">
                         <input id="bookmarkIcon" type="text" placeholder="🌐 Emoji 或圖片網址" data-i18n-placeholder="iconPlaceholder" />
                         <button id="autoIconBtn" type="button" class="btn" data-i18n="autoFetch"><i data-lucide="sparkles" style="width:14px;height:14px;margin-right:4px;"></i>自動抓取</button>
-                        <button id="iconSearchBtn" type="button" class="btn" data-i18n="iconSearch"><i data-lucide="search" style="width:14px;height:14px;margin-right:4px;"></i>搜尋圖標</button>
                     </div>
                     <span class="hint" data-i18n="iconHint">可輸入 Emoji、圖片網址，或使用自動抓取</span>
+                    <a class="icon-library-link" href="https://simpleicons.org/" target="_blank" rel="noopener" style="margin-top: 8px;">
+                        <span data-i18n="iconSearchLibraryLink">前往 Simple Icons 圖標庫</span>
+                    </a>
                 </div>
                 <footer class="modal-footer">
                     <button id="saveBookmark" class="btn primary" data-i18n="save">儲存</button>
@@ -288,25 +290,6 @@
                 </div>
                 <footer class="modal-footer">
                     <button data-close="categoryModal" class="btn primary" data-i18n="done">完成</button>
-                </footer>
-            </div>
-        </div>
-
-        <!-- 圖標搜索彈窗 -->
-        <div id="iconSearchModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="iconSearchTitle">
-            <div class="modal-panel">
-                <header class="modal-header">
-                    <h3 id="iconSearchTitle"><i data-lucide="search" style="width:18px;height:18px;margin-right:6px;"></i><span data-i18n="iconSearch">搜尋圖標</span></h3>
-                    <button class="modal-close" data-close="iconSearchModal" aria-label="關閉圖標搜索">×</button>
-                </header>
-                <div class="modal-body">
-                    <p class="hint" style="margin-bottom: 8px;" data-i18n="iconSearchHint">從 Simple Icons 搜尋品牌圖標，例如：github、google、youtube</p>
-                    <a class="icon-library-link" href="https://simpleicons.org/" target="_blank" rel="noopener" data-i18n="iconSearchLibraryLink">前往 Simple Icons 圖標庫</a>
-                    <input id="iconSearchInput" type="text" data-i18n-placeholder="iconSearchPlaceholder" placeholder="輸入品牌名稱..." style="margin-bottom: 16px;" />
-                    <div id="iconSearchResults" class="icon-grid"></div>
-                </div>
-                <footer class="modal-footer">
-                    <button data-close="iconSearchModal" class="btn" data-i18n="cancel">取消</button>
                 </footer>
             </div>
         </div>
