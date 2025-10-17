@@ -64,6 +64,11 @@ const translations = {
     customSearchInlineHint: 'Use {query} as the search keyword placeholder',
     customSearchSave: 'Save and apply',
     customSearchPlaceholder: 'https://example.com/search?q={query}',
+    clearSettings: 'Reset all settings',
+    clearSettingsDescription: 'Restore the homepage to its default appearance and content.',
+    clearSettingsAction: 'Reset now',
+    clearSettingsConfirm: 'Are you sure you want to reset everything? This will remove custom bookmarks, categories, and settings.',
+    clearSettingsSuccess: 'All settings cleared, reloading…',
         backgroundSection: 'Background Settings',
         backgroundType: 'Background Type',
         gradient: 'Gradient',
@@ -177,6 +182,11 @@ const translations = {
     customSearchInlineHint: '使用 {query} 作为搜索关键字的占位符',
     customSearchSave: '保存并应用',
     customSearchPlaceholder: 'https://example.com/search?q={query}',
+    clearSettings: '重置所有设置',
+    clearSettingsDescription: '恢复默认界面、书签、分类与所有个性化选项。',
+    clearSettingsAction: '立即重置',
+    clearSettingsConfirm: '确定要重置所有设置吗？这会清除自定义书签、分类与搜索记录。',
+    clearSettingsSuccess: '设置已清除，页面即将重新载入…',
         backgroundSection: '背景设置',
         backgroundType: '背景类型',
         gradient: '渐层',
@@ -290,6 +300,11 @@ const translations = {
     customSearchInlineHint: '使用 {query} 作為搜尋關鍵字的佔位符',
     customSearchSave: '儲存並套用',
     customSearchPlaceholder: 'https://example.com/search?q={query}',
+    clearSettings: '重設所有設定',
+    clearSettingsDescription: '將首頁恢復到預設外觀、書籤與所有個人化設定。',
+    clearSettingsAction: '立即重設',
+    clearSettingsConfirm: '確定要重設所有設定嗎？這將清除自訂書籤、分類與搜尋紀錄。',
+    clearSettingsSuccess: '設定已重設，重新整理中…',
         backgroundSection: '背景設定',
         backgroundType: '背景類型',
         gradient: '漸層',
@@ -362,9 +377,9 @@ const searchEngines = {
         url: 'https://www.bing.com/search?q={query}',
         icon: 'assets/bing-logo.svg',
         labelKey: 'engineBing',
-        iconSize: 20,
-        selectorIconSize: 22,
-        dropdownIconSize: 20
+        iconSize: 24,
+        selectorIconSize: 28,
+        dropdownIconSize: 22
     },
     duckduckgo: {
         url: 'https://duckduckgo.com/?q={query}',
@@ -485,8 +500,9 @@ const REMOTE_SUGGESTION_MIN_LENGTH = 2;
 const LOCAL_SUGGESTION_INITIAL_QUOTA = 4;
 
 const remoteSuggestCache = new Map();
-let remoteSuggestAbortController = null;
+let remoteSuggestCancel = null;
 let latestSuggestQueryToken = 0;
+let remoteSuggestCallbackSeed = 0;
 
 const ICON_ALIAS_OVERRIDES = {
     outlook: 'microsoftoutlook',
@@ -793,6 +809,54 @@ function saveSettings() {
     closeModal('settingsModal');
 }
 
+function handleResetSettings(event) {
+    const button = event?.currentTarget;
+    if (!confirm(t('clearSettingsConfirm'))) {
+        return;
+    }
+
+    if (button) {
+        button.disabled = true;
+        button.classList.add('is-busy');
+        button.textContent = t('clearSettingsSuccess');
+    }
+
+    const keysToClear = [
+        'language',
+        'searchEngine',
+        'customSearchUrl',
+        'bgType',
+        'bgValue',
+        'blurEnabled',
+        'blurAmount',
+        'overlayType',
+        'overlayOpacity',
+        'uploadedBgImage',
+        'searchHistory',
+        'categories',
+        'bookmarks',
+        'darkMode',
+        'darkModeDepth'
+    ];
+
+    keysToClear.forEach(key => localStorage.removeItem(key));
+
+    bookmarks = [];
+    categories = [];
+    searchHistory = [];
+    remoteSuggestCache.clear();
+
+    document.body.classList.remove('dark-mode');
+    document.body.style.background = '';
+    document.documentElement.style.setProperty('--backdrop-blur', '0px');
+    const overlayEl = document.getElementById('backgroundOverlay');
+    if (overlayEl) overlayEl.style.background = 'transparent';
+
+    window.setTimeout(() => {
+        window.location.reload();
+    }, 600);
+}
+
 // Appearance: blur + overlay
 function loadAppearanceSettings() {
     const blurEnabled = localStorage.getItem('blurEnabled');
@@ -863,6 +927,29 @@ function applyAppearanceSettings() {
             overlayEl.style.background = `rgba(0,0,0,${overlayOpacity})`;
         }
     }
+}
+
+function applyOverlay(value) {
+    const overlaySelect = document.getElementById('overlaySelect');
+    if (overlaySelect && overlaySelect.value !== value) {
+        overlaySelect.value = value;
+    }
+    localStorage.setItem('overlayType', value);
+    applyAppearanceSettings();
+}
+
+function updateOverlayOpacity(value) {
+    const numeric = Number(value);
+    const overlayRange = document.getElementById('overlayOpacity');
+    const overlayValue = document.getElementById('overlayValue');
+    if (overlayRange && overlayRange.value !== String(value)) {
+        overlayRange.value = value;
+    }
+    if (overlayValue) {
+        overlayValue.textContent = Number.isFinite(numeric) ? numeric.toFixed(2) : '0.00';
+    }
+    localStorage.setItem('overlayOpacity', String(value));
+    applyAppearanceSettings();
 }
 
 // 處理圖片上傳
@@ -984,6 +1071,9 @@ function initEventListeners() {
     });
     
     document.getElementById('saveSettings').addEventListener('click', saveSettings);
+
+    const resetSettingsBtn = document.getElementById('resetSettings');
+    if (resetSettingsBtn) resetSettingsBtn.addEventListener('click', handleResetSettings);
     
     // 背景類型選擇
     document.querySelectorAll('input[name="bgType"]').forEach(radio => {
@@ -1247,10 +1337,11 @@ async function updateSearchSuggestions(query) {
     renderSuggestionList(container, initialSuggestions);
 
     const trimmed = (query || '').trim();
-    if (!trimmed || trimmed.length < REMOTE_SUGGESTION_MIN_LENGTH || isLikelyUrl(trimmed)) {
-        if (remoteSuggestAbortController) {
-            remoteSuggestAbortController.abort();
-            remoteSuggestAbortController = null;
+    const minLength = getRemoteSuggestionMinLength();
+    if (!trimmed || trimmed.length < minLength || isLikelyUrl(trimmed)) {
+        if (remoteSuggestCancel) {
+            remoteSuggestCancel();
+            remoteSuggestCancel = null;
         }
         return;
     }
@@ -1370,107 +1461,131 @@ function cleanSuggestionText(value) {
         .trim();
 }
 
-function extractDuckDuckGoSuggestions(data, query, limit = SEARCH_SUGGESTION_LIMIT) {
+function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMIT) {
     const suggestions = [];
     const seen = new Set();
-    const trimmedQuery = (query || '').trim();
 
     const add = (raw) => {
         const cleaned = cleanSuggestionText(raw);
         if (!cleaned) return;
-        const primary = cleaned.includes(' - ')
-            ? cleaned.split(' - ')[0].trim()
-            : cleaned;
-        const candidate = primary.length >= 2 ? primary : cleaned;
-        const key = candidate.toLowerCase();
+        const key = cleaned.toLowerCase();
         if (seen.has(key)) return;
         seen.add(key);
-        suggestions.push(candidate);
+        suggestions.push(cleaned);
     };
 
-    const processTopics = (topics) => {
-        if (!Array.isArray(topics)) return;
-        topics.forEach(item => {
-            if (!item) return;
-            if (Array.isArray(item.Topics)) {
-                processTopics(item.Topics);
-                return;
-            }
-            add(item.Text || item.Name || '');
-        });
-    };
-
-    if (data) {
-        if (typeof data.Heading === 'string') add(data.Heading);
-        if (Array.isArray(data.Results)) {
-            data.Results.forEach(entry => add(entry?.Text));
+    if (Array.isArray(payload)) {
+        if (payload.length >= 2 && Array.isArray(payload[1])) {
+            payload[1].forEach(add);
+        } else {
+            payload.forEach(item => {
+                if (!item) return;
+                if (typeof item === 'string') {
+                    add(item);
+                } else if (typeof item === 'object') {
+                    add(item.phrase || item.text || item.value || '');
+                }
+            });
         }
-        if (Array.isArray(data.RelatedTopics)) {
-            processTopics(data.RelatedTopics);
+    } else if (payload && typeof payload === 'object') {
+        if (Array.isArray(payload.phrase)) {
+            payload.phrase.forEach(add);
+        } else if (Array.isArray(payload.results)) {
+            payload.results.forEach(add);
         }
     }
 
-    if (!suggestions.length && trimmedQuery) {
-        add(trimmedQuery);
+    if (query) {
+        add(query);
     }
 
     return suggestions.slice(0, limit);
 }
 
+function getDuckDuckGoLocaleParams(lang = currentLanguage) {
+    switch (lang) {
+        case 'zh-CN':
+            return { kl: 'cn-zh', kad: 'zh-cn' };
+        case 'zh-TW':
+            return { kl: 'tw-tzh', kad: 'zh-tw' };
+        case 'en':
+        default:
+            return { kl: 'us-en', kad: 'en-us' };
+    }
+}
+
+function getRemoteSuggestionMinLength() {
+    if (currentLanguage && currentLanguage.startsWith('zh')) {
+        return 1;
+    }
+    return REMOTE_SUGGESTION_MIN_LENGTH;
+}
+
 async function fetchDuckDuckGoSuggestions(query) {
-    if (!query || query.length < REMOTE_SUGGESTION_MIN_LENGTH) {
+    if (!query || query.length < getRemoteSuggestionMinLength()) {
         return [];
     }
 
-    const normalized = query.toLowerCase();
-    if (remoteSuggestCache.has(normalized)) {
-        return remoteSuggestCache.get(normalized);
+    const locale = getDuckDuckGoLocaleParams();
+    const cacheKey = `${query.toLowerCase()}|${locale.kl || ''}`;
+    if (remoteSuggestCache.has(cacheKey)) {
+        return remoteSuggestCache.get(cacheKey);
     }
 
-    if (remoteSuggestAbortController) {
-        remoteSuggestAbortController.abort();
+    if (remoteSuggestCancel) {
+        remoteSuggestCancel();
+        remoteSuggestCancel = null;
     }
 
-    const controller = new AbortController();
-    remoteSuggestAbortController = controller;
-
-    const params = new URLSearchParams({
-        q: query,
-        format: 'json',
-        no_redirect: '1',
-        no_html: '1',
-        skip_disambig: '1'
-    });
-
-    try {
-        const response = await fetch(`https://api.duckduckgo.com/?${params.toString()}`, {
-            headers: {
-                'Accept': 'application/json'
-            },
-            signal: controller.signal
+    return new Promise(resolve => {
+        const callbackId = `__ddgSuggest_${Date.now()}_${remoteSuggestCallbackSeed++}`;
+        const params = new URLSearchParams({
+            q: query,
+            type: 'list'
         });
+        if (locale.kl) params.set('kl', locale.kl);
+        if (locale.kad) params.set('kad', locale.kad);
+        params.set('_', String(Date.now()));
+        const script = document.createElement('script');
+        let settled = false;
 
-        if (remoteSuggestAbortController === controller) {
-            remoteSuggestAbortController = null;
-        }
+        const finalize = (result) => {
+            if (settled) return;
+            settled = true;
+            if (remoteSuggestCancel === cancel) {
+                remoteSuggestCancel = null;
+            }
+            window.clearTimeout(timeoutId);
+            delete window[callbackId];
+            if (script.parentNode) {
+                script.parentNode.removeChild(script);
+            }
+            if (Array.isArray(result) && result.length) {
+                remoteSuggestCache.set(cacheKey, result);
+            }
+            resolve(Array.isArray(result) ? result : []);
+        };
 
-        if (!response.ok) {
-            throw new Error(`DuckDuckGo suggest request failed with status ${response.status}`);
-        }
+        const cancel = () => finalize([]);
+        remoteSuggestCancel = cancel;
 
-        const data = await response.json();
-        const suggestions = extractDuckDuckGoSuggestions(data, query, SEARCH_SUGGESTION_LIMIT);
-        remoteSuggestCache.set(normalized, suggestions);
-        return suggestions;
-    } catch (error) {
-        if (remoteSuggestAbortController === controller) {
-            remoteSuggestAbortController = null;
-        }
-        if (error.name !== 'AbortError') {
-            console.warn('DuckDuckGo suggestions request failed', error);
-        }
-        return [];
-    }
+        window[callbackId] = (payload) => {
+            try {
+                const suggestions = extractDuckDuckGoSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
+                finalize(suggestions);
+            } catch (err) {
+                console.warn('Failed to parse DuckDuckGo suggestions', err);
+                finalize([]);
+            }
+        };
+
+        script.onerror = cancel;
+        script.src = `https://duckduckgo.com/ac/?${params.toString()}&callback=${callbackId}`;
+        script.async = true;
+        document.head.appendChild(script);
+
+        const timeoutId = window.setTimeout(cancel, 4000);
+    });
 }
 
 function setCurrentSearchEngine(engineKey, { persist = true } = {}) {

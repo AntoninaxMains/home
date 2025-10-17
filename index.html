@@ -118,95 +118,120 @@
                     <h3 id="settingsTitle"><i data-lucide="settings" style="width:18px;height:18px;margin-right:6px;"></i><span data-i18n="settingsTitle">設定</span></h3>
                     <button class="modal-close" data-close="settingsModal" aria-label="關閉設定">×</button>
                 </header>
-                <div class="modal-body">
-                    <section class="settings-block">
-                        <h4><i data-lucide="search" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="searchEngineSection">搜尋引擎</span></h4>
-                        <label for="customSearchUrl" data-i18n="customSearchUrl">自訂搜尋引擎 URL</label>
-                        <input id="customSearchUrl" type="text" placeholder="https://example.com/search?q={query}" />
-                        <span class="hint" data-i18n="customSearchHint">使用 {query} 作為搜尋關鍵字的佔位符</span>
-                    </section>
-                    <section class="settings-block">
-                        <h4><i data-lucide="palette" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="backgroundSection">背景設定</span></h4>
-                        <div class="settings-field">
-                            <label data-i18n="backgroundType">背景類型</label>
-                            <div class="radio-list" id="bgTypeRadios">
-                                <label><input type="radio" name="bgType" value="gradient" checked /> <span data-i18n="gradient">漸層</span></label>
-                                <label><input type="radio" name="bgType" value="image" /> <span data-i18n="image">圖片</span></label>
-                                <label><input type="radio" name="bgType" value="color" /> <span data-i18n="solidColor">純色</span></label>
+                <div class="modal-body settings-body">
+                    <div class="settings-layout">
+                        <section class="settings-card">
+                            <header class="settings-card__header">
+                                <i data-lucide="search"></i>
+                                <h4 data-i18n="searchEngineSection">搜尋引擎</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <label for="customSearchUrl" data-i18n="customSearchUrl">自訂搜尋引擎 URL</label>
+                                <input id="customSearchUrl" type="text" placeholder="https://example.com/search?q={query}" class="settings-input" />
+                                <span class="hint" data-i18n="customSearchHint">使用 {query} 作為搜尋關鍵字的佔位符</span>
                             </div>
-                        </div>
-                        <div class="settings-field" id="gradientSettings">
-                            <label for="gradientPreset" data-i18n="selectGradient">選擇漸層</label>
-                            <select id="gradientPreset">
-                                <option value="default">天空藍</option>
-                                <option value="sunset">日落橘紅</option>
-                                <option value="ocean">海洋藍綠</option>
-                                <option value="purple">夢幻紫</option>
-                                <option value="green">森林綠</option>
-                                <option value="dark">星夜黑</option>
-                            </select>
-                        </div>
-                        <div class="settings-field hidden" id="imageSettings">
-                            <label for="bgImageUrl" data-i18n="imageUrl">圖片網址</label>
-                            <input id="bgImageUrl" type="text" placeholder="https://example.com/image.jpg" />
-                            <span class="hint" data-i18n="imageHint">提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature</span>
-                            
-                            <label for="bgImageUpload" style="margin-top: 12px;" data-i18n="uploadImage">上傳圖片</label>
-                            <input id="bgImageUpload" type="file" accept="image/*" style="margin-top: 6px;" />
-                            <span class="hint" data-i18n="uploadHint">上傳的圖片將保存在瀏覽器緩存中</span>
-                        </div>
-                        <div class="settings-field hidden" id="colorSettings">
-                            <label for="bgColor" data-i18n="selectColor">選擇顏色</label>
-                            <input id="bgColor" type="color" value="#1a1a2e" />
-                        </div>
-                    </section>
-                    <section class="settings-block">
-                        <h4><i data-lucide="image" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="appearanceSection">顯示效果（外觀）</span></h4>
-                        <div class="settings-field">
-                            <label data-i18n="backgroundBlur">背景模糊</label>
-                            <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
-                                <input id="blurToggle" type="checkbox" />
-                                <label for="blurToggle" style="font-weight:600;" data-i18n="enableBlur">啟用背景模糊</label>
+                        </section>
+                        <section class="settings-card">
+                            <header class="settings-card__header">
+                                <i data-lucide="palette"></i>
+                                <h4 data-i18n="backgroundSection">背景設定</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <div class="settings-field">
+                                    <label data-i18n="backgroundType">背景類型</label>
+                                    <div class="radio-list" id="bgTypeRadios">
+                                        <label><input type="radio" name="bgType" value="gradient" checked /> <span data-i18n="gradient">漸層</span></label>
+                                        <label><input type="radio" name="bgType" value="image" /> <span data-i18n="image">圖片</span></label>
+                                        <label><input type="radio" name="bgType" value="color" /> <span data-i18n="solidColor">純色</span></label>
+                                    </div>
+                                </div>
+                                <div class="settings-field" id="gradientSettings">
+                                    <label for="gradientPreset" data-i18n="selectGradient">選擇漸層</label>
+                                    <select id="gradientPreset" class="settings-select">
+                                        <option value="default">天空藍</option>
+                                        <option value="sunset">日落橘紅</option>
+                                        <option value="ocean">海洋藍綠</option>
+                                        <option value="purple">夢幻紫</option>
+                                        <option value="green">森林綠</option>
+                                        <option value="dark">星夜黑</option>
+                                    </select>
+                                </div>
+                                <div class="settings-field hidden" id="imageSettings">
+                                    <label for="bgImageUrl" data-i18n="imageUrl">圖片網址</label>
+                                    <input id="bgImageUrl" type="text" placeholder="https://example.com/image.jpg" class="settings-input" />
+                                    <span class="hint" data-i18n="imageHint">提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature</span>
+                                    <label for="bgImageUpload" class="settings-sublabel" data-i18n="uploadImage">上傳圖片</label>
+                                    <input id="bgImageUpload" type="file" accept="image/*" class="settings-file" />
+                                    <span class="hint" data-i18n="uploadHint">上傳的圖片將保存在瀏覽器緩存中</span>
+                                </div>
+                                <div class="settings-field hidden" id="colorSettings">
+                                    <label for="bgColor" data-i18n="selectColor">選擇顏色</label>
+                                    <input id="bgColor" type="color" value="#1a1a2e" class="settings-color" />
+                                </div>
                             </div>
-                            <input id="blurRange" type="range" min="0" max="40" value="0" style="width:100%; margin-top:8px;" />
-                            <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">0</span>px</div>
+                        </section>
+                        <section class="settings-card">
+                            <header class="settings-card__header">
+                                <i data-lucide="image"></i>
+                                <h4 data-i18n="appearanceSection">顯示效果（外觀）</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <div class="settings-field">
+                                    <label data-i18n="backgroundBlur">背景模糊</label>
+                                    <div class="settings-inline">
+                                        <input id="blurToggle" type="checkbox" />
+                                        <label for="blurToggle" class="settings-inline__label" data-i18n="enableBlur">啟用背景模糊</label>
+                                    </div>
+                                    <input id="blurRange" type="range" min="0" max="40" value="0" class="settings-range" />
+                                    <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">0</span>px</div>
+                                </div>
+                                <div class="settings-field">
+                                    <label data-i18n="backgroundFilter">背景濾鏡</label>
+                                    <select id="overlaySelect" class="settings-select">
+                                        <option value="none" data-i18n="filterNone">無</option>
+                                        <option value="white" data-i18n="filterWhite">白色濾鏡</option>
+                                        <option value="black" data-i18n="filterBlack">黑色濾鏡</option>
+                                    </select>
+                                    <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" class="settings-range" />
+                                    <div class="hint"><span data-i18n="filterOpacity">濾鏡透明度</span>: <span id="overlayValue">0.40</span></div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="settings-card">
+                            <header class="settings-card__header">
+                                <i data-lucide="sun"></i>
+                                <h4 data-i18n="darkModeSection">夜間模式</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <div class="settings-field">
+                                    <label class="settings-inline">
+                                        <input type="checkbox" id="darkModeToggle" />
+                                        <span data-i18n="enableDarkMode">啟用夜間模式</span>
+                                    </label>
+                                </div>
+                                <div class="settings-field" id="darkModeSettings">
+                                    <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
+                                    <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
+                                    <span class="range-value" id="darkModeDepthValue">35%</span>
+                                </div>
+                                <div class="settings-field">
+                                    <label for="languageSelect" data-i18n="selectLanguage">選擇語言</label>
+                                    <select id="languageSelect" class="settings-select">
+                                        <option value="en">English</option>
+                                        <option value="zh-CN">简体中文</option>
+                                        <option value="zh-TW">正體中文</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="settings-reset-card">
+                        <div class="settings-reset-card__text">
+                            <h5 data-i18n="clearSettings">重設所有設定</h5>
+                            <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
                         </div>
-                        <div class="settings-field" style="margin-top:10px;">
-                            <label data-i18n="backgroundFilter">背景濾鏡</label>
-                            <select id="overlaySelect" style="margin-top:6px;">
-                                <option value="none" data-i18n="filterNone">無</option>
-                                <option value="white" data-i18n="filterWhite">白色濾鏡</option>
-                                <option value="black" data-i18n="filterBlack">黑色濾鏡</option>
-                            </select>
-                            <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" style="width:100%; margin-top:8px;" />
-                            <div class="hint"><span data-i18n="filterOpacity">濾鏡透明度</span>: <span id="overlayValue">0.40</span></div>
-                        </div>
-                    </section>
-                    <section class="settings-block">
-                        <h4><i data-lucide="moon" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="darkModeSection">夜間模式</span></h4>
-                        <div class="settings-field">
-                            <label>
-                                <input type="checkbox" id="darkModeToggle" />
-                                <span data-i18n="enableDarkMode">啟用夜間模式</span>
-                            </label>
-                        </div>
-                        <div class="settings-field" id="darkModeSettings" style="display:none;">
-                            <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
-                            <input type="range" id="darkModeDepth" min="0" max="100" value="35" />
-                            <span class="range-value" id="darkModeDepthValue">35%</span>
-                        </div>
-                    </section>
-                    <section class="settings-block">
-                        <h4><i data-lucide="globe-2" style="width:16px;height:16px;margin-right:6px;"></i><span data-i18n="languageSection">語言</span></h4>
-                        <div class="settings-field">
-                            <label for="languageSelect" data-i18n="selectLanguage">選擇語言</label>
-                            <select id="languageSelect" style="margin-top:6px;">
-                                <option value="en">English</option>
-                                <option value="zh-CN">简体中文</option>
-                                <option value="zh-TW">正體中文</option>
-                            </select>
-                        </div>
-                    </section>
+                        <button id="resetSettings" type="button" class="btn ghost" data-i18n="clearSettingsAction">立即重設</button>
+                    </div>
                 </div>
                 <footer class="modal-footer">
                     <button id="saveSettings" class="btn primary" data-i18n="save">儲存設定</button>

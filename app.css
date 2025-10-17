@@ -175,6 +175,112 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 .settings-field { margin-top: 8px; }
 .hidden { display: none !important; }
 
+/* Settings modal */
+.settings-body { background: linear-gradient(180deg, rgba(76, 110, 245, 0.08) 0%, rgba(76, 110, 245, 0.04) 45%, transparent 100%); border-radius: 0 0 16px 16px; padding-top: 24px; padding-bottom: 28px; gap: 28px; }
+.settings-layout { display: grid; grid-template-columns: 1fr; gap: 20px; animation: settingsFadeIn 0.4s ease both; }
+
+@media (min-width: 720px) {
+  .settings-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.settings-card { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 22px 22px 20px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(76, 110, 245, 0.08); box-shadow: 0 22px 40px rgba(15, 23, 42, 0.08); backdrop-filter: blur(12px); transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; overflow: hidden; animation: settingsCardPop 0.45s ease both; }
+.settings-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(76, 110, 245, 0.12), rgba(76, 110, 245, 0)); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+.settings-card:hover { transform: translateY(-2px); box-shadow: 0 26px 48px rgba(15, 23, 42, 0.12); border-color: rgba(76, 110, 245, 0.18); }
+.settings-card:hover::before { opacity: 1; }
+.settings-card:nth-child(1) { animation-delay: 0.05s; }
+.settings-card:nth-child(2) { animation-delay: 0.08s; }
+.settings-card:nth-child(3) { animation-delay: 0.11s; }
+.settings-card:nth-child(4) { animation-delay: 0.14s; }
+.settings-card__header { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+.settings-card__header i { width: 24px; height: 24px; color: var(--primary); }
+.settings-card__header h4 { font-size: 16px; font-weight: 700; color: var(--text); }
+.settings-card__content { display: flex; flex-direction: column; gap: 16px; position: relative; z-index: 1; }
+
+.settings-input,
+.settings-select,
+.settings-range,
+.settings-file,
+.settings-color { width: 100%; }
+
+.settings-select,
+.settings-input { background: rgba(255, 255, 255, 0.9); border-radius: 12px; border: 1px solid rgba(15, 23, 42, 0.08); padding: 10px 14px; transition: border-color var(--transition), box-shadow var(--transition), background var(--transition); }
+.settings-select:focus,
+.settings-input:focus { border-color: rgba(76, 110, 245, 0.7); box-shadow: 0 0 0 4px rgba(76, 110, 245, 0.18); background: #fff; }
+
+.settings-sublabel { display: block; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--text-subtle); }
+.settings-file { margin-top: 8px; border: 1px dashed rgba(76, 110, 245, 0.45); border-radius: 12px; padding: 10px 12px; background: rgba(76, 110, 245, 0.06); cursor: pointer; transition: border-color var(--transition), background var(--transition); }
+.settings-file:hover { border-color: rgba(76, 110, 245, 0.65); background: rgba(76, 110, 245, 0.1); }
+.settings-color { height: 44px; border-radius: 12px; border: 1px solid rgba(76, 110, 245, 0.25); padding: 6px; background: rgba(255, 255, 255, 0.9); }
+
+.settings-inline { display: inline-flex; align-items: center; gap: 10px; }
+.settings-inline input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
+.settings-inline__label { font-size: 13px; font-weight: 600; color: var(--text); }
+
+.settings-range { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 999px; background: rgba(76, 110, 245, 0.2); outline: none; transition: background var(--transition); }
+.settings-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); cursor: pointer; box-shadow: 0 4px 10px rgba(76, 110, 245, 0.35); transition: transform 0.2s ease; }
+.settings-range::-webkit-slider-thumb:hover { transform: scale(1.08); }
+.settings-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); cursor: pointer; box-shadow: 0 4px 10px rgba(76, 110, 245, 0.35); }
+.settings-range:focus { background: rgba(76, 110, 245, 0.32); }
+
+.range-value { font-size: 12px; font-weight: 600; color: var(--primary-dark); }
+
+.settings-reset-card { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; border-radius: var(--radius-md); border: 1px dashed rgba(76, 110, 245, 0.45); background: rgba(76, 110, 245, 0.08); box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08); animation: settingsFadeIn 0.45s ease 0.08s both; }
+.settings-reset-card__text { display: flex; flex-direction: column; gap: 4px; }
+.settings-reset-card__text h5 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.settings-reset-card__text p { font-size: 13px; line-height: 1.6; color: var(--text-subtle); }
+
+@media (min-width: 540px) {
+  .settings-reset-card { flex-direction: row; align-items: center; justify-content: space-between; }
+  .settings-reset-card__text { max-width: 480px; }
+}
+
+.btn.ghost { background: transparent; color: var(--primary-dark); border: 1px solid rgba(76, 110, 245, 0.35); padding: 10px 18px; transition: background var(--transition), border-color var(--transition), color var(--transition); box-shadow: none; }
+.btn.ghost:hover { background: rgba(76, 110, 245, 0.1); border-color: rgba(76, 110, 245, 0.55); color: var(--primary); }
+
+.btn.is-busy { position: relative; pointer-events: none; padding-left: 40px; }
+.btn.is-busy::before { content: ''; position: absolute; left: 16px; top: 50%; width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-bottom-color: transparent; border-right-color: transparent; transform: translateY(-50%); animation: spin 0.7s linear infinite; }
+
+@keyframes spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+@keyframes settingsFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes settingsCardPop {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+body.dark-mode .settings-card { background: rgba(22, 24, 34, 0.94); border: 1px solid rgba(255, 255, 255, 0.06); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45); }
+body.dark-mode .settings-card__header h4 { color: #f5f7ff; }
+body.dark-mode .settings-card__header i { color: #aebdff; }
+body.dark-mode .settings-card__content label,
+body.dark-mode .settings-card__content .hint { color: rgba(235, 238, 255, 0.72); }
+body.dark-mode .settings-select,
+body.dark-mode .settings-input,
+body.dark-mode .settings-file,
+body.dark-mode .settings-color { background: rgba(26, 28, 38, 0.94); border: 1px solid rgba(255, 255, 255, 0.08); color: #f5f7ff; }
+body.dark-mode .settings-select:focus,
+body.dark-mode .settings-input:focus { border-color: rgba(174, 189, 255, 0.65); box-shadow: 0 0 0 4px rgba(174, 189, 255, 0.16); }
+body.dark-mode .settings-inline__label { color: #f5f7ff; }
+body.dark-mode .settings-range { background: rgba(174, 189, 255, 0.35); }
+body.dark-mode .settings-reset-card { border-color: rgba(174, 189, 255, 0.35); background: rgba(46, 53, 82, 0.55); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55); }
+body.dark-mode .settings-reset-card__text h5 { color: #f5f7ff; }
+body.dark-mode .settings-reset-card__text p { color: rgba(235, 238, 255, 0.7); }
+body.dark-mode .btn.ghost { color: #aebdff; border-color: rgba(174, 189, 255, 0.45); background: rgba(174, 189, 255, 0.06); }
+body.dark-mode .btn.ghost:hover { background: rgba(174, 189, 255, 0.12); border-color: rgba(174, 189, 255, 0.6); }
+
+.modal.show .modal-panel { animation: modalPop 0.32s cubic-bezier(0.33, 1, 0.68, 1) both; }
+
+@keyframes modalPop {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* Quick Settings */
 .quick-settings {
   position: fixed;
