@@ -1123,6 +1123,7 @@ function initEventListeners() {
     // 設定按鈕
     document.getElementById('settingsBtn').addEventListener('click', function() {
         openModal('settingsModal');
+        updateCacheSize(); // 更新緩存大小顯示
     });
     
     document.getElementById('saveSettings').addEventListener('click', saveSettings);
@@ -1531,10 +1532,19 @@ function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_
         suggestions.push(cleaned);
     };
 
+    // DuckDuckGo 返回格式: [query, [suggestion1, suggestion2, ...]]
     if (Array.isArray(payload)) {
+        // 標準格式：第二個元素是建議數組
         if (payload.length >= 2 && Array.isArray(payload[1])) {
-            payload[1].forEach(add);
+            payload[1].forEach(item => {
+                if (typeof item === 'string') {
+                    add(item);
+                } else if (item && typeof item === 'object') {
+                    add(item.phrase || item.text || item.value || '');
+                }
+            });
         } else {
+            // 備用格式：直接是建議數組
             payload.forEach(item => {
                 if (!item) return;
                 if (typeof item === 'string') {
@@ -1545,15 +1555,14 @@ function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_
             });
         }
     } else if (payload && typeof payload === 'object') {
+        // 對象格式
         if (Array.isArray(payload.phrase)) {
             payload.phrase.forEach(add);
         } else if (Array.isArray(payload.results)) {
             payload.results.forEach(add);
+        } else if (Array.isArray(payload.suggestions)) {
+            payload.suggestions.forEach(add);
         }
-    }
-
-    if (query) {
-        add(query);
     }
 
     return suggestions.slice(0, limit);
@@ -1628,8 +1637,9 @@ async function fetchDuckDuckGoSuggestions(query) {
 
         window[callbackId] = (payload) => {
             try {
+                console.log('DuckDuckGo 原始回應:', payload);
                 const suggestions = extractDuckDuckGoSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
-                console.log('DuckDuckGo 建議詞:', suggestions);
+                console.log('DuckDuckGo 解析後建議詞:', suggestions);
                 finalize(suggestions);
             } catch (err) {
                 console.warn('Failed to parse DuckDuckGo suggestions', err);
