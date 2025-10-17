@@ -49,6 +49,8 @@ function loadSettings() {
     
     // 載入背景設定
     loadBackgroundSettings();
+    // 載入外觀設定（模糊/濾鏡）
+    loadAppearanceSettings();
 }
 
 // 載入背景設定
@@ -125,7 +127,70 @@ function saveSettings() {
     localStorage.setItem('bgValue', bgValue);
     applyBackground(bgType, bgValue);
     
+    // 也儲存外觀設定
+    saveAppearanceSettings();
+
     closeModal('settingsModal');
+}
+
+// Appearance: blur + overlay
+function loadAppearanceSettings() {
+    const blurEnabled = localStorage.getItem('blurEnabled');
+    const blurAmount = localStorage.getItem('blurAmount');
+    const overlayType = localStorage.getItem('overlayType') || 'none';
+    const overlayOpacity = localStorage.getItem('overlayOpacity');
+
+    const blurToggle = document.getElementById('blurToggle');
+    const blurRange = document.getElementById('blurRange');
+    const blurValue = document.getElementById('blurValue');
+    const overlaySelect = document.getElementById('overlaySelect');
+    const overlayRange = document.getElementById('overlayOpacity');
+    const overlayValue = document.getElementById('overlayValue');
+
+    if (blurToggle) blurToggle.checked = blurEnabled === 'true' || blurEnabled === null;
+    if (blurRange) blurRange.value = blurAmount || 16;
+    if (blurValue) blurValue.textContent = blurRange ? blurRange.value : (blurAmount || 16);
+    if (overlaySelect) overlaySelect.value = overlayType;
+    if (overlayRange) overlayRange.value = overlayOpacity !== null ? overlayOpacity : 0.4;
+    if (overlayValue) overlayValue.textContent = Number(overlayRange ? overlayRange.value : (overlayOpacity !== null ? overlayOpacity : 0.4)).toFixed(2);
+
+    applyAppearanceSettings();
+}
+
+function saveAppearanceSettings() {
+    const blurToggle = document.getElementById('blurToggle');
+    const blurRange = document.getElementById('blurRange');
+    const overlaySelect = document.getElementById('overlaySelect');
+    const overlayRange = document.getElementById('overlayOpacity');
+
+    if (blurToggle) localStorage.setItem('blurEnabled', blurToggle.checked);
+    if (blurRange) localStorage.setItem('blurAmount', blurRange.value);
+    if (overlaySelect) localStorage.setItem('overlayType', overlaySelect.value);
+    if (overlayRange) localStorage.setItem('overlayOpacity', overlayRange.value);
+
+    applyAppearanceSettings();
+}
+
+function applyAppearanceSettings() {
+    const blurEnabled = localStorage.getItem('blurEnabled') === 'true' || localStorage.getItem('blurEnabled') === null;
+    const blurAmount = localStorage.getItem('blurAmount') || 16;
+    const overlayType = localStorage.getItem('overlayType') || 'none';
+    const overlayOpacity = localStorage.getItem('overlayOpacity') !== null ? Number(localStorage.getItem('overlayOpacity')) : 0.4;
+
+    // apply blur via CSS variable
+    document.documentElement.style.setProperty('--backdrop-blur', blurEnabled ? `${blurAmount}px` : '0px');
+
+    // overlay
+    const overlayEl = document.getElementById('backgroundOverlay');
+    if (overlayEl) {
+        if (overlayType === 'none') {
+            overlayEl.style.background = 'transparent';
+        } else if (overlayType === 'white') {
+            overlayEl.style.background = `rgba(255,255,255,${overlayOpacity})`;
+        } else {
+            overlayEl.style.background = `rgba(0,0,0,${overlayOpacity})`;
+        }
+    }
 }
 
 // 初始化事件監聽
@@ -271,12 +336,12 @@ function loadBookmarks() {
 
 function getDefaultBookmarks() {
     return [
-        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: '🐙', category: '' },
-        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: '📺', category: '' },
-        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: '📧', category: '' },
-        { id: Date.now() + 3, name: 'Twitter', url: 'https://twitter.com', icon: '🐦', category: '' },
-        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: '📝', category: '' },
-        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: '📷', category: '' }
+        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: 'https://www.google.com/s2/favicons?domain=github.com&sz=128', category: '' },
+        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=128', category: '' },
+        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: 'https://www.google.com/s2/favicons?domain=gmail.com&sz=128', category: '' },
+        { id: Date.now() + 3, name: 'Twitter', url: 'https://twitter.com', icon: 'https://www.google.com/s2/favicons?domain=twitter.com&sz=128', category: '' },
+        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: 'https://www.google.com/s2/favicons?domain=notion.so&sz=128', category: '' },
+        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'https://www.google.com/s2/favicons?domain=instagram.com&sz=128', category: '' }
     ];
 }
 

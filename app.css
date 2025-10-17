@@ -4,6 +4,8 @@
 :root {
   --primary: #4c6ef5;
   --primary-dark: #364fc7;
+  --backdrop-blur: 16px;
+  --overlay-color: rgba(0,0,0,0.4);
   --accent: #f59f00;
   --surface: rgba(255, 255, 255, 0.92);
   --surface-muted: rgba(255, 255, 255, 0.75);
@@ -26,7 +28,10 @@ body {
   line-height: 1.6;
 }
 
-.background-layer { position: fixed; inset: 0; background: rgba(13,18,38,.42); backdrop-filter: blur(16px); z-index: -1; }
+.background-layer { position: fixed; inset: 0; background: rgba(13,18,38,.42); backdrop-filter: blur(var(--backdrop-blur)); z-index: -1; }
+
+/* Overlay that can be white/black with adjustable opacity */
+.background-overlay { position: fixed; inset: 0; pointer-events: none; background: var(--overlay-color, transparent); z-index: 0; }
 
 .app { max-width: 1120px; margin: 0 auto; padding: 72px 24px 56px; display: flex; flex-direction: column; gap: 32px; }
 
@@ -107,3 +112,8 @@ input[type="text"]:focus, input[type="url"]:focus, input[type="color"]:focus, se
   .search-bar { grid-template-columns: 36px 1fr 96px; }
   .bookmark-grid, .bookmarks-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 }
+
+/* range input minimal styling */
+input[type="range"] { appearance: none; -webkit-appearance: none; height: 6px; background: rgba(0,0,0,0.08); border-radius: 6px; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+input[type="range"]:focus { outline: none; }

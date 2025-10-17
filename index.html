@@ -7,7 +7,8 @@
         <link rel="stylesheet" href="app.css" />
     </head>
     <body>
-        <div class="background-layer" aria-hidden="true"></div>
+    <div class="background-layer" aria-hidden="true"></div>
+    <div id="backgroundOverlay" class="background-overlay" aria-hidden="true"></div>
         <main class="app">
             <section class="hero">
                 <div class="hero-header">
@@ -110,6 +111,28 @@
                         <div class="settings-field hidden" id="colorSettings">
                             <label for="bgColor">選擇顏色</label>
                             <input id="bgColor" type="color" value="#1a1a2e" />
+                        </div>
+                    </section>
+                    <section class="settings-block">
+                        <h4>🖼️ 顯示效果（外觀）</h4>
+                        <div class="settings-field">
+                            <label>背景模糊</label>
+                            <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
+                                <input id="blurToggle" type="checkbox" />
+                                <label for="blurToggle" style="font-weight:600;">啟用背景模糊</label>
+                            </div>
+                            <input id="blurRange" type="range" min="0" max="40" value="16" style="width:100%; margin-top:8px;" />
+                            <div class="hint">模糊深度: <span id="blurValue">16</span>px</div>
+                        </div>
+                        <div class="settings-field" style="margin-top:10px;">
+                            <label>背景濾鏡</label>
+                            <select id="overlaySelect" style="margin-top:6px;">
+                                <option value="none">無</option>
+                                <option value="white">白色濾鏡</option>
+                                <option value="black">黑色濾鏡</option>
+                            </select>
+                            <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" style="width:100%; margin-top:8px;" />
+                            <div class="hint">濾鏡透明度: <span id="overlayValue">0.40</span></div>
                         </div>
                     </section>
                 </div>
