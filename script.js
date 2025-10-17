@@ -71,6 +71,11 @@ const translations = {
     clearSettingsAction: 'Reset now',
     clearSettingsConfirm: 'Are you sure you want to reset everything? This will remove custom bookmarks, categories, and settings.',
     clearSettingsSuccess: 'All settings cleared, reloading…',
+    clearSearchHistory: 'Clear search history',
+    clearSearchHistoryDescription: 'Delete all search history records.',
+    clearSearchHistoryAction: 'Clear now',
+    clearSearchHistoryConfirm: 'Are you sure you want to clear all search history?',
+    clearSearchHistorySuccess: 'Search history cleared!',
         backgroundSection: 'Background Settings',
         backgroundType: 'Background Type',
         gradient: 'Gradient',
@@ -191,6 +196,11 @@ const translations = {
     clearSettingsAction: '立即重置',
     clearSettingsConfirm: '确定要重置所有设置吗？这会清除自定义书签、分类与搜索记录。',
     clearSettingsSuccess: '设置已清除，页面即将重新载入…',
+    clearSearchHistory: '清空搜索记录',
+    clearSearchHistoryDescription: '删除所有搜索历史记录。',
+    clearSearchHistoryAction: '立即清空',
+    clearSearchHistoryConfirm: '确定要清空所有搜索记录吗？',
+    clearSearchHistorySuccess: '搜索记录已清空！',
         backgroundSection: '背景设置',
         backgroundType: '背景类型',
         gradient: '渐层',
@@ -308,6 +318,16 @@ const translations = {
     customSearchPlaceholder: 'https://example.com/search?q={query}',
     clearSettings: '重設所有設定',
     clearSettingsDescription: '將首頁恢復到預設外觀、書籤與所有個人化設定。',
+    clearSettingsAction: '立即重設',
+    clearSettingsConfirm: '確定要重設所有設定嗎？這會清除自訂書籤、分類與搜尋記錄。',
+    clearSettingsSuccess: '設定已清除，頁面即將重新載入…',
+    clearSearchHistory: '清空搜尋記錄',
+    clearSearchHistoryDescription: '刪除所有搜尋歷史記錄。',
+    clearSearchHistoryAction: '立即清空',
+    clearSearchHistoryConfirm: '確定要清空所有搜尋記錄嗎？',
+    clearSearchHistorySuccess: '搜尋記錄已清空！',
+    renameCategory: '重新命名',
+    editCategoryIcon: '修改圖標',
     clearSettingsAction: '立即重設',
     clearSettingsConfirm: '確定要重設所有設定嗎？這將清除自訂書籤、分類與搜尋紀錄。',
     clearSettingsSuccess: '設定已重設，重新整理中…',
@@ -858,9 +878,37 @@ function handleResetSettings(event) {
     const overlayEl = document.getElementById('backgroundOverlay');
     if (overlayEl) overlayEl.style.background = 'transparent';
 
-    window.setTimeout(() => {
-        window.location.reload();
-    }, 600);
+    setTimeout(() => {
+        location.reload();
+    }, 800);
+}
+
+function handleClearSearchHistory(event) {
+    const button = event?.currentTarget;
+    if (!confirm(t('clearSearchHistoryConfirm'))) {
+        return;
+    }
+
+    if (button) {
+        button.disabled = true;
+        button.classList.add('is-busy');
+        button.textContent = t('clearSearchHistorySuccess');
+    }
+
+    // 清空搜索歷史
+    searchHistory = [];
+    localStorage.removeItem('searchHistory');
+
+    // 更新搜索建議顯示
+    updateSearchSuggestions('');
+
+    setTimeout(() => {
+        if (button) {
+            button.disabled = false;
+            button.classList.remove('is-busy');
+            button.textContent = t('clearSearchHistoryAction');
+        }
+    }, 1500);
 }
 
 // Appearance: blur + overlay
@@ -1081,6 +1129,9 @@ function initEventListeners() {
 
     const resetSettingsBtn = document.getElementById('resetSettings');
     if (resetSettingsBtn) resetSettingsBtn.addEventListener('click', handleResetSettings);
+    
+    const clearSearchHistoryBtn = document.getElementById('clearSearchHistoryBtn');
+    if (clearSearchHistoryBtn) clearSearchHistoryBtn.addEventListener('click', handleClearSearchHistory);
     
     // 背景類型選擇
     document.querySelectorAll('input[name="bgType"]').forEach(radio => {
@@ -1385,29 +1436,11 @@ function buildLocalSuggestions(query) {
         suggestions.push(text);
     };
 
-    // 只處理有輸入的情況
+    // 只處理有輸入的情況，只從搜索歷史中建議
     if (value) {
-        // 先添加匹配的搜索歷史
+        // 只添加匹配的搜索歷史
         searchHistory.forEach(item => {
             if (item.toLowerCase().includes(value)) addSuggestion(item);
-        });
-        
-        // 再添加匹配的書籤
-        bookmarks.forEach(bookmark => {
-            if (bookmark.name && bookmark.name.toLowerCase().includes(value)) {
-                addSuggestion(bookmark.name);
-            }
-            if (bookmark.url && bookmark.url.toLowerCase().includes(value)) {
-                addSuggestion(bookmark.url);
-            }
-            try {
-                const hostname = new URL(bookmark.url).hostname;
-                if (hostname && hostname.toLowerCase().includes(value)) {
-                    addSuggestion(hostname);
-                }
-            } catch (error) {
-                // ignore invalid urls
-            }
         });
     }
 
@@ -1885,7 +1918,22 @@ function performSearch() {
 // 分類管理
 function loadCategories() {
     const saved = localStorage.getItem('categories');
-    categories = saved ? JSON.parse(saved) : [];
+    if (!saved) {
+        categories = [];
+    } else {
+        const parsed = JSON.parse(saved);
+        // 向後兼容：如果是字符串數組，轉換為對象數組
+        if (Array.isArray(parsed) && parsed.length > 0) {
+            if (typeof parsed[0] === 'string') {
+                categories = parsed.map(name => ({ name, icon: '📁' }));
+                saveCategories(); // 保存新格式
+            } else {
+                categories = parsed;
+            }
+        } else {
+            categories = [];
+        }
+    }
     updateCategorySelect();
 }
 
@@ -1898,7 +1946,8 @@ function updateCategorySelect() {
     if (!select) return;
     select.innerHTML = `<option value="">${t('mainList')}</option>`;
     categories.forEach(cat => {
-        select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        const catName = typeof cat === 'string' ? cat : cat.name;
+        select.innerHTML += `<option value="${catName}">${catName}</option>`;
     });
     select.innerHTML += `<option value="new">${t('newCategory')}</option>`;
 }
@@ -1970,11 +2019,15 @@ function createCategorySection(category, categoryBookmarks) {
     const section = document.createElement('div');
     section.className = 'category-section';
     
+    // 獲取分類對象
+    const catObj = categories.find(c => (typeof c === 'string' ? c : c.name) === category);
+    const catIcon = catObj && typeof catObj === 'object' ? catObj.icon : '📁';
+    
     const header = document.createElement('div');
     header.className = 'category-header';
     header.innerHTML = `
-        <div class="category-title">📁 ${category}</div>
-        <div class="category-actions">
+        <div class="category-title">${catIcon} ${category}</div>
+        <div class="category-actions" style="display: none;">
             <button class="add-btn" onclick="openBookmarkModal(null, '${category.replace(/'/g, "\\'")}')">+ 新增</button>
             <button class="manage-btn" onclick="deleteCategory('${category.replace(/'/g, "\\'")}')">刪除分類</button>
         </div>
@@ -2137,8 +2190,11 @@ function deleteCategory(category) {
             }
         });
         
-        // 從分類列表中移除
-        categories = categories.filter(cat => cat !== category);
+        // 從分類列表中移除（支持字符串和對象格式）
+        categories = categories.filter(cat => {
+            const name = typeof cat === 'string' ? cat : cat.name;
+            return name !== category;
+        });
         
         saveCategories();
         saveBookmarksToStorage();
@@ -2156,12 +2212,22 @@ function openCategoryManagement() {
     if (categories.length === 0) {
         categoryList.innerHTML = `<p style="text-align:center; color: var(--text-subtle); padding: 20px;">${t('noCategories')}</p>`;
     } else {
-        categories.forEach(cat => {
+        categories.forEach((cat, index) => {
+            const catName = typeof cat === 'string' ? cat : cat.name;
+            const catIcon = typeof cat === 'object' && cat.icon ? cat.icon : '📁';
+            
             const item = document.createElement('div');
             item.className = 'category-item';
             item.innerHTML = `
-                <span class="category-item-name">📁 ${cat}</span>
-                <button onclick="deleteCategoryFromModal('${cat}')" class="btn" style="padding: 6px 12px; font-size: 12px;">${t('deleteCategory')}</button>
+                <div class="category-item-info">
+                    <span class="category-item-icon">${catIcon}</span>
+                    <span class="category-item-name">${catName}</span>
+                </div>
+                <div class="category-item-actions">
+                    <button onclick="renameCategoryPrompt(${index})" class="btn" style="padding: 6px 12px; font-size: 12px;" title="${t('renameCategory')}">${t('renameCategory')}</button>
+                    <button onclick="editCategoryIconPrompt(${index})" class="btn" style="padding: 6px 12px; font-size: 12px;" title="${t('editCategoryIcon')}">${t('editCategoryIcon')}</button>
+                    <button onclick="deleteCategoryFromModal('${catName.replace(/'/g, "\\\'")}')" class="btn" style="padding: 6px 12px; font-size: 12px;">${t('deleteCategory')}</button>
+                </div>
             `;
             categoryList.appendChild(item);
         });
@@ -2182,15 +2248,82 @@ function addNewCategory() {
         return;
     }
     
-    if (categories.includes(newCat)) {
+    // 檢查是否已存在
+    const exists = categories.some(c => {
+        const name = typeof c === 'string' ? c : c.name;
+        return name === newCat;
+    });
+    
+    if (exists) {
         alert(t('alertCategoryExists'));
         return;
     }
     
-    categories.push(newCat);
+    categories.push({ name: newCat, icon: '📁' });
     saveCategories();
     updateCategorySelect();
     openCategoryManagement(); // 刷新列表
+}
+
+function renameCategoryPrompt(index) {
+    const cat = categories[index];
+    const oldName = typeof cat === 'string' ? cat : cat.name;
+    const newName = prompt(`重新命名分類「${oldName}」：`, oldName);
+    
+    if (!newName || newName.trim() === '') return;
+    if (newName.trim() === oldName) return;
+    
+    // 檢查新名稱是否已存在
+    const exists = categories.some((c, i) => {
+        if (i === index) return false;
+        const name = typeof c === 'string' ? c : c.name;
+        return name === newName.trim();
+    });
+    
+    if (exists) {
+        alert('分類名稱已存在');
+        return;
+    }
+    
+    // 更新分類
+    if (typeof categories[index] === 'string') {
+        categories[index] = { name: newName.trim(), icon: '📁' };
+    } else {
+        categories[index].name = newName.trim();
+    }
+    
+    // 更新所有使用此分類的書籤
+    bookmarks.forEach(bookmark => {
+        if (bookmark.category === oldName) {
+            bookmark.category = newName.trim();
+        }
+    });
+    
+    saveCategories();
+    saveBookmarksToStorage();
+    updateCategorySelect();
+    renderBookmarks();
+    openCategoryManagement();
+}
+
+function editCategoryIconPrompt(index) {
+    const cat = categories[index];
+    const catName = typeof cat === 'string' ? cat : cat.name;
+    const currentIcon = typeof cat === 'object' && cat.icon ? cat.icon : '📁';
+    const newIcon = prompt(`修改分類「${catName}」的圖標（Emoji 或圖片網址）：`, currentIcon);
+    
+    if (!newIcon) return;
+    
+    // 確保是對象格式
+    if (typeof categories[index] === 'string') {
+        categories[index] = { name: catName, icon: newIcon.trim() };
+    } else {
+        categories[index].icon = newIcon.trim();
+    }
+    
+    saveCategories();
+    renderBookmarks();
+    openCategoryManagement();
 }
 
 function deleteCategoryFromModal(category) {
