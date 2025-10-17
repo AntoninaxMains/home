@@ -5,7 +5,7 @@
   --primary: #4c6ef5;
   --primary-dark: #364fc7;
   --backdrop-blur: 16px;
-  --overlay-color: rgba(0,0,0,0.4);
+  --overlay-color: transparent; /* default: no overlay */
   --accent: #f59f00;
   --surface: rgba(255, 255, 255, 0.92);
   --surface-muted: rgba(255, 255, 255, 0.75);
@@ -32,6 +32,13 @@ body {
 
 /* Overlay that can be white/black with adjustable opacity */
 .background-overlay { position: fixed; inset: 0; pointer-events: none; background: var(--overlay-color, transparent); z-index: 0; }
+
+/* muted / blurred icon for less emphasis */
+.muted-icon img, .muted-icon svg { filter: blur(1.2px) grayscale(.2) opacity(.85); }
+
+/* small icon used inside pills */
+.pill-icon { width: 20px; height: 20px; display:inline-grid; place-items:center; }
+.pill-icon svg { width: 18px; height: 18px; display:block; }
 
 .app { max-width: 1120px; margin: 0 auto; padding: 72px 24px 56px; display: flex; flex-direction: column; gap: 32px; }
 

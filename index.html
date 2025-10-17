@@ -18,23 +18,23 @@
                 <div class="search-card">
                     <div class="engine-list" id="engineTabs" role="tablist" aria-label="搜尋引擎">
                         <button class="engine-pill active" data-engine="google" role="tab" aria-selected="true">
-                            <span>🔍</span>
+                            <span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="6"></circle><path d="M21 21l-4.3-4.3"></path></svg></span>
                             Google
                         </button>
                         <button class="engine-pill" data-engine="bing" role="tab" aria-selected="false">
-                            <span>🔎</span>
+                            <span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12h18"></path><path d="M12 3v18"></path></svg></span>
                             Bing
                         </button>
                         <button class="engine-pill" data-engine="duckduckgo" role="tab" aria-selected="false">
-                            <span>🦆</span>
+                            <span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12c2-6 12-6 14 0-2 6-12 6-14 0z"></path></svg></span>
                             DuckDuckGo
                         </button>
                         <button class="engine-pill" data-engine="baidu" role="tab" aria-selected="false">
-                            <span>📍</span>
+                            <span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3"></circle><path d="M6 20c2-4 10-4 12 0"></path></svg></span>
                             百度
                         </button>
                         <button class="engine-pill" data-engine="custom" role="tab" aria-selected="false">
-                            <span>⚙️</span>
+                            <span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v6"></path><path d="M12 16v6"></path><path d="M4 12h6"></path><path d="M14 12h6"></path></svg></span>
                             自訂
                         </button>
                     </div>
@@ -49,10 +49,10 @@
             </section>
 
             <section class="toolbar" aria-label="快速操作">
-                <div class="toolbar-actions">
+                    <div class="toolbar-actions">
                     <button id="addBookmarkBtn" class="toolbar-btn primary">+ 新增書籤</button>
-                    <button id="manageCategoriesBtn" class="toolbar-btn">📁 管理分類</button>
-                    <button id="settingsBtn" class="toolbar-btn">⚙️ 設定</button>
+                    <button id="manageCategoriesBtn" class="toolbar-btn"><span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="16" rx="2"></rect></svg></span> 管理分類</button>
+                    <button id="settingsBtn" class="toolbar-btn"><span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 8a4 4 0 100 8 4 4 0 000-8z"></path><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06A2 2 0 014.27 17.9l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82L4.27 4.27A2 2 0 016.9 1.7l.06.06A1.65 1.65 0 009 2.09 1.65 1.65 0 0010.51 1H11a2 2 0 014 0h.09a1.65 1.65 0 001.51 1 1.65 1.65 0 001.82-.33l.06-.06A2 2 0 0119.73 6.1l-.06.06a1.65 1.65 0 00-.33 1.82 1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"></path></svg></span> 設定</button>
                 </div>
             </section>
 
