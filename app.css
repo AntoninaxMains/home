@@ -28,13 +28,12 @@ body {
   line-height: 1.6;
 }
 
-.background-layer { position: fixed; inset: 0; background: rgba(13,18,38,.42); backdrop-filter: blur(var(--backdrop-blur)); z-index: -1; }
+.background-layer { position: fixed; inset: 0; background: transparent; backdrop-filter: blur(var(--backdrop-blur)); z-index: -1; }
 
 /* Overlay that can be white/black with adjustable opacity */
 .background-overlay { position: fixed; inset: 0; pointer-events: none; background: var(--overlay-color, transparent); z-index: 0; }
 
-/* muted / blurred icon for less emphasis */
-.muted-icon img, .muted-icon svg { filter: blur(1.2px) grayscale(.2) opacity(.85); }
+/* remove muted styling - show icons clearly */
 
 /* small icon used inside pills */
 .pill-icon { width: 20px; height: 20px; display:inline-grid; place-items:center; }

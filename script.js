@@ -1,10 +1,10 @@
-// 搜尋引擎配置（icon 使用 inline SVG，便於統一替換）
+// 搜尋引擎配置（使用 Lucide icon names）
 const searchEngines = {
-    google: { url: 'https://www.google.com/search?q={query}', icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="6"></circle><path d="M21 21l-4.3-4.3"></path></svg>` },
-    bing: { url: 'https://www.bing.com/search?q={query}', icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12h18"></path><path d="M12 3v18"></path></svg>` },
-    duckduckgo: { url: 'https://duckduckgo.com/?q={query}', icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12c2-6 12-6 14 0-2 6-12 6-14 0z"></path></svg>` },
-    baidu: { url: 'https://www.baidu.com/s?wd={query}', icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3"></circle><path d="M6 20c2-4 10-4 12 0"></path></svg>` },
-    custom: { url: '', icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v6"></path><path d="M12 16v6"></path><path d="M4 12h6"></path><path d="M14 12h6"></path></svg>` }
+    google: { url: 'https://www.google.com/search?q={query}', icon: 'search' },
+    bing: { url: 'https://www.bing.com/search?q={query}', icon: 'compass' },
+    duckduckgo: { url: 'https://duckduckgo.com/?q={query}', icon: 'shield' },
+    baidu: { url: 'https://www.baidu.com/s?wd={query}', icon: 'globe' },
+    custom: { url: '', icon: 'settings' }
 };
 
 // 背景漸層預設
@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loadBookmarks();
     initEventListeners();
     updateSearchIcon();
+    // initialize lucide icons
+    if (window.lucide) window.lucide.createIcons();
 });
 
 // 載入設定
@@ -289,8 +291,10 @@ function setActiveEngineTab(engine) {
 function updateSearchIcon() {
     const el = document.getElementById('searchEngineIcon');
     if (!el) return;
-    // insert SVG icon (safe because icons are controlled strings)
-    el.innerHTML = searchEngines[currentSearchEngine].icon || '';
+    const iconName = searchEngines[currentSearchEngine].icon;
+    el.innerHTML = `<i data-lucide="${iconName}"></i>`;
+    // reinitialize lucide icons
+    if (window.lucide) window.lucide.createIcons();
 }
 
 // 執行搜尋
@@ -339,12 +343,12 @@ function loadBookmarks() {
 
 function getDefaultBookmarks() {
     return [
-        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: 'https://www.google.com/s2/favicons?domain=github.com&sz=128', category: '', muted: true },
-        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=128', category: '' },
-        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: '', category: '' },
-        { id: Date.now() + 3, name: 'Twitter', url: 'https://twitter.com', icon: 'https://www.google.com/s2/favicons?domain=twitter.com&sz=128', category: '' },
-        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: 'https://www.google.com/s2/favicons?domain=notion.so&sz=128', category: '' },
-        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'https://www.google.com/s2/favicons?domain=instagram.com&sz=128', category: '' }
+        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: 'https://cdn.simpleicons.org/github', category: '' },
+        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: 'https://cdn.simpleicons.org/youtube', category: '' },
+        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: 'https://cdn.simpleicons.org/gmail', category: '' },
+        { id: Date.now() + 3, name: 'X', url: 'https://x.com', icon: 'https://cdn.simpleicons.org/x', category: '' },
+        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: 'https://cdn.simpleicons.org/notion', category: '' },
+        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'https://cdn.simpleicons.org/instagram', category: '' }
     ];
 }
 
@@ -428,7 +432,6 @@ function createBookmarkElement(bookmark) {
     };
     
     let iconHtml = '';
-    let iconClass = '';
     // allow explicit null/empty to mean no icon
     if (!bookmark.icon) {
         iconHtml = '';
@@ -440,18 +443,18 @@ function createBookmarkElement(bookmark) {
         // fallback to text or svg string
         iconHtml = bookmark.icon;
     }
-
-    // apply muted style for items marked muted (e.g., github/x)
-    if (bookmark.muted) iconClass = 'muted-icon';
     
     div.innerHTML = `
         <div class="bookmark-actions">
-            <button onclick="editBookmark(${bookmark.id}); event.stopPropagation();" title="編輯">✏️</button>
-            <button onclick="deleteBookmark(${bookmark.id}); event.stopPropagation();" title="刪除">🗑️</button>
+            <button onclick="editBookmark(${bookmark.id}); event.stopPropagation();" title="編輯"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+            <button onclick="deleteBookmark(${bookmark.id}); event.stopPropagation();" title="刪除"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
         </div>
-        <div class="bookmark-icon ${iconClass}">${iconHtml}</div>
+        <div class="bookmark-icon">${iconHtml}</div>
         <div class="bookmark-name">${bookmark.name}</div>
     `;
+    
+    // initialize lucide icons in this element
+    if (window.lucide) window.lucide.createIcons({ nameAttr: 'data-lucide' });
     
     return div;
 }
