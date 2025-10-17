@@ -269,11 +269,11 @@ function t(key) {
 const searchEngines = {
     google: { 
         url: 'https://www.google.com/search?q={query}', 
-        icon: 'https://cdn.simpleicons.org/google/4285F4'
+        icon: 'https://cdn.simpleicons.org/google'
     },
     bing: { 
         url: 'https://www.bing.com/search?q={query}', 
-        icon: 'https://cdn.simpleicons.org/microsoftbing/008373'
+        icon: 'https://cdn.simpleicons.org/bing/008373'
     },
     duckduckgo: { 
         url: 'https://duckduckgo.com/?q={query}', 
@@ -436,6 +436,12 @@ function updateUILanguage() {
     // Update language select
     const langSelect = document.getElementById('languageSelect');
     if (langSelect) langSelect.value = currentLanguage;
+    
+    // Update quick language dropdown
+    document.querySelectorAll('.lang-option').forEach(option => {
+        const isActive = option.getAttribute('data-lang') === currentLanguage;
+        option.classList.toggle('active', isActive);
+    });
     
     // Reinitialize lucide icons
     if (window.lucide) window.lucide.createIcons();
@@ -669,10 +675,31 @@ function initEventListeners() {
     const iconSearchBtn = document.getElementById('iconSearchBtn');
     if (iconSearchBtn) iconSearchBtn.addEventListener('click', openIconSearch);
     
-    // 快速設置按鈕
+    // 快速設置按鈕 - 語言下拉選單
     const quickLangBtn = document.getElementById('quickLangBtn');
-    if (quickLangBtn) {
-        quickLangBtn.addEventListener('click', cycleLanguage);
+    const langMenu = document.getElementById('langMenu');
+    
+    if (quickLangBtn && langMenu) {
+        quickLangBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langMenu.classList.toggle('show');
+        });
+        
+        // 語言選項點擊
+        document.querySelectorAll('.lang-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+                langMenu.classList.remove('show');
+            });
+        });
+        
+        // 點擊外部關閉下拉選單
+        document.addEventListener('click', function(e) {
+            if (!quickLangBtn.contains(e.target) && !langMenu.contains(e.target)) {
+                langMenu.classList.remove('show');
+            }
+        });
     }
     
     const quickDarkModeBtn = document.getElementById('quickDarkModeBtn');

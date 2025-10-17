@@ -14,9 +14,16 @@
     
     <!-- 右上角快速設置 -->
     <div class="quick-settings">
-        <button id="quickLangBtn" class="quick-btn" aria-label="語言" title="切換語言">
-            <i data-lucide="globe-2"></i>
-        </button>
+        <div class="lang-dropdown">
+            <button id="quickLangBtn" class="quick-btn" aria-label="語言" title="切換語言">
+                <i data-lucide="globe-2"></i>
+            </button>
+            <div class="lang-menu" id="langMenu">
+                <button class="lang-option" data-lang="en">English</button>
+                <button class="lang-option" data-lang="zh-CN">简体中文</button>
+                <button class="lang-option" data-lang="zh-TW">正體中文</button>
+            </div>
+        </div>
         <button id="quickDarkModeBtn" class="quick-btn" aria-label="夜間模式" title="切換夜間模式">
             <i data-lucide="moon"></i>
         </button>
@@ -31,11 +38,11 @@
                 <div class="search-card">
                     <div class="engine-list" id="engineTabs" role="tablist" aria-label="搜尋引擎">
                         <button class="engine-pill active" data-engine="google" role="tab" aria-selected="true">
-                            <img src="https://cdn.simpleicons.org/google/4285F4" alt="Google" class="pill-icon" style="width:20px;height:20px;">
+                            <img src="https://cdn.simpleicons.org/google" alt="Google" class="pill-icon" style="width:20px;height:20px;">
                             Google
                         </button>
                         <button class="engine-pill" data-engine="bing" role="tab" aria-selected="false">
-                            <img src="https://cdn.simpleicons.org/microsoftbing/008373" alt="Bing" class="pill-icon" style="width:20px;height:20px;">
+                            <img src="https://cdn.simpleicons.org/bing/008373" alt="Bing" class="pill-icon" style="width:20px;height:20px;">
                             Bing
                         </button>
                         <button class="engine-pill" data-engine="duckduckgo" role="tab" aria-selected="false">

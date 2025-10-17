@@ -47,9 +47,9 @@ body {
 .hero-subtitle { color: rgba(255,255,255,.85); font-size: 18px; }
 
 /* Search Card */
-.search-card { width: min(680px, 100%); background: var(--surface); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 16px; }
+.search-card { width: min(680px, 100%); background: var(--surface); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 16px; transition: all 0.3s ease; }
 .engine-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-.engine-pill { border: 1px solid rgba(76,110,245,.15); background: #fff; color: var(--text-subtle); padding: 8px 14px; border-radius: 999px; display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition); }
+.engine-pill { border: 1px solid rgba(76,110,245,.15); background: #fff; color: var(--text-subtle); padding: 8px 14px; border-radius: 999px; display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
 .engine-pill:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(76,110,245,.2); }
 .engine-pill.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; border-color: transparent; }
 
@@ -74,7 +74,7 @@ body {
 .bookmark-card__header h2 { font-size: 20px; color: var(--text); }
 .bookmark-card__header p { color: var(--text-subtle); font-size: 14px; }
 .bookmark-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; padding: 16px; }
-.bookmark-item { position: relative; background: #fff; border: 1px solid rgba(0,0,0,.06); border-radius: var(--radius-md); padding: 16px 12px 14px; text-align: center; cursor: pointer; transition: transform var(--transition), box-shadow var(--transition); }
+.bookmark-item { position: relative; background: #fff; border: 1px solid rgba(0,0,0,.06); border-radius: var(--radius-md); padding: 16px 12px 14px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
 .bookmark-item:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(15,23,42,.12); }
 .bookmark-actions { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; opacity: 0; transition: opacity var(--transition); }
 .bookmark-item:hover .bookmark-actions { opacity: 1; }
@@ -94,12 +94,12 @@ body {
 /* Modal */
 .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.36); padding: 20px; z-index: 50; }
 .modal.show { display: flex; }
-.modal-panel { width: min(560px, 100%); background: #fff; border-radius: 16px; box-shadow: 0 24px 64px rgba(0,0,0,.3); overflow: hidden; }
-.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,.06); }
+.modal-panel { width: min(560px, 100%); max-height: 85vh; background: #fff; border-radius: 16px; box-shadow: 0 24px 64px rgba(0,0,0,.3); overflow: hidden; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,.06); flex-shrink: 0; }
 .modal-header h3 { font-size: 18px; }
 .modal-close { border: none; background: transparent; font-size: 22px; cursor: pointer; }
-.modal-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
-.modal-footer { padding: 12px 20px 16px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid rgba(0,0,0,.06); }
+.modal-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; flex: 1; }
+.modal-footer { padding: 12px 20px 16px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid rgba(0,0,0,.06); flex-shrink: 0; }
 
 /* Form */
 label { font-weight: 700; font-size: 13px; color: var(--text-subtle); }
@@ -157,13 +157,87 @@ input[type="text"]:focus, input[type="url"]:focus, input[type="color"]:focus, se
   stroke: white;
 }
 
+/* Language Dropdown */
+.lang-dropdown {
+  position: relative;
+}
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+  padding: 8px;
+  min-width: 150px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 1001;
+}
+
+.lang-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.lang-option {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text);
+  transition: background var(--transition);
+}
+
+.lang-option:hover {
+  background: rgba(76, 110, 245, 0.1);
+}
+
+.lang-option.active {
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+}
+
+body.dark-mode .lang-menu {
+  background: rgba(30, 30, 40, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .lang-option:hover {
+  background: rgba(76, 110, 245, 0.2);
+}
+
 /* Dark Mode */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 body.dark-mode {
   --surface: rgba(30, 30, 40, 0.92);
   --surface-muted: rgba(30, 30, 40, 0.75);
   --text: #e8eaed;
-  --text-subtle: #9aa0a6;
+  --text-subtle: #b8bdc3;
   --border: rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, var(--dark-overlay-opacity, 0.8));
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.3s ease;
 }
 
 body.dark-mode .hero-title {
@@ -172,7 +246,7 @@ body.dark-mode .hero-title {
 }
 
 body.dark-mode .hero-subtitle {
-  color: rgba(255,255,255,.75);
+  color: rgba(255,255,255,.85);
 }
 
 body.dark-mode .quick-btn {
@@ -188,14 +262,87 @@ body.dark-mode input[type="text"],
 body.dark-mode input[type="url"],
 body.dark-mode select,
 body.dark-mode textarea {
-  background: rgba(40, 40, 50, 0.8);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(40, 40, 50, 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
   color: var(--text);
 }
 
 body.dark-mode .btn {
-  background: rgba(60, 60, 70, 0.8);
+  background: rgba(60, 60, 70, 0.9);
   color: #e8eaed;
+}
+
+body.dark-mode .btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+}
+
+body.dark-mode .modal-panel {
+  background: rgba(25, 25, 35, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .bookmark-item,
+body.dark-mode .search-card {
+  background: rgba(35, 35, 45, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+body.dark-mode .bookmark-name {
+  color: var(--text);
+}
+
+body.dark-mode .bookmark-actions button {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text);
+}
+
+body.dark-mode .bookmark-actions button:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+body.dark-mode .toolbar-btn {
+  background: rgba(35, 35, 45, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+body.dark-mode .toolbar-btn:hover {
+  background: rgba(45, 45, 55, 1);
+}
+
+body.dark-mode .toolbar-btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+}
+
+body.dark-mode .engine-pill {
+  background: rgba(35, 35, 45, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+body.dark-mode .engine-pill.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+body.dark-mode .search-bar input {
+  background: rgba(45, 45, 55, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+body.dark-mode .search-btn {
+  background: var(--primary);
+  color: #fff;
 }
 
 /* Search Engine Pills with Brand Icons */
