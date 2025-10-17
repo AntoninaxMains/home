@@ -55,18 +55,22 @@ function loadSettings() {
 function loadBackgroundSettings() {
     const bgType = localStorage.getItem('bgType') || 'image';
     const bgValue = localStorage.getItem('bgValue') || 'https://img.zakk.au/file/1758520685708_71119.jpg';
-    
-    document.querySelector(`input[name="bgType"][value="${bgType}"]`).checked = true;
+
+    const radio = document.querySelector(`input[name="bgType"][value="${bgType}"]`);
+    if (radio) radio.checked = true;
     showBgOptions(bgType);
-    
+
     if (bgType === 'gradient') {
-        document.getElementById('gradientPreset').value = bgValue;
+        const sel = document.getElementById('gradientPreset');
+        if (sel) sel.value = bgValue;
         applyBackground('gradient', bgValue);
     } else if (bgType === 'image') {
-        document.getElementById('bgImageUrl').value = bgValue;
+        const inp = document.getElementById('bgImageUrl');
+        if (inp) inp.value = bgValue;
         applyBackground('image', bgValue);
     } else if (bgType === 'color') {
-        document.getElementById('bgColor').value = bgValue;
+        const color = document.getElementById('bgColor');
+        if (color) color.value = bgValue;
         applyBackground('color', bgValue);
     }
 }
@@ -91,9 +95,12 @@ function applyBackground(type, value) {
 
 // 顯示背景選項
 function showBgOptions(type) {
-    document.getElementById('gradientOptions').style.display = type === 'gradient' ? 'block' : 'none';
-    document.getElementById('imageOptions').style.display = type === 'image' ? 'block' : 'none';
-    document.getElementById('colorOptions').style.display = type === 'color' ? 'block' : 'none';
+    const grad = document.getElementById('gradientSettings');
+    const img = document.getElementById('imageSettings');
+    const col = document.getElementById('colorSettings');
+    if (grad) grad.classList.toggle('hidden', type !== 'gradient');
+    if (img) img.classList.toggle('hidden', type !== 'image');
+    if (col) col.classList.toggle('hidden', type !== 'color');
 }
 
 // 儲存設定
@@ -129,16 +136,17 @@ function initEventListeners() {
             performSearch();
         }
     });
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchBtn) searchBtn.addEventListener('click', performSearch);
     
     // 搜尋引擎標籤切換
-    document.querySelectorAll('.engine-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
+    document.querySelectorAll('#engineTabs .engine-pill').forEach(pill => {
+        pill.addEventListener('click', function() {
             const engine = this.dataset.engine;
             currentSearchEngine = engine;
             localStorage.setItem('searchEngine', engine);
             setActiveEngineTab(engine);
             updateSearchIcon();
-            
             if (engine === 'custom' && !searchEngines.custom.url) {
                 openModal('settingsModal');
             }
@@ -160,17 +168,21 @@ function initEventListeners() {
     });
     
     // 書籤按鈕
-    document.getElementById('addMainBookmarkBtn').addEventListener('click', function() {
-        openBookmarkModal(null, '');
-    });
+    const addBtn = document.getElementById('addBookmarkBtn');
+    if (addBtn) addBtn.addEventListener('click', function() { openBookmarkModal(null, ''); });
     
     document.getElementById('saveBookmark').addEventListener('click', saveBookmark);
-    document.getElementById('cancelBookmark').addEventListener('click', function() {
-        closeModal('bookmarkModal');
+    // 關閉由 data-close 控制
+    document.querySelectorAll('[data-close]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-close');
+            if (id) closeModal(id);
+        });
     });
     
     // 抓取圖示按鈕
-    document.getElementById('fetchIcon').addEventListener('click', fetchFavicon);
+    const autoIconBtn = document.getElementById('autoIconBtn');
+    if (autoIconBtn) autoIconBtn.addEventListener('click', fetchFavicon);
     
     // 管理分類按鈕
     document.getElementById('manageCategoriesBtn').addEventListener('click', function() {
@@ -181,21 +193,14 @@ function initEventListeners() {
     
     // 分類選擇
     document.getElementById('bookmarkCategory').addEventListener('change', function(e) {
-        const newCategoryInput = document.getElementById('newCategory');
+        const newCategoryInput = document.getElementById('newCategoryInput');
+        if (!newCategoryInput) return;
         if (e.target.value === 'new') {
-            newCategoryInput.style.display = 'block';
+            newCategoryInput.classList.remove('hidden');
             newCategoryInput.focus();
         } else {
-            newCategoryInput.style.display = 'none';
+            newCategoryInput.classList.add('hidden');
         }
-    });
-    
-    // 關閉彈窗
-    document.querySelectorAll('.close').forEach(function(closeBtn) {
-        closeBtn.addEventListener('click', function() {
-            const modal = this.closest('.modal');
-            closeModal(modal.id);
-        });
     });
     
     // 點擊外部關閉彈窗
@@ -208,11 +213,10 @@ function initEventListeners() {
 
 // 設置活動標籤
 function setActiveEngineTab(engine) {
-    document.querySelectorAll('.engine-tab').forEach(tab => {
-        tab.classList.remove('active');
-        if (tab.dataset.engine === engine) {
-            tab.classList.add('active');
-        }
+    document.querySelectorAll('#engineTabs .engine-pill').forEach(pill => {
+        const isActive = pill.dataset.engine === engine;
+        pill.classList.toggle('active', isActive);
+        pill.setAttribute('aria-selected', String(isActive));
     });
 }
 
@@ -281,10 +285,10 @@ function saveBookmarksToStorage() {
 }
 
 function renderBookmarks() {
-    const mainList = document.getElementById('mainBookmarksList');
-    const categoriesContainer = document.getElementById('categoriesContainer');
-    
-    mainList.innerHTML = '';
+    const mainGrid = document.getElementById('bookmarkGrid');
+    const categoriesContainer = document.getElementById('categorySection');
+    if (!mainGrid || !categoriesContainer) return;
+    mainGrid.innerHTML = '';
     categoriesContainer.innerHTML = '';
     
     // 分離主書籤和分類書籤
@@ -303,12 +307,12 @@ function renderBookmarks() {
     // 渲染主書籤
     mainBookmarks.forEach(bookmark => {
         const bookmarkEl = createBookmarkElement(bookmark);
-        mainList.appendChild(bookmarkEl);
+        mainGrid.appendChild(bookmarkEl);
     });
     
     // 如果沒有主書籤，顯示提示
     if (mainBookmarks.length === 0) {
-        mainList.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 40px;">還沒有書籤，點擊上方按鈕新增！</p>';
+        mainGrid.innerHTML = '<p style="text-align:center; color: var(--text-subtle); padding: 40px;">還沒有書籤，點擊上方按鈕新增！</p>';
     }
     
     // 渲染分類書籤
@@ -379,7 +383,7 @@ function createBookmarkElement(bookmark) {
 function openBookmarkModal(bookmark = null, defaultCategory = '') {
     editingBookmarkId = bookmark ? bookmark.id : null;
     
-    const title = document.getElementById('bookmarkModalTitle');
+    const title = document.getElementById('bookmarkTitle');
     const categorySelect = document.getElementById('bookmarkCategory');
     const nameInput = document.getElementById('bookmarkName');
     const urlInput = document.getElementById('bookmarkUrl');
@@ -391,7 +395,8 @@ function openBookmarkModal(bookmark = null, defaultCategory = '') {
     urlInput.value = bookmark ? bookmark.url : '';
     iconInput.value = bookmark ? bookmark.icon : '';
     
-    document.getElementById('newCategory').style.display = 'none';
+    const newCat = document.getElementById('newCategoryInput');
+    if (newCat) newCat.classList.add('hidden');
     
     openModal('bookmarkModal');
     nameInput.focus();
@@ -399,7 +404,7 @@ function openBookmarkModal(bookmark = null, defaultCategory = '') {
 
 function saveBookmark() {
     const categorySelect = document.getElementById('bookmarkCategory');
-    const newCategoryInput = document.getElementById('newCategory');
+    const newCategoryInput = document.getElementById('newCategoryInput');
     const name = document.getElementById('bookmarkName').value.trim();
     const url = document.getElementById('bookmarkUrl').value.trim();
     const icon = document.getElementById('bookmarkIcon').value.trim() || '🌐';
@@ -500,7 +505,7 @@ function openCategoryManagement() {
             item.className = 'category-item';
             item.innerHTML = `
                 <span class="category-item-name">📁 ${cat}</span>
-                <button onclick="deleteCategoryFromModal('${cat}')" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">刪除</button>
+                <button onclick="deleteCategoryFromModal('${cat}')" class="btn" style="padding: 6px 12px; font-size: 12px;">刪除</button>
             `;
             categoryList.appendChild(item);
         });
