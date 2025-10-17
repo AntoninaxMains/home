@@ -354,27 +354,38 @@ const searchEngines = {
     google: {
         url: 'https://www.google.com/search?q={query}',
         icon: 'google',
-        labelKey: 'engineGoogle'
+        labelKey: 'engineGoogle',
+        iconSize: 18,
+        dropdownIconSize: 16
     },
     bing: {
         url: 'https://www.bing.com/search?q={query}',
         icon: 'assets/bing-logo.svg',
-        labelKey: 'engineBing'
+        labelKey: 'engineBing',
+        iconSize: 20,
+        selectorIconSize: 22,
+        dropdownIconSize: 20
     },
     duckduckgo: {
         url: 'https://duckduckgo.com/?q={query}',
         icon: 'duckduckgo',
-        labelKey: 'engineDuckDuckGo'
+        labelKey: 'engineDuckDuckGo',
+        iconSize: 18,
+        dropdownIconSize: 16
     },
     baidu: {
         url: 'https://www.baidu.com/s?wd={query}',
         icon: 'baidu',
-        labelKey: 'engineBaidu'
+        labelKey: 'engineBaidu',
+        iconSize: 18,
+        dropdownIconSize: 16
     },
     custom: {
         url: '',
         icon: 'lucide:settings',
-        labelKey: 'engineCustom'
+        labelKey: 'engineCustom',
+        iconSize: 18,
+        dropdownIconSize: 16
     }
 };
 
@@ -1345,6 +1356,67 @@ function mergeSuggestions(localSuggestions, remoteSuggestions, limit = SEARCH_SU
     return result;
 }
 
+function cleanSuggestionText(value) {
+    if (!value) return '';
+    return String(value)
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;/gi, "'")
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function extractDuckDuckGoSuggestions(data, query, limit = SEARCH_SUGGESTION_LIMIT) {
+    const suggestions = [];
+    const seen = new Set();
+    const trimmedQuery = (query || '').trim();
+
+    const add = (raw) => {
+        const cleaned = cleanSuggestionText(raw);
+        if (!cleaned) return;
+        const primary = cleaned.includes(' - ')
+            ? cleaned.split(' - ')[0].trim()
+            : cleaned;
+        const candidate = primary.length >= 2 ? primary : cleaned;
+        const key = candidate.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        suggestions.push(candidate);
+    };
+
+    const processTopics = (topics) => {
+        if (!Array.isArray(topics)) return;
+        topics.forEach(item => {
+            if (!item) return;
+            if (Array.isArray(item.Topics)) {
+                processTopics(item.Topics);
+                return;
+            }
+            add(item.Text || item.Name || '');
+        });
+    };
+
+    if (data) {
+        if (typeof data.Heading === 'string') add(data.Heading);
+        if (Array.isArray(data.Results)) {
+            data.Results.forEach(entry => add(entry?.Text));
+        }
+        if (Array.isArray(data.RelatedTopics)) {
+            processTopics(data.RelatedTopics);
+        }
+    }
+
+    if (!suggestions.length && trimmedQuery) {
+        add(trimmedQuery);
+    }
+
+    return suggestions.slice(0, limit);
+}
+
 async function fetchDuckDuckGoSuggestions(query) {
     if (!query || query.length < REMOTE_SUGGESTION_MIN_LENGTH) {
         return [];
@@ -1362,10 +1434,16 @@ async function fetchDuckDuckGoSuggestions(query) {
     const controller = new AbortController();
     remoteSuggestAbortController = controller;
 
-    const params = new URLSearchParams({ q: query, type: 'list' });
+    const params = new URLSearchParams({
+        q: query,
+        format: 'json',
+        no_redirect: '1',
+        no_html: '1',
+        skip_disambig: '1'
+    });
 
     try {
-        const response = await fetch(`https://duckduckgo.com/ac/?${params.toString()}`, {
+        const response = await fetch(`https://api.duckduckgo.com/?${params.toString()}`, {
             headers: {
                 'Accept': 'application/json'
             },
@@ -1381,20 +1459,9 @@ async function fetchDuckDuckGoSuggestions(query) {
         }
 
         const data = await response.json();
-        const suggestions = Array.isArray(data) ? data.map(item => {
-            if (!item) return '';
-            if (typeof item === 'string') return item;
-            if (typeof item === 'object') {
-                if (typeof item.phrase === 'string') return item.phrase;
-                if (typeof item.text === 'string') return item.text;
-                if (typeof item.value === 'string') return item.value;
-            }
-            return '';
-        }).filter(Boolean) : [];
-
-        const limited = suggestions.slice(0, SEARCH_SUGGESTION_LIMIT);
-        remoteSuggestCache.set(normalized, limited);
-        return limited;
+        const suggestions = extractDuckDuckGoSuggestions(data, query, SEARCH_SUGGESTION_LIMIT);
+        remoteSuggestCache.set(normalized, suggestions);
+        return suggestions;
     } catch (error) {
         if (remoteSuggestAbortController === controller) {
             remoteSuggestAbortController = null;
@@ -1435,9 +1502,10 @@ function renderEngineDropdown() {
     dropdown.innerHTML = Object.keys(searchEngines).map(key => {
         const engine = searchEngines[key];
         const label = t(engine.labelKey || key);
+        const iconSize = engine.dropdownIconSize ?? engine.iconSize ?? 18;
         return `
             <button type="button" class="engine-option${key === currentSearchEngine ? ' active' : ''}" data-engine="${key}" role="option" aria-selected="${key === currentSearchEngine}">
-                <span class="engine-option__icon">${getIconMarkup(engine.icon, 18, label)}</span>
+                <span class="engine-option__icon" style="--engine-option-icon-size:${iconSize}px;">${getIconMarkup(engine.icon, iconSize, label)}</span>
                 <span class="engine-option__name">${escapeHtml(label)}</span>
             </button>
         `;
@@ -1457,7 +1525,9 @@ function updateEngineSelector() {
         labelTarget.textContent = t(engine.labelKey || currentSearchEngine);
     }
     if (iconTarget && engine) {
-        iconTarget.innerHTML = getIconMarkup(engine.icon, 20, t(engine.labelKey || currentSearchEngine));
+        const selectorSize = engine.selectorIconSize ?? engine.iconSize ?? 20;
+        iconTarget.style.setProperty('--selector-icon-size', `${selectorSize}px`);
+        iconTarget.innerHTML = getIconMarkup(engine.icon, selectorSize, t(engine.labelKey || currentSearchEngine));
         if (window.lucide) window.lucide.createIcons();
     }
 }
@@ -1640,7 +1710,9 @@ function updateSearchIcon() {
     if (!el) return;
     const engine = searchEngines[currentSearchEngine];
     if (!engine) return;
-    el.innerHTML = getIconMarkup(engine.icon, 20, t(engine.labelKey || currentSearchEngine));
+    const selectorSize = engine.selectorIconSize ?? engine.iconSize ?? 20;
+    el.style.setProperty('--selector-icon-size', `${selectorSize}px`);
+    el.innerHTML = getIconMarkup(engine.icon, selectorSize, t(engine.labelKey || currentSearchEngine));
     if (window.lucide) window.lucide.createIcons();
 }
 
