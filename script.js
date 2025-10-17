@@ -273,7 +273,7 @@ const searchEngines = {
     },
     bing: { 
         url: 'https://www.bing.com/search?q={query}', 
-        icon: 'https://cdn.simpleicons.org/bing/008373'
+        icon: 'https://www.bing.com/favicon.ico'
     },
     duckduckgo: { 
         url: 'https://duckduckgo.com/?q={query}', 
@@ -705,6 +705,51 @@ function initEventListeners() {
     const quickDarkModeBtn = document.getElementById('quickDarkModeBtn');
     if (quickDarkModeBtn) {
         quickDarkModeBtn.addEventListener('click', toggleDarkMode);
+    }
+    
+    // 移動端懸浮球
+    const fabBtn = document.getElementById('fabBtn');
+    const fabMenu = document.getElementById('fabMenu');
+    
+    if (fabBtn && fabMenu) {
+        fabBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            fabMenu.classList.toggle('show');
+            fabBtn.classList.toggle('active');
+        });
+        
+        // FAB 選項事件
+        document.getElementById('fabAddBookmark')?.addEventListener('click', function() {
+            openBookmarkModal(null, '');
+            closeFabMenu();
+        });
+        
+        document.getElementById('fabManageCategories')?.addEventListener('click', function() {
+            openCategoryManagement();
+            closeFabMenu();
+        });
+        
+        document.getElementById('fabSettings')?.addEventListener('click', function() {
+            openModal('settingsModal');
+            closeFabMenu();
+        });
+        
+        document.getElementById('fabLang')?.addEventListener('click', function() {
+            cycleFabLanguage();
+            closeFabMenu();
+        });
+        
+        document.getElementById('fabDarkMode')?.addEventListener('click', function() {
+            toggleDarkMode();
+            updateFabDarkModeIcon();
+        });
+        
+        // 點擊外部關閉 FAB 選單
+        document.addEventListener('click', function(e) {
+            if (fabBtn && fabMenu && !fabBtn.contains(e.target) && !fabMenu.contains(e.target)) {
+                closeFabMenu();
+            }
+        });
     }
     
     // 夜間模式切換
@@ -1170,6 +1215,37 @@ function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
 }
 
+// FAB 輔助函數
+function closeFabMenu() {
+    const fabMenu = document.getElementById('fabMenu');
+    const fabBtn = document.getElementById('fabBtn');
+    if (fabMenu) fabMenu.classList.remove('show');
+    if (fabBtn) fabBtn.classList.remove('active');
+}
+
+function cycleFabLanguage() {
+    const languages = ['en', 'zh-CN', 'zh-TW'];
+    const currentIndex = languages.indexOf(currentLanguage);
+    const nextIndex = (currentIndex + 1) % languages.length;
+    changeLanguage(languages[nextIndex]);
+}
+
+function updateFabDarkModeIcon() {
+    const fabDarkMode = document.getElementById('fabDarkMode');
+    if (fabDarkMode) {
+        const isDark = document.body.classList.contains('dark-mode');
+        const icon = fabDarkMode.querySelector('i');
+        const span = fabDarkMode.querySelector('span');
+        if (icon) {
+            icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            if (window.lucide) window.lucide.createIcons();
+        }
+        if (span) {
+            span.textContent = isDark ? t('lightMode') || '日間模式' : t('darkMode') || '夜間模式';
+        }
+    }
+}
+
 // 夜間模式功能
 function toggleDarkMode(forceState) {
     const isDark = forceState !== undefined ? forceState : !document.body.classList.contains('dark-mode');
@@ -1191,6 +1267,9 @@ function toggleDarkMode(forceState) {
     const toggle = document.getElementById('darkModeToggle');
     if (toggle) toggle.checked = isDark;
     
+    // 更新 FAB 圖標
+    updateFabDarkModeIcon();
+    
     // 顯示/隱藏深度設置
     const settings = document.getElementById('darkModeSettings');
     if (settings) settings.style.display = isDark ? 'block' : 'none';
@@ -1204,7 +1283,7 @@ function updateDarkModeDepth(depth) {
 
 function loadDarkMode() {
     const darkMode = localStorage.getItem('darkMode');
-    const depth = localStorage.getItem('darkModeDepth') || '80';
+    const depth = localStorage.getItem('darkModeDepth') || '35';
     
     if (darkMode === 'enabled') {
         toggleDarkMode(true);
@@ -1213,7 +1292,8 @@ function loadDarkMode() {
     const depthInput = document.getElementById('darkModeDepth');
     if (depthInput) {
         depthInput.value = depth;
-        document.getElementById('darkModeDepthValue').textContent = depth + '%';
+        const valueDisplay = document.getElementById('darkModeDepthValue');
+        if (valueDisplay) valueDisplay.textContent = depth + '%';
     }
     updateDarkModeDepth(depth);
 }

@@ -121,6 +121,15 @@ input[type="text"]:focus, input[type="url"]:focus, input[type="color"]:focus, se
   display: flex;
   gap: 10px;
   z-index: 1000;
+  align-items: flex-start;
+}
+
+.desktop-only {
+  display: flex;
+}
+
+.mobile-only {
+  display: none;
 }
 
 .quick-btn {
@@ -134,7 +143,7 @@ input[type="text"]:focus, input[type="url"]:focus, input[type="color"]:focus, se
   display: grid;
   place-items: center;
   box-shadow: 0 4px 12px rgba(0,0,0,.1);
-  transition: all var(--transition);
+  transition: all 0.3s ease;
 }
 
 .quick-btn:hover {
@@ -155,6 +164,122 @@ input[type="text"]:focus, input[type="url"]:focus, input[type="color"]:focus, se
 
 .quick-btn.active svg {
   stroke: white;
+}
+
+/* FAB (Floating Action Button) - Mobile */
+.fab-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+.fab-button {
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 24px rgba(76, 110, 245, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(76, 110, 245, 0.5);
+}
+
+.fab-button.active {
+  transform: rotate(45deg);
+}
+
+.fab-button i {
+  width: 24px;
+  height: 24px;
+}
+
+.fab-menu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.fab-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  transform-origin: right center;
+  animation: fabSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.fab-option:nth-child(1) { animation-delay: 0.05s; }
+.fab-option:nth-child(2) { animation-delay: 0.1s; }
+.fab-option:nth-child(3) { animation-delay: 0.15s; }
+.fab-option:nth-child(4) { animation-delay: 0.2s; }
+.fab-option:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes fabSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.fab-option:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateX(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.fab-option i {
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
+}
+
+.fab-option span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+body.dark-mode .fab-option {
+  background: rgba(45, 45, 55, 0.98);
+  color: var(--text);
+}
+
+body.dark-mode .fab-option:hover {
+  background: rgba(55, 55, 65, 1);
 }
 
 /* Language Dropdown */
@@ -219,7 +344,14 @@ body.dark-mode .lang-option:hover {
 
 /* Dark Mode */
 body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease;
 }
 
 body.dark-mode {
@@ -234,10 +366,19 @@ body.dark-mode::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, var(--dark-overlay-opacity, 0.8));
+  background: rgba(0, 0, 0, var(--dark-overlay-opacity, 0.35));
   pointer-events: none;
   z-index: -1;
-  transition: opacity 0.3s ease;
+  animation: fadeInOverlay 0.5s ease;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 body.dark-mode .hero-title {
@@ -289,13 +430,33 @@ body.dark-mode .modal-footer {
 
 body.dark-mode .bookmark-item,
 body.dark-mode .search-card {
-  background: rgba(35, 35, 45, 0.9);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(45, 45, 55, 0.95);
+  border-color: rgba(255, 255, 255, 0.2);
   color: var(--text);
 }
 
+body.dark-mode .bookmark-card {
+  background: rgba(35, 35, 45, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
 body.dark-mode .bookmark-name {
+  color: #e8eaed;
+  font-weight: 700;
+}
+
+body.dark-mode .search-bar {
+  background: rgba(45, 45, 55, 0.95);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .search-bar input {
+  background: transparent;
   color: var(--text);
+}
+
+body.dark-mode .search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 body.dark-mode .bookmark-actions button {
@@ -355,16 +516,15 @@ body.dark-mode .search-btn {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .app { padding: 60px 16px 40px; gap: 24px; }
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+  
+  .app { padding: 60px 16px 100px; gap: 24px; }
   .hero-title { font-size: clamp(32px, 8vw, 48px); }
   .hero-subtitle { font-size: 16px; }
   .search-card { padding: 18px; }
   .engine-list { gap: 6px; }
   .engine-pill { padding: 8px 12px; font-size: 13px; }
-  .toolbar-actions { flex-wrap: wrap; gap: 8px; }
-  .toolbar-btn { padding: 8px 12px; font-size: 13px; }
-  .quick-settings { top: 12px; right: 12px; gap: 8px; }
-  .quick-btn { width: 40px; height: 40px; }
   .modal-panel { width: calc(100% - 32px); max-height: 90vh; }
   .icon-row { flex-direction: column; }
 }
@@ -375,14 +535,16 @@ body.dark-mode .search-btn {
   .bookmark-grid, .bookmarks-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
   .bookmark-item__name { font-size: 12px; }
   .engine-list { flex-wrap: wrap; }
+  .fab-button { width: 52px; height: 52px; }
+  .fab-container { bottom: 20px; right: 20px; }
 }
 
 @media (max-width: 480px) {
   .hero-title { font-size: 28px; }
   .hero-subtitle { font-size: 14px; }
-  .app { padding: 50px 12px 32px; }
-  .toolbar-actions { flex-direction: column; width: 100%; }
-  .toolbar-btn { width: 100%; justify-content: center; }
+  .app { padding: 50px 12px 90px; }
+  .fab-button { width: 48px; height: 48px; }
+  .fab-option { padding: 10px 16px; font-size: 13px; }
 }
 
 /* range input minimal styling */

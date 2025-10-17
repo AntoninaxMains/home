@@ -14,7 +14,16 @@
     
     <!-- 右上角快速設置 -->
     <div class="quick-settings">
-        <div class="lang-dropdown">
+        <button id="addBookmarkBtn" class="quick-btn desktop-only" aria-label="新增書籤" title="新增書籤">
+            <i data-lucide="plus"></i>
+        </button>
+        <button id="manageCategoriesBtn" class="quick-btn desktop-only" aria-label="管理分類" title="管理分類">
+            <i data-lucide="folder"></i>
+        </button>
+        <button id="settingsBtn" class="quick-btn desktop-only" aria-label="設定" title="設定">
+            <i data-lucide="settings"></i>
+        </button>
+        <div class="lang-dropdown desktop-only">
             <button id="quickLangBtn" class="quick-btn" aria-label="語言" title="切換語言">
                 <i data-lucide="globe-2"></i>
             </button>
@@ -24,9 +33,38 @@
                 <button class="lang-option" data-lang="zh-TW">正體中文</button>
             </div>
         </div>
-        <button id="quickDarkModeBtn" class="quick-btn" aria-label="夜間模式" title="切換夜間模式">
+        <button id="quickDarkModeBtn" class="quick-btn desktop-only" aria-label="夜間模式" title="切換夜間模式">
             <i data-lucide="moon"></i>
         </button>
+    </div>
+    
+    <!-- 移動端懸浮球 -->
+    <div class="fab-container mobile-only">
+        <button id="fabBtn" class="fab-button" aria-label="選單">
+            <i data-lucide="menu"></i>
+        </button>
+        <div class="fab-menu" id="fabMenu">
+            <button class="fab-option" id="fabAddBookmark" title="新增書籤">
+                <i data-lucide="plus"></i>
+                <span>新增書籤</span>
+            </button>
+            <button class="fab-option" id="fabManageCategories" title="管理分類">
+                <i data-lucide="folder"></i>
+                <span>管理分類</span>
+            </button>
+            <button class="fab-option" id="fabSettings" title="設定">
+                <i data-lucide="settings"></i>
+                <span>設定</span>
+            </button>
+            <button class="fab-option" id="fabLang" title="語言">
+                <i data-lucide="globe-2"></i>
+                <span>語言</span>
+            </button>
+            <button class="fab-option" id="fabDarkMode" title="夜間模式">
+                <i data-lucide="moon"></i>
+                <span>夜間模式</span>
+            </button>
+        </div>
     </div>
     
         <main class="app">
@@ -42,7 +80,7 @@
                             Google
                         </button>
                         <button class="engine-pill" data-engine="bing" role="tab" aria-selected="false">
-                            <img src="https://cdn.simpleicons.org/bing/008373" alt="Bing" class="pill-icon" style="width:20px;height:20px;">
+                            <img src="https://www.bing.com/favicon.ico" alt="Bing" class="pill-icon" style="width:20px;height:20px;" onerror="this.src='https://api.iconify.design/simple-icons:bing.svg?color=%23008373'">
                             Bing
                         </button>
                         <button class="engine-pill" data-engine="duckduckgo" role="tab" aria-selected="false">
@@ -65,14 +103,6 @@
                             搜尋
                         </button>
                     </div>
-                </div>
-            </section>
-
-            <section class="toolbar" aria-label="快速操作">
-                    <div class="toolbar-actions">
-                    <button id="addBookmarkBtn" class="toolbar-btn primary"><i data-lucide="plus" style="width:16px;height:16px;"></i> 新增書籤</button>
-                    <button id="manageCategoriesBtn" class="toolbar-btn"><i data-lucide="folder" class="pill-icon"></i> 管理分類</button>
-                    <button id="settingsBtn" class="toolbar-btn"><i data-lucide="settings" class="pill-icon"></i> 設定</button>
                 </div>
             </section>
 
@@ -165,8 +195,8 @@
                         </div>
                         <div class="settings-field" id="darkModeSettings" style="display:none;">
                             <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
-                            <input type="range" id="darkModeDepth" min="0" max="100" value="80" />
-                            <span class="range-value" id="darkModeDepthValue">80%</span>
+                            <input type="range" id="darkModeDepth" min="0" max="100" value="35" />
+                            <span class="range-value" id="darkModeDepthValue">35%</span>
                         </div>
                     </section>
                     <section class="settings-block">
