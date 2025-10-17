@@ -475,7 +475,12 @@ const ICON_ALIAS_OVERRIDES = {
     officeoutlook: 'microsoftoutlook',
     'microsoft outlook': 'microsoftoutlook',
     'microsoft-outlook': 'microsoftoutlook',
-    microsoftoutlook: 'microsoftoutlook'
+    microsoftoutlook: 'microsoftoutlook',
+    chatgpt: 'openai',
+    'open ai': 'openai',
+    bard: 'googlegemini',
+    gemini: 'googlegemini',
+    'google gemini': 'googlegemini'
 };
 
 const POPULAR_ICON_FALLBACK = [
@@ -497,6 +502,8 @@ const POPULAR_ICON_FALLBACK = [
     { slug: 'microsoft', title: 'Microsoft' },
     { slug: 'dropbox', title: 'Dropbox' },
     { slug: 'notion', title: 'Notion' },
+    { slug: 'openai', title: 'OpenAI', aliases: ['chatgpt'] },
+    { slug: 'googlegemini', title: 'Google Gemini', aliases: ['gemini', 'bard'] },
     { slug: 'figma', title: 'Figma' },
     { slug: 'steam', title: 'Steam' },
     { slug: 'twitch', title: 'Twitch' },
@@ -905,7 +912,13 @@ function initEventListeners() {
     });
 
     const engineSelector = document.getElementById('engineSelector');
-    if (engineSelector) engineSelector.addEventListener('click', toggleEngineDropdown);
+    if (engineSelector) {
+        engineSelector.addEventListener('click', toggleEngineDropdown);
+        engineSelector.addEventListener('keydown', handleEngineSelectorKeydown);
+    }
+
+    const engineIconTrigger = document.getElementById('engineSelectorIcon');
+    if (engineIconTrigger) engineIconTrigger.addEventListener('click', handleEngineIconClick);
 
     const engineDropdown = document.getElementById('engineDropdown');
     if (engineDropdown) engineDropdown.addEventListener('click', handleEngineDropdownClick);
@@ -1132,7 +1145,8 @@ function initEventListeners() {
 function initializeSearchUI() {
     renderEngineDropdown();
     updateEngineSelector();
-    updateOpenButtonState('');
+    const input = document.getElementById('searchInput');
+    updateOpenButtonState(input ? input.value : '');
 }
 
 // 搜尋歷史
@@ -1331,6 +1345,50 @@ function toggleEngineDropdown(event) {
     if (selector) selector.setAttribute('aria-expanded', engineDropdownOpen ? 'true' : 'false');
 }
 
+function handleEngineIconClick(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    cycleSearchEngine(1);
+}
+
+function handleEngineSelectorKeydown(event) {
+    if (!event) return;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        cycleSearchEngine(1);
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        cycleSearchEngine(-1);
+    } else if (event.key === 'Enter' || event.key === ' ') {
+        toggleEngineDropdown(event);
+    } else if (event.key === 'Escape') {
+        closeEngineDropdown();
+    }
+}
+
+function getSelectableSearchEngines() {
+    const customUrl = searchEngines.custom?.url || '';
+    return Object.keys(searchEngines).filter(key => {
+        if (key === 'custom') {
+            if (currentSearchEngine === 'custom') return true;
+            return customUrl.includes('{query}');
+        }
+        return true;
+    });
+}
+
+function cycleSearchEngine(direction = 1) {
+    const engines = getSelectableSearchEngines();
+    if (!engines.length) return;
+    const currentIndex = engines.indexOf(currentSearchEngine);
+    const baseIndex = currentIndex === -1 ? 0 : currentIndex;
+    const nextIndex = (baseIndex + direction + engines.length) % engines.length;
+    setCurrentSearchEngine(engines[nextIndex]);
+    closeEngineDropdown();
+}
+
 function closeEngineDropdown() {
     if (!engineDropdownOpen) return;
     engineDropdownOpen = false;
@@ -1413,7 +1471,9 @@ function openQueryUrl(query) {
 function normalizeUrl(value) {
     let url = value.trim();
     if (!url) return '';
-    if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(url)) {
+    if (/^\/\//.test(url)) {
+        url = `https:${url}`;
+    } else if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(url)) {
         url = `https://${url}`;
     }
     try {
@@ -1425,16 +1485,24 @@ function normalizeUrl(value) {
 }
 
 function isLikelyUrl(value) {
-    if (!value || /\s/.test(value)) return false;
-    if (/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)) {
+    if (!value) return false;
+    const trimmed = value.trim();
+    if (!trimmed || /\s/.test(trimmed)) return false;
+    if (/^([a-zA-Z][a-zA-Z\d+.-]*:)?\/\/[\S]+$/.test(trimmed)) {
+        return true;
+    }
+    if (/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(trimmed)) {
         try {
-            new URL(value);
+            new URL(trimmed);
             return true;
         } catch (error) {
             return false;
         }
     }
-    return /^([\w-]+\.)+[\w-]{2,}(\/.*)?$/.test(value);
+    if (/^localhost(:\d+)?(\/.*)?$/i.test(trimmed)) {
+        return true;
+    }
+    return /^(?:[\w-]+\.)+[\w-]{2,}(?::\d+)?(\/.*)?$/i.test(trimmed);
 }
 
 // 更新搜尋圖示
@@ -1497,13 +1565,16 @@ function loadBookmarks() {
 }
 
 function getDefaultBookmarks() {
+    const baseId = Date.now();
     return [
-        { id: Date.now(), name: 'GitHub', url: 'https://github.com', icon: 'github', category: '' },
-        { id: Date.now() + 1, name: 'YouTube', url: 'https://youtube.com', icon: 'youtube', category: '' },
-        { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: 'gmail', category: '' },
-        { id: Date.now() + 3, name: 'X', url: 'https://x.com', icon: 'x', category: '' },
-        { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: 'notion', category: '' },
-        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'instagram', category: '' }
+        { id: baseId, name: 'GitHub', url: 'https://github.com', icon: 'github', category: '' },
+        { id: baseId + 1, name: 'ChatGPT', url: 'https://chat.openai.com', icon: 'openai', category: '' },
+        { id: baseId + 2, name: 'Gemini', url: 'https://gemini.google.com', icon: 'googlegemini', category: '' },
+        { id: baseId + 3, name: 'YouTube', url: 'https://youtube.com', icon: 'youtube', category: '' },
+        { id: baseId + 4, name: 'Gmail', url: 'https://gmail.com', icon: 'gmail', category: '' },
+        { id: baseId + 5, name: 'X', url: 'https://x.com', icon: 'x', category: '' },
+        { id: baseId + 6, name: 'Notion', url: 'https://notion.so', icon: 'notion', category: '' },
+        { id: baseId + 7, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'instagram', category: '' }
     ];
 }
 
