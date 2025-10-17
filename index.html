@@ -7,49 +7,87 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="background-overlay"></div>
     <div class="container">
         <!-- 搜尋區域 -->
         <div class="search-section">
-            <div class="search-engine-selector">
-                <select id="searchEngine">
+            <h1 class="logo">Start Page</h1>
+            <div class="search-box">
+                <div class="search-engine-icon" id="searchEngineIcon">🔍</div>
+                <input type="text" id="searchInput" placeholder="搜尋任何內容..." autocomplete="off">
+                <select id="searchEngine" class="search-engine-select">
                     <option value="google">Google</option>
                     <option value="bing">Bing</option>
                     <option value="duckduckgo">DuckDuckGo</option>
                     <option value="baidu">百度</option>
                     <option value="custom">自訂</option>
                 </select>
-                <button id="settingsBtn" class="icon-btn" title="設定">⚙️</button>
-            </div>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="搜尋..." autocomplete="off">
-                <button id="searchBtn">🔍</button>
             </div>
         </div>
 
+        <!-- 設定按鈕 -->
+        <button id="settingsBtn" class="floating-settings-btn" title="設定">⚙️</button>
+
         <!-- 書籤區域 -->
-        <div class="bookmarks-section">
-            <div class="section-header">
-                <h2>我的書籤</h2>
-                <button id="addBookmarkBtn" class="add-btn">+ 新增書籤</button>
-            </div>
-            <div id="bookmarksList" class="bookmarks-grid"></div>
-        </div>
+        <div class="bookmarks-section" id="bookmarksContainer"></div>
     </div>
 
     <!-- 設定彈窗 -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>搜尋引擎設定</h3>
+                <h3>⚙️ 設定</h3>
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
-                <label for="customSearchUrl">自訂搜尋引擎 URL：</label>
-                <input type="text" id="customSearchUrl" placeholder="https://example.com/search?q={query}">
-                <small>使用 {query} 作為搜尋關鍵字的佔位符</small>
+                <div class="settings-section">
+                    <h4>🔍 搜尋引擎</h4>
+                    <label for="customSearchUrl">自訂搜尋引擎 URL：</label>
+                    <input type="text" id="customSearchUrl" placeholder="https://example.com/search?q={query}">
+                    <small>使用 {query} 作為搜尋關鍵字的佔位符</small>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>🎨 背景設定</h4>
+                    <label>選擇背景類型：</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="bgType" value="gradient" checked> 漸層色
+                        </label>
+                        <label>
+                            <input type="radio" name="bgType" value="image"> 圖片
+                        </label>
+                        <label>
+                            <input type="radio" name="bgType" value="color"> 純色
+                        </label>
+                    </div>
+                    
+                    <div id="gradientOptions" class="bg-option">
+                        <label for="gradientPreset">選擇漸層：</label>
+                        <select id="gradientPreset">
+                            <option value="default">預設藍色</option>
+                            <option value="sunset">日落橘紅</option>
+                            <option value="ocean">海洋藍綠</option>
+                            <option value="purple">夢幻紫色</option>
+                            <option value="green">清新綠色</option>
+                            <option value="dark">深色模式</option>
+                        </select>
+                    </div>
+                    
+                    <div id="imageOptions" class="bg-option" style="display:none;">
+                        <label for="bgImageUrl">圖片網址：</label>
+                        <input type="text" id="bgImageUrl" placeholder="https://example.com/image.jpg">
+                        <small>或使用 Unsplash: https://source.unsplash.com/1920x1080/?nature</small>
+                    </div>
+                    
+                    <div id="colorOptions" class="bg-option" style="display:none;">
+                        <label for="bgColor">選擇顏色：</label>
+                        <input type="color" id="bgColor" value="#1a1a2e">
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button id="saveSettings" class="btn-primary">儲存</button>
+                <button id="saveSettings" class="btn-primary">儲存設定</button>
             </div>
         </div>
     </div>
@@ -62,18 +100,47 @@
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
+                <label for="bookmarkCategory">分類：</label>
+                <div class="category-input-group">
+                    <select id="bookmarkCategory">
+                        <option value="">選擇或新增分類...</option>
+                    </select>
+                    <input type="text" id="newCategory" placeholder="或輸入新分類" style="display:none;">
+                </div>
+                
                 <label for="bookmarkName">名稱：</label>
                 <input type="text" id="bookmarkName" placeholder="網站名稱">
                 
                 <label for="bookmarkUrl">網址：</label>
                 <input type="text" id="bookmarkUrl" placeholder="https://example.com">
                 
-                <label for="bookmarkIcon">圖示 (選填)：</label>
-                <input type="text" id="bookmarkIcon" placeholder="🌐 或網址">
+                <label for="bookmarkIcon">圖示：</label>
+                <div class="icon-input-group">
+                    <input type="text" id="bookmarkIcon" placeholder="🌐 emoji 或圖片網址">
+                    <button type="button" id="fetchIcon" class="btn-secondary">自動抓取</button>
+                </div>
+                <small>可輸入 emoji、圖片網址，或點擊「自動抓取」從網站獲取圖示</small>
             </div>
             <div class="modal-footer">
                 <button id="saveBookmark" class="btn-primary">儲存</button>
                 <button id="cancelBookmark" class="btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 分類管理彈窗 -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>管理分類</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="categoryList"></div>
+                <button id="addCategoryBtn" class="btn-secondary" style="margin-top: 16px;">+ 新增分類</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary close">完成</button>
             </div>
         </div>
     </div>
