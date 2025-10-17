@@ -2083,13 +2083,14 @@ function renderIconGrid(icons, resetLimit = false, query = '') {
 }
 
 function selectIcon(iconName) {
-    const iconUrl = `https://cdn.simpleicons.org/${iconName}`;
     const iconInput = document.getElementById('bookmarkIcon');
     if (iconInput) {
-        iconInput.value = iconUrl;
+        iconInput.value = iconName;
     }
     closeModal('iconSearchModal');
-    const message = (t('alertIconSelected') || '已選擇圖標：{icon}').replace('{icon}', iconName);
+    const iconMeta = iconLibrary.find(icon => icon.slug === iconName);
+    const display = iconMeta?.title || iconName;
+    const message = (t('alertIconSelected') || '已選擇圖標：{icon}').replace('{icon}', display);
     alert(message);
 }
 
