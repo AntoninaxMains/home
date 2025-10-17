@@ -358,7 +358,7 @@ const searchEngines = {
     },
     bing: {
         url: 'https://www.bing.com/search?q={query}',
-        icon: 'bing',
+        icon: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bing_Logo.svg',
         labelKey: 'engineBing'
     },
     duckduckgo: {
@@ -480,7 +480,10 @@ const ICON_ALIAS_OVERRIDES = {
     'open ai': 'openai',
     bard: 'googlegemini',
     gemini: 'googlegemini',
-    'google gemini': 'googlegemini'
+    'google gemini': 'googlegemini',
+    bing: 'microsoftbing',
+    'ms bing': 'microsoftbing',
+    microsoftbing: 'microsoftbing'
 };
 
 const POPULAR_ICON_FALLBACK = [
