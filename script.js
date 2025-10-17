@@ -466,6 +466,13 @@ let iconAliasLookup = new Map();
 let engineDropdownOpen = false;
 
 const MAX_SEARCH_HISTORY = 12;
+const SEARCH_SUGGESTION_LIMIT = 8;
+const REMOTE_SUGGESTION_MIN_LENGTH = 2;
+const LOCAL_SUGGESTION_INITIAL_QUOTA = 4;
+
+const remoteSuggestCache = new Map();
+let remoteSuggestAbortController = null;
+let latestSuggestQueryToken = 0;
 
 const ICON_ALIAS_OVERRIDES = {
     outlook: 'microsoftoutlook',
@@ -1216,26 +1223,33 @@ function handleSuggestionClick(event) {
     }
 }
 
-function updateSearchSuggestions(query) {
+async function updateSearchSuggestions(query) {
     const container = document.getElementById('searchSuggestions');
     if (!container) return;
-    const suggestions = buildSearchSuggestions(query);
-    if (!suggestions.length) {
-        container.innerHTML = '';
-        container.classList.add('hidden');
+
+    const callToken = ++latestSuggestQueryToken;
+    const localSuggestions = buildLocalSuggestions(query);
+    const initialSuggestions = localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT);
+    renderSuggestionList(container, initialSuggestions);
+
+    const trimmed = (query || '').trim();
+    if (!trimmed || trimmed.length < REMOTE_SUGGESTION_MIN_LENGTH || isLikelyUrl(trimmed)) {
+        if (remoteSuggestAbortController) {
+            remoteSuggestAbortController.abort();
+            remoteSuggestAbortController = null;
+        }
         return;
     }
-    const title = `<div class="suggestions-title">${t('searchSuggestionsTitle')}</div>`;
-    const list = suggestions.map(item => {
-        const value = escapeAttribute(item);
-        const label = escapeHtml(item);
-        return `<button type="button" class="suggestion-item" data-value="${value}">${label}</button>`;
-    }).join('');
-    container.innerHTML = `${title}<div class="suggestion-list">${list}</div>`;
-    container.classList.remove('hidden');
+
+    const remoteSuggestions = await fetchDuckDuckGoSuggestions(trimmed);
+    if (callToken !== latestSuggestQueryToken) return;
+    if (!remoteSuggestions.length) return;
+
+    const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
+    renderSuggestionList(container, combined);
 }
 
-function buildSearchSuggestions(query) {
+function buildLocalSuggestions(query) {
     const suggestions = [];
     const seen = new Set();
     const value = (query || '').trim().toLowerCase();
@@ -1277,7 +1291,116 @@ function buildSearchSuggestions(query) {
         addSuggestion(`${query} ${engineLabel}`);
     }
 
-    return suggestions.slice(0, 8);
+    return suggestions;
+}
+
+function renderSuggestionList(container, suggestions) {
+    if (!suggestions.length) {
+        container.innerHTML = '';
+        container.classList.add('hidden');
+        return;
+    }
+    const title = `<div class="suggestions-title">${t('searchSuggestionsTitle')}</div>`;
+    const list = suggestions.map(item => {
+        const value = escapeAttribute(item);
+        const label = escapeHtml(item);
+        return `<button type="button" class="suggestion-item" data-value="${value}">${label}</button>`;
+    }).join('');
+    container.innerHTML = `${title}<div class="suggestion-list">${list}</div>`;
+    container.classList.remove('hidden');
+}
+
+function mergeSuggestions(localSuggestions, remoteSuggestions, limit = SEARCH_SUGGESTION_LIMIT) {
+    const result = [];
+    const seen = new Set();
+
+    const addValue = (raw) => {
+        const text = typeof raw === 'string' ? raw.trim() : '';
+        if (!text) return;
+        const key = text.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        result.push(text);
+    };
+
+    const local = Array.isArray(localSuggestions) ? localSuggestions : [];
+    const remote = Array.isArray(remoteSuggestions) ? remoteSuggestions : [];
+
+    const initialLocalQuota = Math.min(LOCAL_SUGGESTION_INITIAL_QUOTA, limit);
+    for (let i = 0; i < local.length && result.length < initialLocalQuota; i++) {
+        addValue(local[i]);
+    }
+
+    for (let i = 0; i < remote.length && result.length < limit; i++) {
+        addValue(remote[i]);
+    }
+
+    for (let i = initialLocalQuota; i < local.length && result.length < limit; i++) {
+        addValue(local[i]);
+    }
+
+    return result;
+}
+
+async function fetchDuckDuckGoSuggestions(query) {
+    if (!query || query.length < REMOTE_SUGGESTION_MIN_LENGTH) {
+        return [];
+    }
+
+    const normalized = query.toLowerCase();
+    if (remoteSuggestCache.has(normalized)) {
+        return remoteSuggestCache.get(normalized);
+    }
+
+    if (remoteSuggestAbortController) {
+        remoteSuggestAbortController.abort();
+    }
+
+    const controller = new AbortController();
+    remoteSuggestAbortController = controller;
+
+    const params = new URLSearchParams({ q: query, type: 'list' });
+
+    try {
+        const response = await fetch(`https://duckduckgo.com/ac/?${params.toString()}`, {
+            headers: {
+                'Accept': 'application/json'
+            },
+            signal: controller.signal
+        });
+
+        if (remoteSuggestAbortController === controller) {
+            remoteSuggestAbortController = null;
+        }
+
+        if (!response.ok) {
+            throw new Error(`DuckDuckGo suggest request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        const suggestions = Array.isArray(data) ? data.map(item => {
+            if (!item) return '';
+            if (typeof item === 'string') return item;
+            if (typeof item === 'object') {
+                if (typeof item.phrase === 'string') return item.phrase;
+                if (typeof item.text === 'string') return item.text;
+                if (typeof item.value === 'string') return item.value;
+            }
+            return '';
+        }).filter(Boolean) : [];
+
+        const limited = suggestions.slice(0, SEARCH_SUGGESTION_LIMIT);
+        remoteSuggestCache.set(normalized, limited);
+        return limited;
+    } catch (error) {
+        if (remoteSuggestAbortController === controller) {
+            remoteSuggestAbortController = null;
+        }
+        if (error.name !== 'AbortError') {
+            console.warn('DuckDuckGo suggestions request failed', error);
+        }
+        return [];
+    }
 }
 
 function setCurrentSearchEngine(engineKey, { persist = true } = {}) {
