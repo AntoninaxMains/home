@@ -901,6 +901,9 @@ function handleClearSearchHistory(event) {
 
     // 更新搜索建議顯示
     updateSearchSuggestions('');
+    
+    // 更新緩存大小
+    updateCacheSize();
 
     setTimeout(() => {
         if (button) {
@@ -2367,6 +2370,39 @@ async function fetchFavicon() {
         
     } catch (error) {
         alert(t('alertInvalidUrl'));
+    }
+}
+
+// 計算緩存大小
+function updateCacheSize() {
+    const cacheSizeElement = document.getElementById('cacheSize');
+    if (!cacheSizeElement) return;
+
+    try {
+        let totalSize = 0;
+        
+        // 計算 localStorage 大小
+        for (let key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                const value = localStorage.getItem(key);
+                if (value) {
+                    // 每個字符約 2 字節（UTF-16）
+                    totalSize += (key.length + value.length) * 2;
+                }
+            }
+        }
+        
+        // 格式化大小
+        const formatSize = (bytes) => {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        };
+        
+        cacheSizeElement.textContent = formatSize(totalSize);
+    } catch (error) {
+        cacheSizeElement.textContent = '無法計算';
+        console.error('計算緩存大小失敗:', error);
     }
 }
 

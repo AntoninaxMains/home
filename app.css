@@ -354,6 +354,16 @@ body.dark-mode .settings-input:focus { border-color: rgba(174, 189, 255, 0.65); 
 body.dark-mode .settings-inline__label { color: #f5f7ff; }
 body.dark-mode .settings-range { background: rgba(174, 189, 255, 0.35); }
 body.dark-mode .settings-reset-card { border-color: rgba(174, 189, 255, 0.35); background: rgba(46, 53, 82, 0.55); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55); }
+body.dark-mode .settings-reset-header { border-bottom-color: rgba(174, 189, 255, 0.2); }
+body.dark-mode .settings-reset-header h4 { color: #f5f7ff; }
+body.dark-mode .settings-reset-header i { color: #aebdff; }
+body.dark-mode .settings-reset-item__text h5 { color: #f5f7ff; }
+body.dark-mode .settings-reset-item__text p { color: rgba(235, 238, 255, 0.7); }
+body.dark-mode .settings-reset-divider { background: rgba(174, 189, 255, 0.15); }
+body.dark-mode .settings-cache-info { background: rgba(46, 53, 82, 0.6); }
+body.dark-mode .settings-cache-info__icon { background: rgba(174, 189, 255, 0.2); }
+body.dark-mode .settings-cache-label { color: rgba(235, 238, 255, 0.7); }
+body.dark-mode .settings-cache-size { color: #aebdff; }
 body.dark-mode .settings-reset-card__text h5 { color: #f5f7ff; }
 body.dark-mode .settings-reset-card__text p { color: rgba(235, 238, 255, 0.7); }
 body.dark-mode .btn.ghost { color: #aebdff; border-color: rgba(174, 189, 255, 0.45); background: rgba(174, 189, 255, 0.06); }
