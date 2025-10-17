@@ -446,18 +446,16 @@ function updateUILanguage() {
     quickButtons.forEach(({ id, label, icon }) => {
         const btn = document.getElementById(id);
         if (!btn) return;
-        let iconEl = btn.querySelector('[data-lucide]');
         const desiredIcon = typeof icon === 'function' ? icon() : icon;
-        if (!iconEl) {
-            iconEl = document.createElement('i');
-            iconEl.setAttribute('data-lucide', desiredIcon);
-        } else {
-            iconEl.setAttribute('data-lucide', desiredIcon);
-        }
+        const iconEl = document.createElement('i');
+        iconEl.setAttribute('data-lucide', desiredIcon);
         btn.innerHTML = '';
         btn.appendChild(iconEl);
         btn.setAttribute('title', t(label));
         btn.setAttribute('aria-label', t(label));
+        if (id === 'quickDarkModeBtn') {
+            btn.classList.toggle('active', document.body.classList.contains('dark-mode'));
+        }
     });
     
     // Bookmarks header
@@ -661,6 +659,15 @@ function applyAppearanceSettings() {
     const blurAmount = localStorage.getItem('blurAmount') !== null ? Number(localStorage.getItem('blurAmount')) : 0;
     const overlayType = localStorage.getItem('overlayType') || 'none';
     const overlayOpacity = localStorage.getItem('overlayOpacity') !== null ? Number(localStorage.getItem('overlayOpacity')) : 0.4;
+
+    const blurRange = document.getElementById('blurRange');
+    const blurValue = document.getElementById('blurValue');
+    if (blurRange && !Number.isNaN(blurAmount)) {
+        blurRange.value = String(blurAmount);
+    }
+    if (blurValue) {
+        blurValue.textContent = blurRange ? blurRange.value : String(blurAmount);
+    }
 
     // apply blur via CSS variable
     document.documentElement.style.setProperty('--backdrop-blur', blurEnabled ? `${blurAmount}px` : '0px');
@@ -1347,12 +1354,16 @@ function updateFabDarkModeIcon() {
     const fabDarkMode = document.getElementById('fabDarkMode');
     if (fabDarkMode) {
         const isDark = document.body.classList.contains('dark-mode');
-        const icon = fabDarkMode.querySelector('[data-lucide]');
         const span = fabDarkMode.querySelector('span');
-        if (icon) {
-            icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-            if (window.lucide) window.lucide.createIcons();
+        fabDarkMode.querySelectorAll('[data-lucide]').forEach(el => el.remove());
+        const newIcon = document.createElement('i');
+        newIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+        if (span) {
+            fabDarkMode.insertBefore(newIcon, span);
+        } else {
+            fabDarkMode.insertBefore(newIcon, fabDarkMode.firstChild);
         }
+        if (window.lucide) window.lucide.createIcons();
         if (span) {
             span.textContent = isDark ? t('lightMode') || '日間模式' : t('darkMode') || '夜間模式';
         }
@@ -1381,11 +1392,11 @@ function toggleDarkMode(forceState) {
     const quickBtn = document.getElementById('quickDarkModeBtn');
     if (quickBtn) {
         quickBtn.classList.toggle('active', isDark);
-        const icon = quickBtn.querySelector('[data-lucide]');
-        if (icon) {
-            icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-            if (window.lucide) window.lucide.createIcons();
-        }
+        const iconEl = document.createElement('i');
+        iconEl.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+        quickBtn.innerHTML = '';
+        quickBtn.appendChild(iconEl);
+        if (window.lucide) window.lucide.createIcons();
         quickBtn.setAttribute('title', t(isDark ? 'lightMode' : 'darkMode'));
         quickBtn.setAttribute('aria-label', t(isDark ? 'lightMode' : 'darkMode'));
     }
@@ -1454,13 +1465,13 @@ function ensureIconLibrary() {
                 .filter(Boolean)
                 .sort((a, b) => a.localeCompare(b));
             if (!iconLibrary.length) {
-                iconLibrary = [...POPULAR_ICON_FALLBACK];
+                iconLibrary = [...POPULAR_ICON_FALLBACK].sort((a, b) => a.localeCompare(b));
             }
             return iconLibrary;
         })
         .catch(error => {
             console.error('Icon library load failed:', error);
-            iconLibrary = [...POPULAR_ICON_FALLBACK];
+            iconLibrary = [...POPULAR_ICON_FALLBACK].sort((a, b) => a.localeCompare(b));
             return iconLibrary;
         });
     return iconLibraryPromise;
@@ -1524,7 +1535,7 @@ function renderIconGrid(icons, resetLimit = false, query = '') {
         const safeIcon = icon.replace(/'/g, "\\'");
         return `
             <div class="icon-grid-item" onclick="selectIcon('${safeIcon}')">
-                <img src="https://cdn.simpleicons.org/${icon}" alt="${icon}" onerror="this.src='https://api.iconify.design/simple-icons:${icon}.svg';">
+                <img src="https://cdn.simpleicons.org/${icon}" alt="${icon}" onerror="if(!this.dataset.alt){this.dataset.alt='1';this.src='https://api.iconify.design/simple-icons:${icon}.svg';}else{this.remove();}">
                 <span>${icon}</span>
             </div>
         `;
