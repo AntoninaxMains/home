@@ -53,6 +53,8 @@ const translations = {
         selectGradient: 'Select Gradient',
         imageUrl: 'Image URL',
         imageHint: 'Tip: Use Unsplash, e.g. https://source.unsplash.com/1920x1080/?nature',
+        uploadImage: 'Upload Image',
+        uploadHint: 'Uploaded image will be saved in browser cache',
         selectColor: 'Select Color',
         appearanceSection: 'Display Effects (Appearance)',
         backgroundBlur: 'Background Blur',
@@ -68,6 +70,8 @@ const translations = {
         darkModeSection: 'Dark Mode',
         enableDarkMode: 'Enable Dark Mode',
         darkModeDepth: 'Dark Mode Depth',
+        darkMode: 'Dark Mode',
+        lightMode: 'Light Mode',
         // Gradient presets
         gradientDefault: 'Sky Blue',
         gradientSunset: 'Sunset Orange',
@@ -83,7 +87,11 @@ const translations = {
         alertDeleteCategory: 'Are you sure you want to delete "{category}" category?\nBookmarks in this category will be moved to main list.',
         alertSetCustomUrl: 'Please set custom search engine URL first',
         alertIconFetched: 'Icon automatically filled!',
-        alertInvalidUrl: 'Please confirm URL format is correct'
+        alertInvalidUrl: 'Please confirm URL format is correct',
+        alertInvalidImage: 'Please select a valid image file',
+        alertImageTooLarge: 'Image size cannot exceed 5MB',
+        alertImageUploaded: 'Image uploaded and applied!',
+        alertUploadError: 'Image upload failed, please try again'
     },
     'zh-CN': {
         // Hero
@@ -138,6 +146,8 @@ const translations = {
         selectGradient: '选择渐层',
         imageUrl: '图片网址',
         imageHint: '提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature',
+        uploadImage: '上传图片',
+        uploadHint: '上传的图片将保存在浏览器缓存中',
         selectColor: '选择颜色',
         appearanceSection: '显示效果（外观）',
         backgroundBlur: '背景模糊',
@@ -153,6 +163,8 @@ const translations = {
         darkModeSection: '夜间模式',
         enableDarkMode: '启用夜间模式',
         darkModeDepth: '深色强度',
+        darkMode: '夜间模式',
+        lightMode: '日间模式',
         // Gradient presets
         gradientDefault: '天空蓝',
         gradientSunset: '日落橘红',
@@ -168,7 +180,11 @@ const translations = {
         alertDeleteCategory: '确定要删除「{category}」分类吗？\n此分类下的书签将移至主列表。',
         alertSetCustomUrl: '请先设置自定义搜索引擎 URL',
         alertIconFetched: '已自动填入网站图标！',
-        alertInvalidUrl: '无法获取图标，请确认网址格式正确'
+        alertInvalidUrl: '无法获取图标，请确认网址格式正确',
+        alertInvalidImage: '请选择有效的图片文件',
+        alertImageTooLarge: '图片大小不能超过 5MB',
+        alertImageUploaded: '图片已上传并应用！',
+        alertUploadError: '图片上传失败，请重试'
     },
     'zh-TW': {
         // Hero
@@ -223,6 +239,8 @@ const translations = {
         selectGradient: '選擇漸層',
         imageUrl: '圖片網址',
         imageHint: '提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature',
+        uploadImage: '上傳圖片',
+        uploadHint: '上傳的圖片將保存在瀏覽器緩存中',
         selectColor: '選擇顏色',
         appearanceSection: '顯示效果（外觀）',
         backgroundBlur: '背景模糊',
@@ -238,6 +256,8 @@ const translations = {
         darkModeSection: '夜間模式',
         enableDarkMode: '啟用夜間模式',
         darkModeDepth: '深色強度',
+        darkMode: '夜間模式',
+        lightMode: '日間模式',
         // Gradient presets
         gradientDefault: '天空藍',
         gradientSunset: '日落橘紅',
@@ -253,7 +273,11 @@ const translations = {
         alertDeleteCategory: '確定要刪除「{category}」分類嗎？\n此分類下的書籤將移至主列表。',
         alertSetCustomUrl: '請先設定自訂搜尋引擎 URL',
         alertIconFetched: '已自動填入網站圖示！',
-        alertInvalidUrl: '無法獲取圖示，請確認網址格式正確'
+        alertInvalidUrl: '無法獲取圖示，請確認網址格式正確',
+        alertInvalidImage: '請選擇有效的圖片檔案',
+        alertImageTooLarge: '圖片大小不能超過 5MB',
+        alertImageUploaded: '圖片已上傳並應用！',
+        alertUploadError: '圖片上傳失敗，請重試'
     }
 };
 
@@ -615,6 +639,50 @@ function applyAppearanceSettings() {
     }
 }
 
+// 處理圖片上傳
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // 檢查文件類型
+    if (!file.type.startsWith('image/')) {
+        alert(t('alertInvalidImage') || '請選擇有效的圖片文件');
+        return;
+    }
+    
+    // 檢查文件大小 (限制 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+        alert(t('alertImageTooLarge') || '圖片大小不能超過 5MB');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const imageData = e.target.result;
+        // 保存到 localStorage
+        localStorage.setItem('uploadedBgImage', imageData);
+        
+        // 更新背景圖片 URL 輸入框
+        const bgImageUrl = document.getElementById('bgImageUrl');
+        if (bgImageUrl) {
+            bgImageUrl.value = '(已上傳的圖片)';
+        }
+        
+        // 應用背景
+        document.body.style.background = `url('${imageData}') center/cover fixed no-repeat`;
+        localStorage.setItem('bgValue', imageData);
+        localStorage.setItem('bgType', 'image');
+        
+        alert(t('alertImageUploaded') || '圖片已上傳並應用！');
+    };
+    
+    reader.onerror = function() {
+        alert(t('alertUploadError') || '圖片上傳失敗，請重試');
+    };
+    
+    reader.readAsDataURL(file);
+}
+
 // 初始化事件監聽
 function initEventListeners() {
     // 搜尋功能
@@ -813,6 +881,12 @@ function initEventListeners() {
         });
     }
     
+    // 背景圖片上傳
+    const bgImageUpload = document.getElementById('bgImageUpload');
+    if (bgImageUpload) {
+        bgImageUpload.addEventListener('change', handleImageUpload);
+    }
+    
     // 點擊外部關閉彈窗
     window.addEventListener('click', function(e) {
         if (e.target.classList.contains('modal')) {
@@ -899,7 +973,11 @@ function getDefaultBookmarks() {
         { id: Date.now() + 2, name: 'Gmail', url: 'https://gmail.com', icon: 'https://cdn.simpleicons.org/gmail', category: '' },
         { id: Date.now() + 3, name: 'X', url: 'https://x.com', icon: 'https://cdn.simpleicons.org/x', category: '' },
         { id: Date.now() + 4, name: 'Notion', url: 'https://notion.so', icon: 'https://cdn.simpleicons.org/notion', category: '' },
-        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'https://cdn.simpleicons.org/instagram', category: '' }
+        { id: Date.now() + 5, name: 'Instagram', url: 'https://www.instagram.com/', icon: 'https://cdn.simpleicons.org/instagram', category: '' },
+        { id: Date.now() + 6, name: 'LinkedIn', url: 'https://www.linkedin.com/', icon: 'https://cdn.simpleicons.org/linkedin/0A66C2', category: '' },
+        { id: Date.now() + 7, name: 'Amazon', url: 'https://www.amazon.com/', icon: 'https://cdn.simpleicons.org/amazon/FF9900', category: '' },
+        { id: Date.now() + 8, name: 'Microsoft', url: 'https://www.microsoft.com/', icon: 'https://cdn.simpleicons.org/microsoft/5E5E5E', category: '' },
+        { id: Date.now() + 9, name: 'Outlook', url: 'https://outlook.live.com/', icon: 'https://cdn.simpleicons.org/microsoftoutlook/0078D4', category: '' }
     ];
 }
 
@@ -1248,11 +1326,21 @@ function updateFabDarkModeIcon() {
 
 // 夜間模式功能
 function toggleDarkMode(forceState) {
-    const isDark = forceState !== undefined ? forceState : !document.body.classList.contains('dark-mode');
-    document.body.classList.toggle('dark-mode', isDark);
+    const currentDark = document.body.classList.contains('dark-mode');
+    const isDark = forceState !== undefined ? forceState : !currentDark;
+    
+    // 添加過渡動畫類
+    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    
+    if (isDark) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+    
     localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
     
-    // 更新按鈕狀態
+    // 更新桌面端按鈕狀態和圖標
     const quickBtn = document.getElementById('quickDarkModeBtn');
     if (quickBtn) {
         quickBtn.classList.toggle('active', isDark);
@@ -1268,7 +1356,18 @@ function toggleDarkMode(forceState) {
     if (toggle) toggle.checked = isDark;
     
     // 更新 FAB 圖標
-    updateFabDarkModeIcon();
+    const fabBtn = document.getElementById('fabDarkMode');
+    if (fabBtn) {
+        const fabIcon = fabBtn.querySelector('i');
+        if (fabIcon) {
+            fabIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            if (window.lucide) window.lucide.createIcons();
+        }
+        const fabSpan = fabBtn.querySelector('span');
+        if (fabSpan) {
+            fabSpan.textContent = isDark ? (t('lightMode') || '日間模式') : (t('darkMode') || '夜間模式');
+        }
+    }
     
     // 顯示/隱藏深度設置
     const settings = document.getElementById('darkModeSettings');

@@ -157,6 +157,10 @@
                             <label for="bgImageUrl" data-i18n="imageUrl">圖片網址</label>
                             <input id="bgImageUrl" type="text" placeholder="https://example.com/image.jpg" />
                             <span class="hint" data-i18n="imageHint">提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature</span>
+                            
+                            <label for="bgImageUpload" style="margin-top: 12px;" data-i18n="uploadImage">上傳圖片</label>
+                            <input id="bgImageUpload" type="file" accept="image/*" style="margin-top: 6px;" />
+                            <span class="hint" data-i18n="uploadHint">上傳的圖片將保存在瀏覽器緩存中</span>
                         </div>
                         <div class="settings-field hidden" id="colorSettings">
                             <label for="bgColor" data-i18n="selectColor">選擇顏色</label>
@@ -168,11 +172,11 @@
                         <div class="settings-field">
                             <label data-i18n="backgroundBlur">背景模糊</label>
                             <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
-                                <input id="blurToggle" type="checkbox" />
+                                <input id="blurToggle" type="checkbox" checked />
                                 <label for="blurToggle" style="font-weight:600;" data-i18n="enableBlur">啟用背景模糊</label>
                             </div>
-                            <input id="blurRange" type="range" min="0" max="40" value="16" style="width:100%; margin-top:8px;" />
-                            <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">16</span>px</div>
+                            <input id="blurRange" type="range" min="0" max="40" value="0" style="width:100%; margin-top:8px;" />
+                            <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">0</span>px</div>
                         </div>
                         <div class="settings-field" style="margin-top:10px;">
                             <label data-i18n="backgroundFilter">背景濾鏡</label>

@@ -4,7 +4,7 @@
 :root {
   --primary: #4c6ef5;
   --primary-dark: #364fc7;
-  --backdrop-blur: 16px;
+  --backdrop-blur: 0px;
   --overlay-color: transparent; /* default: no overlay */
   --accent: #f59f00;
   --surface: rgba(255, 255, 255, 0.92);
@@ -26,6 +26,7 @@ body {
   color: var(--text);
   background: url('https://img.zakk.au/file/1758520685708_71119.jpg') center/cover fixed no-repeat;
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .background-layer { position: fixed; inset: 0; background: transparent; backdrop-filter: blur(var(--backdrop-blur)); z-index: -1; }
@@ -460,12 +461,18 @@ body.dark-mode .search-bar input::placeholder {
 }
 
 body.dark-mode .bookmark-actions button {
-  background: rgba(255, 255, 255, 0.15);
-  color: var(--text);
+  background: rgba(76, 110, 245, 0.3);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 body.dark-mode .bookmark-actions button:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(76, 110, 245, 0.5);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .bookmark-item:hover .bookmark-actions {
+  opacity: 1;
 }
 
 body.dark-mode .toolbar-btn {
