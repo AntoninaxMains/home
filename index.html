@@ -74,22 +74,19 @@
                     <p class="hero-subtitle">快速搜尋、管理收藏，一切從這裡開始。</p>
                 </div>
                 <div class="search-card">
-                    <div class="search-header">
-                        <button id="engineSelector" class="engine-selector" aria-haspopup="listbox" aria-expanded="false">
-                            <span class="engine-selector__icon" id="engineSelectorIcon"><i data-lucide="search"></i></span>
-                            <span class="engine-selector__label" id="engineSelectorLabel">Google</span>
-                            <i data-lucide="chevron-down" class="engine-selector__chevron"></i>
-                        </button>
-                        <div id="engineDropdown" class="engine-dropdown" role="listbox" aria-label="搜尋引擎"></div>
-                    </div>
                     <div class="search-input-group">
                         <div class="search-input-wrapper">
-                            <div class="search-icon" id="searchEngineIcon"><i data-lucide="search"></i></div>
+                            <button id="engineSelector" class="engine-selector engine-selector--inline" aria-haspopup="listbox" aria-expanded="false">
+                                <span class="engine-selector__icon" id="engineSelectorIcon"><i data-lucide="search"></i></span>
+                                <span class="engine-selector__label" id="engineSelectorLabel">Google</span>
+                                <i data-lucide="chevron-down" class="engine-selector__chevron"></i>
+                            </button>
                             <input id="searchInput" type="text" placeholder="搜尋任何內容..." data-i18n-placeholder="searchPlaceholder" autocomplete="off" />
                             <div class="search-actions">
                                 <button id="openUrlBtn" type="button" class="search-action secondary hidden" data-i18n="searchOpenLink">打開連結</button>
                                 <button id="searchBtn" type="button" class="search-action primary" data-i18n="searchButton">搜尋</button>
                             </div>
+                            <div id="engineDropdown" class="engine-dropdown" role="listbox" aria-label="搜尋引擎"></div>
                         </div>
                         <div id="customEngineConfig" class="custom-engine hidden">
                             <label for="customSearchInline" data-i18n="customSearchInlineLabel">自訂搜尋引擎 URL</label>
