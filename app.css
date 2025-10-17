@@ -24,7 +24,7 @@ html, body { height: 100%; }
 body {
   font-family: 'Poppins', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text);
-  background: url('assets/default-background.jpg') center/cover fixed no-repeat;
+  background: url('assets/default-background.webp') center/cover fixed no-repeat;
   line-height: 1.6;
   transition: background-color 0.3s ease, color 0.3s ease;
 }

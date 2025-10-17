@@ -751,7 +751,7 @@ function loadSettings() {
 // 載入背景設定
 function loadBackgroundSettings() {
     const bgType = localStorage.getItem('bgType') || 'image';
-    const bgValue = localStorage.getItem('bgValue') || 'assets/default-background.jpg';
+    const bgValue = localStorage.getItem('bgValue') || 'assets/default-background.webp';
 
     const radio = document.querySelector(`input[name="bgType"][value="${bgType}"]`);
     if (radio) radio.checked = true;
