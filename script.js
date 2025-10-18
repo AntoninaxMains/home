@@ -1559,10 +1559,22 @@ function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMI
         // 對象格式
         if (Array.isArray(payload.phrase)) {
             payload.phrase.forEach(add);
-        } else if (Array.isArray(payload.results)) {
+        }
+        if (Array.isArray(payload.results)) {
             payload.results.forEach(add);
-        } else if (Array.isArray(payload.suggestions)) {
+        }
+        if (Array.isArray(payload.suggestions)) {
             payload.suggestions.forEach(add);
+        }
+        if (Array.isArray(payload.s)) {
+            payload.s.forEach(add);
+        }
+        if (Array.isArray(payload.g)) {
+            payload.g.forEach(item => {
+                if (item && typeof item === 'object') {
+                    add(item.q);
+                }
+            });
         }
     }
 
