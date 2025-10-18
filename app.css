@@ -278,7 +278,7 @@ body.dark-mode .bookmark-form-side { background: rgba(42, 45, 66, 0.58); border-
 .icon-library-link::after { content: '\2197'; font-size: 11px; }
 .icon-library-link:hover { text-decoration: underline; }
 body.dark-mode .icon-library-link { color: #aebdff; }
-.btn { border: none; border-radius: 10px; padding: 8px 14px; font-weight: 700; cursor: pointer; background: #f3f4f6; }
+.btn { border: none; border-radius: 10px; padding: 8px 14px; font-weight: 700; cursor: pointer; background: #f3f4f6; color: var(--text); transition: all 0.2s ease; }
 .btn.primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; }
 .radio-list { display: flex; gap: 12px; }
 .settings-field { margin-top: 8px; }
@@ -545,6 +545,7 @@ body.dark-mode .btn.ghost:hover { background: rgba(174, 189, 255, 0.12); border-
   place-items: center;
   box-shadow: 0 4px 12px rgba(0,0,0,.1);
   transition: all 0.3s ease;
+  color: var(--text);
 }
 
 .quick-btn:hover {

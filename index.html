@@ -370,10 +370,24 @@
                 translations['ja'] = ja;
             }
             
+            // 確保全局變量在腳本載入前設置
             window.translations = translations;
             window.currentLanguage = currentLanguage;
+            window.SUPPORTED_LANGUAGES = supportedLanguages;
             
             // 載入主腳本 / Load main script
+            const mainScript = document.createElement('script');
+            mainScript.src = 'script.js';
+            mainScript.onerror = function() {
+                console.error('Failed to load main script');
+            };
+            document.body.appendChild(mainScript);
+        };
+        script.onerror = function() {
+            console.error('Failed to load language file:', currentLanguage);
+            // 降級到英語
+            window.translations = {};
+            window.currentLanguage = 'en';
             const mainScript = document.createElement('script');
             mainScript.src = 'script.js';
             document.body.appendChild(mainScript);

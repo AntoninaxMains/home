@@ -3,16 +3,28 @@
 // translations 對象在 index.html 中初始化，只載入當前語言
 // translations object initialized in index.html, only loads current language
 
+// 確保全局變量存在
+if (typeof window.translations === 'undefined') {
+    window.translations = {};
+    console.warn('Translations not loaded yet');
+}
+if (typeof window.currentLanguage === 'undefined') {
+    window.currentLanguage = 'zh-TW';
+}
+
 // 當前語言 (從 index.html 傳入)
 // Current language (passed from index.html)
-let currentLanguage = window.currentLanguage || 'zh-TW';
-let translations = window.translations || {};
+let currentLanguage = window.currentLanguage;
+let translations = window.translations;
 
 // 支援的語言列表
-const SUPPORTED_LANGUAGES = ['en', 'zh-CN', 'zh-TW', 'ja'];
+const SUPPORTED_LANGUAGES = window.SUPPORTED_LANGUAGES || ['en', 'zh-CN', 'zh-TW', 'ja'];
 
 // 獲取翻譯文字
 function t(key) {
+    if (!translations || !currentLanguage) {
+        return key;
+    }
     return translations[currentLanguage]?.[key] || key;
 }
 
@@ -296,18 +308,27 @@ const POPULAR_ICON_FALLBACK = [
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
-    loadLanguage();
-    loadSearchHistory();
-    loadSettings();
-    loadCategories();
-    loadBookmarks();
-    loadDarkMode();
-    initializeSearchUI();
-    setCurrentSearchEngine(currentSearchEngine, { persist: false });
-    initEventListeners();
-    updateUILanguage();
-    // initialize lucide icons
-    if (window.lucide) window.lucide.createIcons();
+    try {
+        loadLanguage();
+        loadSearchHistory();
+        loadSettings();
+        loadCategories();
+        loadBookmarks();
+        loadDarkMode();
+        initializeSearchUI();
+        setCurrentSearchEngine(currentSearchEngine, { persist: false });
+        initEventListeners();
+        updateUILanguage();
+        
+        // initialize lucide icons
+        if (window.lucide) {
+            window.lucide.createIcons();
+        } else {
+            console.error('Lucide library not loaded');
+        }
+    } catch (error) {
+        console.error('Initialization error:', error);
+    }
 });
 
 function normalizeLanguageCode(code) {
