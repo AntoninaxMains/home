@@ -1,0 +1,12 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="YouTube Music logo">
+  <defs>
+    <radialGradient id="ytMusicGradient" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#ff8a80" />
+      <stop offset="100%" stop-color="#ff1744" />
+    </radialGradient>
+  </defs>
+  <circle cx="256" cy="256" r="240" fill="url(#ytMusicGradient)" />
+  <circle cx="256" cy="256" r="144" fill="#fff" opacity="0.18" />
+  <circle cx="256" cy="256" r="64" fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M304 256l-64 40V216l64 40z" fill="#fff" />
+</svg>

@@ -102,6 +102,20 @@
                     <h1 class="hero-title">Start Page</h1>
                     <p class="hero-subtitle">快速搜尋、管理收藏，一切從這裡開始。</p>
                 </div>
+                <div id="weatherWidget" class="weather-widget hidden" aria-live="polite">
+                    <div class="weather-widget__icon" aria-hidden="true">
+                        <i data-lucide="cloud-sun"></i>
+                    </div>
+                    <div class="weather-widget__info">
+                        <div class="weather-widget__top">
+                            <span class="weather-widget__label" data-i18n="weatherWidgetLabel">天氣</span>
+                            <span id="weatherWidgetLocation" class="weather-widget__location"></span>
+                        </div>
+                        <div id="weatherWidgetStatus" class="weather-widget__status"></div>
+                        <div id="weatherWidgetTemp" class="weather-widget__temp"></div>
+                        <div id="weatherWidgetMeta" class="weather-widget__meta"></div>
+                    </div>
+                </div>
                 <div class="search-card">
                     <div class="search-input-group">
                         <div class="search-input-wrapper">
@@ -255,6 +269,62 @@
                                     </div>
                                     <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" class="settings-range" />
                                     <div class="hint"><span data-i18n="filterOpacity">濾鏡透明度</span>: <span id="overlayValue">0.40</span></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 天氣小工具 -->
+                        <section class="settings-card settings-card--wide settings-card--weather" data-settings-area="weather">
+                            <header class="settings-card__header">
+                                <i data-lucide="cloud-sun"></i>
+                                <h4 data-i18n="weatherSection">天氣</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <div class="settings-field weather-field">
+                                    <div class="settings-field__header">
+                                        <div class="weather-field__meta">
+                                            <label data-i18n="weatherToggleHeading">天氣小工具</label>
+                                            <p class="weather-field__hint" data-i18n="weatherDescription">使用 Open-Meteo 提供的資料顯示目前天氣狀況。</p>
+                                        </div>
+                                        <div class="weather-field__controls">
+                                            <span class="weather-toggle__status" data-state="off" data-i18n="weatherStatusOff">天氣小工具已關閉</span>
+                                            <button id="weatherToggleBtn" type="button" class="settings-toggle settings-toggle--no-label" aria-pressed="false" data-toggle-labels="enableWeather,disableWeather" aria-label="切換天氣小工具">
+                                                <span class="settings-toggle__state" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="weather-field__body">
+                                        <label for="weatherLocationInput" data-i18n="weatherLocationLabel">地點</label>
+                                        <div class="weather-location-controls">
+                                            <input id="weatherLocationInput" type="text" class="settings-input" placeholder="輸入城市或地標" data-i18n-placeholder="weatherLocationPlaceholder" />
+                                            <button id="weatherApplyBtn" type="button" class="btn ghost" data-i18n="weatherApply">套用並刷新</button>
+                                        </div>
+                                        <div class="hint weather-field__hint-text" id="weatherStatusText" role="status"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 開發者工具 -->
+                        <section class="settings-card settings-card--developer" data-settings-area="developer">
+                            <header class="settings-card__header">
+                                <i data-lucide="terminal-square"></i>
+                                <h4 data-i18n="developerSection">開發者工具</h4>
+                            </header>
+                            <div class="settings-card__content">
+                                <div class="settings-field developer-field">
+                                    <div class="settings-field__header">
+                                        <div class="developer-field__meta">
+                                            <label data-i18n="debugPanelLabel">顯示除錯面板</label>
+                                            <p class="developer-field__hint" data-i18n="debugPanelDescription">在右下角顯示即時除錯訊息，方便排查問題。</p>
+                                        </div>
+                                        <div class="developer-field__controls">
+                                            <span class="debug-toggle__status" data-state="off" data-i18n="debugStatusOff">除錯面板已關閉</span>
+                                            <button id="debugToggleBtn" type="button" class="settings-toggle settings-toggle--no-label" aria-pressed="false" data-toggle-labels="enableDebugPanel,disableDebugPanel" aria-label="切換除錯面板">
+                                                <span class="settings-toggle__state" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </section>
