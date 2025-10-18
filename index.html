@@ -130,12 +130,12 @@
                             </header>
                             <div class="settings-card__content">
                                 <div class="settings-field">
-                                    <label class="settings-inline">
-                                        <input type="checkbox" id="darkModeToggle" />
-                                        <span data-i18n="enableDarkMode">啟用夜間模式</span>
-                                    </label>
+                                    <button id="darkModeToggleBtn" type="button" class="settings-toggle" data-toggle-labels="enableDarkMode,disableDarkMode" aria-pressed="false" aria-controls="darkModeSettings">
+                                        <span class="settings-toggle__state" aria-hidden="true"></span>
+                                        <span class="settings-toggle__label"></span>
+                                    </button>
                                 </div>
-                                <div class="settings-field" id="darkModeSettings">
+                                <div class="settings-field hidden" id="darkModeSettings">
                                     <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
                                     <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
                                     <span class="range-value" id="darkModeDepthValue">35%</span>
@@ -191,11 +191,13 @@
                                 <h4 data-i18n="appearanceSection">顯示效果（外觀）</h4>
                             </header>
                             <div class="settings-card__content">
-                                <div class="settings-field">
-                                    <label data-i18n="backgroundBlur">背景模糊</label>
-                                    <div class="settings-inline">
-                                        <input id="blurToggle" type="checkbox" />
-                                        <label for="blurToggle" class="settings-inline__label" data-i18n="enableBlur">啟用背景模糊</label>
+                                <div class="settings-field" id="blurControls">
+                                    <div class="settings-field__header">
+                                        <label for="blurRange" data-i18n="backgroundBlur">背景模糊</label>
+                                        <button id="blurToggleBtn" type="button" class="settings-toggle settings-toggle--small" data-toggle-labels="enableBlur,disableBlur" aria-pressed="false" aria-controls="blurRange">
+                                            <span class="settings-toggle__state" aria-hidden="true"></span>
+                                            <span class="settings-toggle__label"></span>
+                                        </button>
                                     </div>
                                     <input id="blurRange" type="range" min="0" max="40" value="0" class="settings-range" />
                                     <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">0</span>px</div>

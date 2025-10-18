@@ -7,10 +7,10 @@ const translations = {
         // Search
         searchPlaceholder: 'Search anything...',
         searchButton: 'Search',
-    searchOpenLink: 'Open link',
-    searchSuggestionsTitle: 'Suggestions',
-    searchHistoryTitle: 'Search History',
-    noSearchHistory: 'No search history yet',
+        searchOpenLink: 'Open link',
+        searchSuggestionsTitle: 'Suggestions',
+        searchHistoryTitle: 'Search History',
+        noSearchHistory: 'No search history yet',
         // Toolbar
         addBookmark: 'Add Bookmark',
         manageCategories: 'Manage Categories',
@@ -39,14 +39,14 @@ const translations = {
         iconPlaceholder: '🌐 Emoji or image URL',
         iconHint: 'Enter emoji, image URL, or use auto fetch',
         iconSearch: 'Search Icon',
-    iconSearchHint: 'Search Simple Icons for brand logos, e.g. github, google, youtube',
-    iconSearchLibraryLink: 'Open Simple Icons library',
-    iconSearchPlaceholder: 'Enter a brand name...',
-    iconLoading: 'Loading icon library…',
-    iconLoadError: 'Unable to load icon library. Please try again later.',
-    iconLoadMore: 'Load more icons',
-    iconNoResults: 'No icons available right now.',
-    iconNoResultsWithQuery: 'No icons found for "{query}".',
+        iconSearchHint: 'Search Simple Icons for brand logos, e.g. github, google, youtube',
+        iconSearchLibraryLink: 'Open Simple Icons library',
+        iconSearchPlaceholder: 'Enter a brand name...',
+        iconLoading: 'Loading icon library…',
+        iconLoadError: 'Unable to load icon library. Please try again later.',
+        iconLoadMore: 'Load more icons',
+        iconNoResults: 'No icons available right now.',
+        iconNoResultsWithQuery: 'No icons found for "{query}".',
         manageCategoriesTitle: 'Manage Categories',
         categoriesDesc: 'Create categories to organize bookmarks. When a category is deleted, bookmarks return to main list.',
         noCategories: 'No categories yet',
@@ -55,30 +55,30 @@ const translations = {
         // Settings
         settingsTitle: 'Settings',
         searchEngineSection: 'Search Engine',
-    engineGoogle: 'Google',
-    engineBing: 'Bing',
-    engineDuckDuckGo: 'DuckDuckGo',
-    engineBaidu: 'Baidu',
-    engineCustom: 'Custom',
+        engineGoogle: 'Google',
+        engineBing: 'Bing',
+        engineDuckDuckGo: 'DuckDuckGo',
+        engineBaidu: 'Baidu',
+        engineCustom: 'Custom',
         customSearchUrl: 'Custom Search Engine URL',
         customSearchHint: 'Use {query} as the search keyword placeholder',
-    customSearchInlineLabel: 'Custom search engine URL',
-    customSearchInlineHint: 'Use {query} as the search keyword placeholder',
-    customSearchSave: 'Save and apply',
-    customSearchPlaceholder: 'https://example.com/search?q={query}',
-    cleanupSectionTitle: 'Cleanup & reset',
-    clearSettings: 'Reset all settings',
-    clearSettingsDescription: 'Restore the homepage to its default appearance and content.',
-    clearSettingsAction: 'Reset now',
-    clearSettingsConfirm: 'Are you sure you want to reset everything? This will remove custom bookmarks, categories, and settings.',
-    clearSettingsSuccess: 'All settings cleared, reloading…',
-    clearSearchHistory: 'Clear search history',
-    clearSearchHistoryDescription: 'Delete all search history records.',
-    clearSearchHistoryAction: 'Clear now',
-    clearSearchHistoryConfirm: 'Are you sure you want to clear all search history?',
-    clearSearchHistorySuccess: 'Search history cleared!',
-    renameCategory: 'Rename',
-    editCategoryIcon: 'Edit Icon',
+        customSearchInlineLabel: 'Custom search engine URL',
+        customSearchInlineHint: 'Use {query} as the search keyword placeholder',
+        customSearchSave: 'Save and apply',
+        customSearchPlaceholder: 'https://example.com/search?q={query}',
+        cleanupSectionTitle: 'Cleanup & reset',
+        clearSettings: 'Reset all settings',
+        clearSettingsDescription: 'Restore the homepage to its default appearance and content.',
+        clearSettingsAction: 'Reset now',
+        clearSettingsConfirm: 'Are you sure you want to reset everything? This will remove custom bookmarks, categories, and settings.',
+        clearSettingsSuccess: 'All settings cleared, reloading…',
+        clearSearchHistory: 'Clear search history',
+        clearSearchHistoryDescription: 'Delete all search history records.',
+        clearSearchHistoryAction: 'Clear now',
+        clearSearchHistoryConfirm: 'Are you sure you want to clear all search history?',
+        clearSearchHistorySuccess: 'Search history cleared!',
+        renameCategory: 'Rename',
+        editCategoryIcon: 'Edit Icon',
         backgroundSection: 'Background Settings',
         backgroundType: 'Background Type',
         gradient: 'Gradient',
@@ -93,6 +93,7 @@ const translations = {
         appearanceSection: 'Display Effects (Appearance)',
         backgroundBlur: 'Background Blur',
         enableBlur: 'Enable Background Blur',
+        disableBlur: 'Disable Background Blur',
         blurDepth: 'Blur Depth',
         backgroundFilter: 'Background Filter',
         filterNone: 'None',
@@ -103,6 +104,7 @@ const translations = {
         selectLanguage: 'Select Language',
         darkModeSection: 'Dark Mode',
         enableDarkMode: 'Enable Dark Mode',
+        disableDarkMode: 'Disable Dark Mode',
         darkModeDepth: 'Dark Mode Depth',
         darkMode: 'Dark Mode',
         lightMode: 'Light Mode',
@@ -125,8 +127,8 @@ const translations = {
         alertInvalidImage: 'Please select a valid image file',
         alertImageTooLarge: 'Image size cannot exceed 5MB',
         alertImageUploaded: 'Image uploaded and applied!',
-    alertUploadError: 'Image upload failed, please try again',
-    alertIconSelected: 'Icon selected: {icon}'
+        alertUploadError: 'Image upload failed, please try again',
+        alertIconSelected: 'Icon selected: {icon}'
     },
     'zh-CN': {
         // Hero
@@ -218,10 +220,11 @@ const translations = {
         uploadImage: '上传图片',
         uploadHint: '上传的图片将保存在浏览器缓存中',
         selectColor: '选择颜色',
-        appearanceSection: '显示效果（外观）',
-        backgroundBlur: '背景模糊',
-        enableBlur: '启用背景模糊',
-        blurDepth: '模糊深度',
+    appearanceSection: '显示效果（外观）',
+    backgroundBlur: '背景模糊',
+    enableBlur: '启用背景模糊',
+    disableBlur: '停用背景模糊',
+    blurDepth: '模糊深度',
         backgroundFilter: '背景滤镜',
         filterNone: '无',
         filterWhite: '白色滤镜',
@@ -229,9 +232,10 @@ const translations = {
         filterOpacity: '滤镜透明度',
         languageSection: '语言',
         selectLanguage: '选择语言',
-        darkModeSection: '夜间模式',
-        enableDarkMode: '启用夜间模式',
-        darkModeDepth: '深色强度',
+    darkModeSection: '夜间模式',
+    enableDarkMode: '启用夜间模式',
+    disableDarkMode: '停用夜间模式',
+    darkModeDepth: '深色强度',
         darkMode: '夜间模式',
         lightMode: '日间模式',
         // Gradient presets
@@ -349,10 +353,11 @@ const translations = {
         uploadImage: '上傳圖片',
         uploadHint: '上傳的圖片將保存在瀏覽器緩存中',
         selectColor: '選擇顏色',
-        appearanceSection: '顯示效果（外觀）',
-        backgroundBlur: '背景模糊',
-        enableBlur: '啟用背景模糊',
-        blurDepth: '模糊深度',
+    appearanceSection: '顯示效果（外觀）',
+    backgroundBlur: '背景模糊',
+    enableBlur: '啟用背景模糊',
+    disableBlur: '停用背景模糊',
+    blurDepth: '模糊深度',
         backgroundFilter: '背景濾鏡',
         filterNone: '無',
         filterWhite: '白色濾鏡',
@@ -360,9 +365,10 @@ const translations = {
         filterOpacity: '濾鏡透明度',
         languageSection: '語言',
         selectLanguage: '選擇語言',
-        darkModeSection: '夜間模式',
-        enableDarkMode: '啟用夜間模式',
-        darkModeDepth: '深色強度',
+    darkModeSection: '夜間模式',
+    enableDarkMode: '啟用夜間模式',
+    disableDarkMode: '停用夜間模式',
+    darkModeDepth: '深色強度',
         darkMode: '夜間模式',
         lightMode: '日間模式',
         // Gradient presets
@@ -477,10 +483,11 @@ const translations = {
         uploadImage: '画像をアップロード',
         uploadHint: 'アップロードした画像はブラウザのキャッシュに保存されます',
         selectColor: '色を選択',
-        appearanceSection: '表示効果（外観）',
-        backgroundBlur: '背景ぼかし',
-        enableBlur: '背景ぼかしを有効にする',
-        blurDepth: 'ぼかしの強さ',
+    appearanceSection: '表示効果（外観）',
+    backgroundBlur: '背景ぼかし',
+    enableBlur: '背景ぼかしを有効にする',
+    disableBlur: '背景ぼかしを無効にする',
+    blurDepth: 'ぼかしの強さ',
         backgroundFilter: '背景フィルター',
         filterNone: 'なし',
         filterWhite: 'ホワイトフィルター',
@@ -488,9 +495,10 @@ const translations = {
         filterOpacity: 'フィルターの不透明度',
         languageSection: '言語',
         selectLanguage: '言語を選択',
-        darkModeSection: 'ダークモード',
-        enableDarkMode: 'ダークモードを有効にする',
-        darkModeDepth: 'ダークモードの強さ',
+    darkModeSection: 'ダークモード',
+    enableDarkMode: 'ダークモードを有効にする',
+    disableDarkMode: 'ダークモードを無効にする',
+    darkModeDepth: 'ダークモードの強さ',
         darkMode: 'ダークモード',
         lightMode: 'ライトモード',
         // Gradient presets
@@ -516,6 +524,8 @@ const translations = {
     alertIconSelected: 'アイコンを選択しました: {icon}'
     }
 };
+
+const SUPPORTED_LANGUAGES = ['en', 'zh-CN', 'zh-TW', 'ja'];
 
 // 當前語言
 let currentLanguage = 'zh-TW';
@@ -740,6 +750,9 @@ const MAX_SEARCH_HISTORY = 12;
 const SEARCH_SUGGESTION_LIMIT = 8;
 const REMOTE_SUGGESTION_MIN_LENGTH = 2;
 const LOCAL_SUGGESTION_INITIAL_QUOTA = 4;
+const DEFAULT_BLUR_AMOUNT = 12;
+const DEFAULT_OVERLAY_TYPE = 'none';
+const DEFAULT_OVERLAY_OPACITY = 0.4;
 
 const remoteSuggestCache = new Map();
 let remoteSuggestCancel = null;
@@ -816,22 +829,67 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.lucide) window.lucide.createIcons();
 });
 
+function normalizeLanguageCode(code) {
+    if (!code || typeof code !== 'string') return null;
+    const trimmed = code.trim();
+    if (!trimmed) return null;
+    if (translations[trimmed]) return trimmed;
+
+    const lower = trimmed.toLowerCase();
+
+    if (lower === 'en' || lower.startsWith('en-')) return 'en';
+    if (lower === 'ja' || lower.startsWith('ja-') || lower.startsWith('jp')) return 'ja';
+
+    if (lower.startsWith('zh')) {
+        if (lower.includes('cn') || lower.includes('hans') || lower.includes('sg') || lower.includes('my')) {
+            return 'zh-CN';
+        }
+        if (lower.includes('tw') || lower.includes('hk') || lower.includes('mo') || lower.includes('hant')) {
+            return 'zh-TW';
+        }
+        return 'zh-TW';
+    }
+
+    return null;
+}
+
+function determinePreferredLanguage() {
+    const candidates = [];
+    const seen = new Set();
+
+    const addCandidate = (code) => {
+        if (!code || seen.has(code)) return;
+        seen.add(code);
+        candidates.push(code);
+    };
+
+    if (Array.isArray(navigator.languages)) {
+        navigator.languages.forEach(addCandidate);
+    }
+
+    addCandidate(navigator.language);
+    addCandidate(navigator.userLanguage);
+    SUPPORTED_LANGUAGES.forEach(addCandidate);
+
+    for (const candidate of candidates) {
+        const resolved = normalizeLanguageCode(candidate);
+        if (resolved && translations[resolved]) {
+            return resolved;
+        }
+    }
+
+    return 'en';
+}
+
 // 載入語言設定
 function loadLanguage() {
     const saved = localStorage.getItem('language');
     if (saved && translations[saved]) {
         currentLanguage = saved;
-    } else {
-        // 自動檢測瀏覽器語言
-        const browserLang = navigator.language || navigator.userLanguage;
-        if (browserLang.startsWith('zh')) {
-            currentLanguage = browserLang.includes('CN') ? 'zh-CN' : 'zh-TW';
-        } else if (browserLang.startsWith('ja')) {
-            currentLanguage = 'ja';
-        } else {
-            currentLanguage = 'en';
-        }
+        return;
     }
+
+    currentLanguage = determinePreferredLanguage();
 }
 
 // 切換語言
@@ -917,6 +975,16 @@ function updateUILanguage() {
 
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
         window.lucide.createIcons();
+    }
+
+    const darkModeToggleBtn = document.getElementById('darkModeToggleBtn');
+    if (darkModeToggleBtn) {
+        updateToggleButton(darkModeToggleBtn, document.body.classList.contains('dark-mode'));
+    }
+
+    const blurToggleBtn = document.getElementById('blurToggleBtn');
+    if (blurToggleBtn) {
+        updateToggleButton(blurToggleBtn, isBlurEnabled());
     }
 
     // Update gradient select options
@@ -1149,66 +1217,162 @@ function handleClearSearchHistory(event) {
     }, 1500);
 }
 
-// Appearance: blur + overlay
-function loadAppearanceSettings() {
-    const blurEnabled = localStorage.getItem('blurEnabled');
-    const blurAmount = localStorage.getItem('blurAmount');
-    const overlayType = localStorage.getItem('overlayType') || 'none';
-    const overlayOpacity = localStorage.getItem('overlayOpacity');
+function updateToggleButton(button, isActive) {
+    if (!button) return;
+    const labels = button.dataset.toggleLabels ? button.dataset.toggleLabels.split(',').map(label => label && label.trim()) : [];
+    const offKey = labels[0];
+    const onKey = labels[1] || labels[0];
+    const labelKey = isActive ? onKey : offKey;
+    const labelText = labelKey ? t(labelKey) : '';
 
-    const blurToggle = document.getElementById('blurToggle');
+    const labelEl = button.querySelector('.settings-toggle__label');
+    if (labelEl) labelEl.textContent = labelText;
+    if (labelText) {
+        button.setAttribute('aria-label', labelText);
+        button.setAttribute('title', labelText);
+    }
+
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    button.classList.toggle('is-active', !!isActive);
+    button.dataset.state = isActive ? 'on' : 'off';
+
+    const stateEl = button.querySelector('.settings-toggle__state');
+    if (stateEl) {
+        stateEl.classList.toggle('is-active', !!isActive);
+    }
+}
+
+function isBlurEnabled() {
+    const stored = localStorage.getItem('blurEnabled');
+    if (stored === null) return false;
+    return stored === 'true';
+}
+
+function parseNumber(value, fallback) {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : fallback;
+}
+
+function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+}
+
+function setBlurEnabled(enabled) {
+    localStorage.setItem('blurEnabled', enabled ? 'true' : 'false');
+    if (enabled) {
+        const stored = Number(localStorage.getItem('blurAmount'));
+        if (!Number.isFinite(stored)) {
+            localStorage.setItem('blurAmount', String(DEFAULT_BLUR_AMOUNT));
+        }
+    }
+    applyAppearanceSettings();
+}
+
+function loadAppearanceSettings() {
+    const blurToggleBtn = document.getElementById('blurToggleBtn');
+    const blurControls = document.getElementById('blurControls');
     const blurRange = document.getElementById('blurRange');
     const blurValue = document.getElementById('blurValue');
     const overlaySelect = document.getElementById('overlaySelect');
     const overlayRange = document.getElementById('overlayOpacity');
     const overlayValue = document.getElementById('overlayValue');
 
-    const isBlurEnabled = blurEnabled === 'true';
-    const blurLevel = blurAmount !== null ? blurAmount : '0';
+    const blurEnabled = isBlurEnabled();
+    const fallbackBlur = blurRange ? parseNumber(blurRange.value, DEFAULT_BLUR_AMOUNT) : DEFAULT_BLUR_AMOUNT;
+    const storedBlur = parseNumber(localStorage.getItem('blurAmount'), fallbackBlur);
+    const blurAmount = clamp(storedBlur, 0, 40);
 
-    if (blurToggle) blurToggle.checked = isBlurEnabled;
-    if (blurRange) blurRange.value = blurLevel;
-    if (blurValue) blurValue.textContent = blurRange ? blurRange.value : blurLevel;
+    if (blurRange) {
+        blurRange.value = String(blurAmount);
+        blurRange.disabled = !blurEnabled;
+        blurRange.setAttribute('aria-disabled', blurEnabled ? 'false' : 'true');
+    }
+    if (blurValue) blurValue.textContent = String(blurAmount);
+    if (blurControls) blurControls.classList.toggle('is-inactive', !blurEnabled);
+    if (blurToggleBtn) updateToggleButton(blurToggleBtn, blurEnabled);
+
+    const overlayType = localStorage.getItem('overlayType') || (overlaySelect ? overlaySelect.value : DEFAULT_OVERLAY_TYPE);
     if (overlaySelect) overlaySelect.value = overlayType;
-    if (overlayRange) overlayRange.value = overlayOpacity !== null ? overlayOpacity : 0.4;
-    if (overlayValue) overlayValue.textContent = Number(overlayRange ? overlayRange.value : (overlayOpacity !== null ? overlayOpacity : 0.4)).toFixed(2);
+
+    const fallbackOverlay = overlayRange ? parseNumber(overlayRange.value, DEFAULT_OVERLAY_OPACITY) : DEFAULT_OVERLAY_OPACITY;
+    const storedOverlay = parseNumber(localStorage.getItem('overlayOpacity'), fallbackOverlay);
+    const overlayOpacity = clamp(storedOverlay, 0, 1);
+
+    const formattedOverlay = overlayOpacity.toFixed(2);
+    if (overlayRange) overlayRange.value = formattedOverlay;
+    if (overlayValue) overlayValue.textContent = formattedOverlay;
 
     applyAppearanceSettings();
 }
 
 function saveAppearanceSettings() {
-    const blurToggle = document.getElementById('blurToggle');
+    const blurToggleBtn = document.getElementById('blurToggleBtn');
     const blurRange = document.getElementById('blurRange');
     const overlaySelect = document.getElementById('overlaySelect');
     const overlayRange = document.getElementById('overlayOpacity');
 
-    if (blurToggle) localStorage.setItem('blurEnabled', blurToggle.checked);
-    if (blurRange) localStorage.setItem('blurAmount', blurRange.value);
-    if (overlaySelect) localStorage.setItem('overlayType', overlaySelect.value);
-    if (overlayRange) localStorage.setItem('overlayOpacity', overlayRange.value);
+    if (blurToggleBtn) {
+        const pressed = blurToggleBtn.getAttribute('aria-pressed') === 'true';
+        localStorage.setItem('blurEnabled', pressed ? 'true' : 'false');
+    }
+
+    if (blurRange) {
+        const amount = clamp(parseNumber(blurRange.value, DEFAULT_BLUR_AMOUNT), 0, 40);
+        localStorage.setItem('blurAmount', String(amount));
+    }
+
+    if (overlaySelect) {
+        localStorage.setItem('overlayType', overlaySelect.value || DEFAULT_OVERLAY_TYPE);
+    }
+
+    if (overlayRange) {
+        const opacity = clamp(parseNumber(overlayRange.value, DEFAULT_OVERLAY_OPACITY), 0, 1);
+        localStorage.setItem('overlayOpacity', opacity.toFixed(2));
+    }
 
     applyAppearanceSettings();
 }
 
 function applyAppearanceSettings() {
-    const blurEnabled = localStorage.getItem('blurEnabled') === 'true';
-    const blurAmount = localStorage.getItem('blurAmount') !== null ? Number(localStorage.getItem('blurAmount')) : 0;
-    const overlayType = localStorage.getItem('overlayType') || 'none';
-    const overlayOpacity = localStorage.getItem('overlayOpacity') !== null ? Number(localStorage.getItem('overlayOpacity')) : 0.4;
-
+    const blurEnabled = isBlurEnabled();
+    const blurToggleBtn = document.getElementById('blurToggleBtn');
+    const blurControls = document.getElementById('blurControls');
     const blurRange = document.getElementById('blurRange');
     const blurValue = document.getElementById('blurValue');
-    if (blurRange && !Number.isNaN(blurAmount)) {
-        blurRange.value = String(blurAmount);
-    }
-    if (blurValue) {
-        blurValue.textContent = blurRange ? blurRange.value : String(blurAmount);
-    }
 
-    // apply blur via CSS variable
+    const storedBlur = parseNumber(localStorage.getItem('blurAmount'), DEFAULT_BLUR_AMOUNT);
+    const blurAmount = clamp(storedBlur, 0, 40);
+
+    if (blurRange) {
+        if (blurRange.value !== String(blurAmount)) {
+            blurRange.value = String(blurAmount);
+        }
+        blurRange.disabled = !blurEnabled;
+        blurRange.setAttribute('aria-disabled', blurEnabled ? 'false' : 'true');
+    }
+    if (blurValue) blurValue.textContent = String(blurAmount);
+    if (blurControls) blurControls.classList.toggle('is-inactive', !blurEnabled);
+    if (blurToggleBtn) updateToggleButton(blurToggleBtn, blurEnabled);
+
     document.documentElement.style.setProperty('--backdrop-blur', blurEnabled ? `${blurAmount}px` : '0px');
 
-    // overlay
+    const overlaySelect = document.getElementById('overlaySelect');
+    const overlayRange = document.getElementById('overlayOpacity');
+    const overlayValue = document.getElementById('overlayValue');
+
+    const overlayType = localStorage.getItem('overlayType') || DEFAULT_OVERLAY_TYPE;
+    const storedOverlay = parseNumber(localStorage.getItem('overlayOpacity'), DEFAULT_OVERLAY_OPACITY);
+    const overlayOpacity = clamp(storedOverlay, 0, 1);
+    const formattedOverlay = overlayOpacity.toFixed(2);
+
+    if (overlaySelect && overlaySelect.value !== overlayType) {
+        overlaySelect.value = overlayType;
+    }
+    if (overlayRange && overlayRange.value !== formattedOverlay) {
+        overlayRange.value = formattedOverlay;
+    }
+    if (overlayValue) overlayValue.textContent = formattedOverlay;
+
     const overlayEl = document.getElementById('backgroundOverlay');
     if (overlayEl) {
         if (overlayType === 'none') {
@@ -1221,26 +1385,34 @@ function applyAppearanceSettings() {
     }
 }
 
+function updateBlurAmount(value) {
+    const amount = clamp(parseNumber(value, DEFAULT_BLUR_AMOUNT), 0, 40);
+    localStorage.setItem('blurAmount', String(amount));
+    const blurValue = document.getElementById('blurValue');
+    if (blurValue) blurValue.textContent = String(amount);
+    applyAppearanceSettings();
+}
+
 function applyOverlay(value) {
     const overlaySelect = document.getElementById('overlaySelect');
     if (overlaySelect && overlaySelect.value !== value) {
         overlaySelect.value = value;
     }
-    localStorage.setItem('overlayType', value);
+    const normalized = value || DEFAULT_OVERLAY_TYPE;
+    localStorage.setItem('overlayType', normalized);
     applyAppearanceSettings();
 }
 
 function updateOverlayOpacity(value) {
-    const numeric = Number(value);
+    const opacity = clamp(parseNumber(value, DEFAULT_OVERLAY_OPACITY), 0, 1);
+    const formatted = opacity.toFixed(2);
     const overlayRange = document.getElementById('overlayOpacity');
     const overlayValue = document.getElementById('overlayValue');
-    if (overlayRange && overlayRange.value !== String(value)) {
-        overlayRange.value = value;
+    if (overlayRange && overlayRange.value !== formatted) {
+        overlayRange.value = formatted;
     }
-    if (overlayValue) {
-        overlayValue.textContent = Number.isFinite(numeric) ? numeric.toFixed(2) : '0.00';
-    }
-    localStorage.setItem('overlayOpacity', String(value));
+    if (overlayValue) overlayValue.textContent = formatted;
+    localStorage.setItem('overlayOpacity', formatted);
     applyAppearanceSettings();
 }
 
@@ -1489,6 +1661,11 @@ function initEventListeners() {
             document.getElementById('darkModeDepthValue').textContent = this.value + '%';
         });
     }
+
+    const darkModeToggleBtn = document.getElementById('darkModeToggleBtn');
+    if (darkModeToggleBtn) {
+        darkModeToggleBtn.addEventListener('click', () => toggleDarkMode());
+    }
     
     // 管理分類按鈕
     const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
@@ -1520,6 +1697,22 @@ function initEventListeners() {
         languageSelect.addEventListener('change', function() {
             changeLanguage(this.value);
         });
+    }
+
+    const blurToggleBtn = document.getElementById('blurToggleBtn');
+    if (blurToggleBtn) {
+        blurToggleBtn.addEventListener('click', () => {
+            setBlurEnabled(!isBlurEnabled());
+        });
+    }
+
+    const blurRange = document.getElementById('blurRange');
+    if (blurRange) {
+        const handleBlurRange = function() {
+            updateBlurAmount(this.value);
+        };
+        blurRange.addEventListener('input', handleBlurRange);
+        blurRange.addEventListener('change', handleBlurRange);
     }
     
     // 濾鏡選擇器
@@ -1573,31 +1766,30 @@ function loadSearchHistory() {
     }
 }
 
-function saveSearchHistory() {
-    localStorage.setItem('searchHistory', JSON.stringify(searchHistory.slice(0, MAX_SEARCH_HISTORY)));
-}
-
-function addSearchHistoryEntry(entry) {
-    const value = entry.trim();
-    if (!value) return;
-    searchHistory = searchHistory.filter(item => item.toLowerCase() !== value.toLowerCase());
-    searchHistory.unshift(value);
+function addSearchHistoryEntry(query) {
+    const trimmed = (query || '').trim();
+    if (!trimmed) return;
+    const lower = trimmed.toLowerCase();
+    searchHistory = searchHistory.filter(item => item.toLowerCase() !== lower);
+    searchHistory.unshift(trimmed);
     if (searchHistory.length > MAX_SEARCH_HISTORY) {
         searchHistory = searchHistory.slice(0, MAX_SEARCH_HISTORY);
     }
-    saveSearchHistory();
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
 }
 
 function handleSearchInputChange(event) {
-    const value = event.target.value;
+    const value = event?.target?.value ?? '';
     updateOpenButtonState(value);
     updateSearchSuggestions(value);
 }
 
 function handleSearchInputKeydown(event) {
+    if (!event) return;
     if (event.key === 'Enter') {
         event.preventDefault();
-        const value = event.target.value.trim();
+        const input = event.target;
+        const value = (input?.value || '').trim();
         if (!value) return;
         if (isLikelyUrl(value)) {
             openQueryUrl(value);
@@ -1605,62 +1797,61 @@ function handleSearchInputKeydown(event) {
             performSearch();
         }
     } else if (event.key === 'Escape') {
-        closeEngineDropdown();
+        const suggestions = document.getElementById('searchSuggestions');
+        if (suggestions) suggestions.classList.add('hidden');
     }
 }
 
 function handleSuggestionClick(event) {
-    const button = event.target.closest('.suggestion-item');
-    if (!button) return;
-    const value = button.dataset.value || button.textContent || '';
-    if (!value) return;
+    const item = event.target.closest('.suggestion-item');
+    if (!item) return;
+    const value = item.dataset.value || item.textContent || '';
     const input = document.getElementById('searchInput');
     if (input) {
         input.value = value;
         input.focus();
     }
-    updateOpenButtonState(value);
-    if (isLikelyUrl(value)) {
-        openQueryUrl(value);
-    } else {
-        performSearch();
-    }
+    performSearch();
 }
 
 async function updateSearchSuggestions(query) {
     const container = document.getElementById('searchSuggestions');
     if (!container) return;
 
+    const value = typeof query === 'string' ? query : '';
+    const trimmed = value.trim();
+
+    updateOpenButtonState(value);
+
     const callToken = ++latestSuggestQueryToken;
-    const trimmed = (query || '').trim();
-    
-    // 如果沒有輸入，只顯示搜索歷史
+
     if (!trimmed) {
-        const historyOnly = searchHistory.slice(0, SEARCH_SUGGESTION_LIMIT);
-        renderSuggestionList(container, historyOnly, false);
+        const history = searchHistory.slice(0, SEARCH_SUGGESTION_LIMIT);
+        if (history.length) {
+            renderSuggestionList(container, history, false);
+        } else {
+            renderSuggestionList(container, [], false);
+        }
         return;
     }
 
-    // 檢查是否需要遠端建議（輸入 1 個字符就開始）
-    const minLength = 1;
-    if (trimmed.length >= minLength && !isLikelyUrl(trimmed)) {
-    // 獲取遠端建議
-    const remoteSuggestions = await fetchRemoteSuggestions(trimmed);
-        if (callToken !== latestSuggestQueryToken) return;
-        
-        if (remoteSuggestions && remoteSuggestions.length > 0) {
-            // 獲取本地建議
-            const localSuggestions = buildLocalSuggestions(query);
-            // 合併本地和遠端建議
-            const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
-            renderSuggestionList(container, combined, true);
-            return;
-        }
+    const localSuggestions = buildLocalSuggestions(trimmed);
+    renderSuggestionList(container, localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT), true);
+
+    if (trimmed.length < getRemoteSuggestionMinLength() || isLikelyUrl(trimmed)) {
+        return;
     }
 
-    // 如果沒有遠端建議，只顯示本地建議
-    const localSuggestions = buildLocalSuggestions(query);
-    renderSuggestionList(container, localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT), true);
+    try {
+        const remoteSuggestions = await fetchRemoteSuggestions(trimmed);
+        if (callToken !== latestSuggestQueryToken) return;
+        if (Array.isArray(remoteSuggestions) && remoteSuggestions.length) {
+            const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
+            renderSuggestionList(container, combined, true);
+        }
+    } catch (error) {
+        console.error('Failed to fetch suggestions:', error);
+    }
 }
 
 function buildLocalSuggestions(query) {
@@ -1746,102 +1937,49 @@ function mergeSuggestions(localSuggestions, remoteSuggestions, limit = SEARCH_SU
     return result;
 }
 
-function cleanSuggestionText(value) {
-    if (!value) return '';
-    return String(value)
-        .replace(/<[^>]*>/g, ' ')
-        .replace(/&nbsp;/gi, ' ')
-        .replace(/&amp;/gi, '&')
-        .replace(/&quot;/gi, '"')
-        .replace(/&#39;/gi, "'")
-        .replace(/&lt;/gi, '<')
-        .replace(/&gt;/gi, '>')
-        .replace(/\s+/g, ' ')
-        .trim();
-}
-
-function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMIT) {
+function normalizeSuggestionPayload(payload, limit = SEARCH_SUGGESTION_LIMIT) {
     const suggestions = [];
     const seen = new Set();
 
-    const add = (raw) => {
-        const cleaned = cleanSuggestionText(raw);
-        if (!cleaned) return;
-        const key = cleaned.toLowerCase();
+    const add = (value) => {
+        if (typeof value !== 'string') return;
+        const trimmed = value.trim();
+        if (!trimmed) return;
+        const key = trimmed.toLowerCase();
         if (seen.has(key)) return;
         seen.add(key);
-        suggestions.push(cleaned);
+        suggestions.push(trimmed);
     };
 
-    // 常見建議 API 返回格式: [query, [suggestion1, suggestion2, ...]]
     if (Array.isArray(payload)) {
-        // 標準格式：第二個元素是建議數組
-        if (payload.length >= 2 && Array.isArray(payload[1])) {
-            payload[1].forEach(item => {
-                if (typeof item === 'string') {
-                    add(item);
-                } else if (item && typeof item === 'object') {
-                    add(item.phrase || item.text || item.value || '');
-                }
-            });
-        } else {
-            // 備用格式：直接是建議數組
-            payload.forEach(item => {
-                if (!item) return;
-                if (typeof item === 'string') {
-                    add(item);
-                } else if (typeof item === 'object') {
-                    add(item.phrase || item.text || item.value || '');
-                }
-            });
-        }
+        payload.forEach(add);
     } else if (payload && typeof payload === 'object') {
-        // 對象格式
-        if (Array.isArray(payload.phrase)) {
-            payload.phrase.forEach(add);
-        }
-        if (Array.isArray(payload.results)) {
-            payload.results.forEach(add);
-        }
-        if (Array.isArray(payload.suggestions)) {
-            payload.suggestions.forEach(add);
-        }
-        if (Array.isArray(payload.s)) {
-            payload.s.forEach(add);
-        }
+        if (Array.isArray(payload.phrase)) payload.phrase.forEach(add);
+        if (Array.isArray(payload.results)) payload.results.forEach(add);
+        if (Array.isArray(payload.suggestions)) payload.suggestions.forEach(add);
+        if (Array.isArray(payload.s)) payload.s.forEach(add);
         if (Array.isArray(payload.g)) {
             payload.g.forEach(item => {
                 if (item && typeof item === 'object') {
-                    add(item.q);
+                    if (typeof item === 'string') {
+                        add(item);
+                    } else {
+                        add(item.q || item.phrase || item.text || '');
+                    }
                 }
             });
         }
     }
 
-    const result = suggestions.slice(0, limit);
-    return result;
+    return suggestions.slice(0, limit);
 }
 
-function getRemoteSuggestionMinLength() {
-    if (currentLanguage && (currentLanguage.startsWith('zh') || currentLanguage === 'ja')) {
-        return 1;
-    }
-    return REMOTE_SUGGESTION_MIN_LENGTH;
-}
-
-function getSuggestionProviderOrder() {
-    const providers = [];
-    const engine = currentSearchEngine || 'google';
-    if (suggestionProviders[engine]) providers.push(engine);
-
-    const fallbackPriority = ['google', 'bing', 'baidu', 'duckduckgo'];
-    fallbackPriority.forEach(key => {
-        if (suggestionProviders[key] && !providers.includes(key)) {
-            providers.push(key);
-        }
-    });
-
-    return providers;
+function updateOpenButtonState(value) {
+    const button = document.getElementById('openUrlBtn');
+    if (!button) return;
+    const trimmed = (value || '').trim();
+    const shouldShow = trimmed && isLikelyUrl(trimmed);
+    button.classList.toggle('hidden', !shouldShow);
 }
 
 const suggestionProviders = {
@@ -2237,57 +2375,6 @@ function saveCustomSearchInline() {
     if (settingsInput) settingsInput.value = template;
     setCurrentSearchEngine('custom');
     updateSearchSuggestions(document.getElementById('searchInput')?.value || '');
-}
-
-function updateOpenButtonState(value) {
-    const button = document.getElementById('openUrlBtn');
-    if (!button) return;
-    button.classList.toggle('hidden', !isLikelyUrl(value.trim()));
-}
-
-function openQueryUrl(query) {
-    const normalized = normalizeUrl(query);
-    if (!normalized) return;
-    addSearchHistoryEntry(query);
-    window.open(normalized, '_blank', 'noopener');
-    updateSearchSuggestions(document.getElementById('searchInput')?.value || '');
-}
-
-function normalizeUrl(value) {
-    let url = value.trim();
-    if (!url) return '';
-    if (/^\/\//.test(url)) {
-        url = `https:${url}`;
-    } else if (!/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(url)) {
-        url = `https://${url}`;
-    }
-    try {
-        const parsed = new URL(url);
-        return parsed.href;
-    } catch (error) {
-        return '';
-    }
-}
-
-function isLikelyUrl(value) {
-    if (!value) return false;
-    const trimmed = value.trim();
-    if (!trimmed || /\s/.test(trimmed)) return false;
-    if (/^([a-zA-Z][a-zA-Z\d+.-]*:)?\/\/[\S]+$/.test(trimmed)) {
-        return true;
-    }
-    if (/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(trimmed)) {
-        try {
-            new URL(trimmed);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-    if (/^localhost(:\d+)?(\/.*)?$/i.test(trimmed)) {
-        return true;
-    }
-    return /^(?:[\w-]+\.)+[\w-]{2,}(?::\d+)?(\/.*)?$/i.test(trimmed);
 }
 
 // 更新搜尋圖示
@@ -2802,10 +2889,9 @@ function closeFabMenu() {
 }
 
 function cycleFabLanguage() {
-    const languages = ['en', 'zh-CN', 'zh-TW', 'ja'];
-    const currentIndex = languages.indexOf(currentLanguage);
-    const nextIndex = (currentIndex + 1) % languages.length;
-    changeLanguage(languages[nextIndex]);
+    const currentIndex = SUPPORTED_LANGUAGES.indexOf(currentLanguage);
+    const nextIndex = (currentIndex + 1) % SUPPORTED_LANGUAGES.length;
+    changeLanguage(SUPPORTED_LANGUAGES[nextIndex]);
 }
 
 function updateFabDarkModeIcon() {
@@ -2831,12 +2917,13 @@ function updateFabDarkModeIcon() {
 }
 
 // 夜間模式功能
-function toggleDarkMode(forceState) {
+function toggleDarkMode(forceState, options = {}) {
     const currentDark = document.body.classList.contains('dark-mode');
     const isDark = forceState !== undefined ? forceState : !currentDark;
+    const { skipTransition = false } = options;
     
     // 添加過渡動畫類
-    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    document.body.style.transition = skipTransition ? '' : 'background-color 0.3s ease, color 0.3s ease';
     
     if (isDark) {
         document.body.classList.add('dark-mode');
@@ -2859,16 +2946,15 @@ function toggleDarkMode(forceState) {
         quickBtn.setAttribute('aria-label', t(isDark ? 'lightMode' : 'darkMode'));
     }
     
-    // 更新設置面板的 checkbox
-    const toggle = document.getElementById('darkModeToggle');
-    if (toggle) toggle.checked = isDark;
+    const settingsToggleBtn = document.getElementById('darkModeToggleBtn');
+    if (settingsToggleBtn) updateToggleButton(settingsToggleBtn, isDark);
     
     // 更新 FAB 圖標
     updateFabDarkModeIcon();
     
     // 顯示/隱藏深度設置
     const settings = document.getElementById('darkModeSettings');
-    if (settings) settings.style.display = isDark ? 'block' : 'none';
+    if (settings) settings.classList.toggle('hidden', !isDark);
 }
 
 function updateDarkModeDepth(depth) {
@@ -2880,10 +2966,9 @@ function updateDarkModeDepth(depth) {
 function loadDarkMode() {
     const darkMode = localStorage.getItem('darkMode');
     const depth = localStorage.getItem('darkModeDepth') || '35';
-    
-    if (darkMode === 'enabled') {
-        toggleDarkMode(true);
-    }
+    const isDark = darkMode === 'enabled';
+
+    toggleDarkMode(isDark, { skipTransition: true });
     
     const depthInput = document.getElementById('darkModeDepth');
     if (depthInput) {
@@ -2896,10 +2981,9 @@ function loadDarkMode() {
 
 // 語言循環切換
 function cycleLanguage() {
-    const languages = ['en', 'zh-CN', 'zh-TW', 'ja'];
-    const currentIndex = languages.indexOf(currentLanguage);
-    const nextIndex = (currentIndex + 1) % languages.length;
-    changeLanguage(languages[nextIndex]);
+    const currentIndex = SUPPORTED_LANGUAGES.indexOf(currentLanguage);
+    const nextIndex = (currentIndex + 1) % SUPPORTED_LANGUAGES.length;
+    changeLanguage(SUPPORTED_LANGUAGES[nextIndex]);
 }
 
 function ensureIconLibrary() {
