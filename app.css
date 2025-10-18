@@ -48,7 +48,7 @@ body {
 .hero-subtitle { color: rgba(255,255,255,.85); font-size: 18px; }
 
 /* Search Card */
-.search-card { width: min(680px, 100%); background: var(--surface); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 16px; transition: all 0.3s ease; position: relative; z-index: 10; }
+.search-card { width: min(680px, 100%); background: rgba(255, 255, 255, 0.88); border: 1px solid rgba(255, 255, 255, 0.65); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16); display: flex; flex-direction: column; gap: 16px; transition: all 0.3s ease; position: relative; z-index: 10; backdrop-filter: blur(18px); }
 .search-header { position: relative; display: flex; justify-content: flex-end; }
 .engine-selector { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid rgba(76,110,245,.18); background: #fff; color: var(--text); font-weight: 600; cursor: pointer; box-shadow: 0 10px 20px rgba(15,23,42,.12); transition: transform var(--transition), box-shadow var(--transition), background var(--transition); }
 .engine-selector:hover { transform: translateY(-1px); box-shadow: 0 16px 28px rgba(76,110,245,.18); }
@@ -57,7 +57,9 @@ body {
 .engine-selector__label { font-size: 14px; }
 .engine-selector__chevron { opacity: 0.6; display: grid; place-items: center; }
 
-.engine-selector--inline { padding: 4px 8px; border: none; background: transparent; box-shadow: none; border-radius: var(--radius-sm); gap: 6px; align-self: stretch; }
+.engine-selector--inline { padding: 6px 12px 6px 6px; border: none; background: transparent; box-shadow: none; border-radius: var(--radius-sm); gap: 6px; align-self: stretch; position: relative; }
+.engine-selector--inline::after { content: ''; position: absolute; top: 8px; right: -6px; width: 1px; height: calc(100% - 16px); background: rgba(76, 110, 245, 0.28); border-radius: 999px; }
+.search-input-wrapper .engine-selector--inline { margin-right: 12px; }
 .engine-selector--inline:hover { transform: none; box-shadow: none; background: rgba(76,110,245,0.12); }
 .engine-selector--inline:focus-visible { outline: 2px solid rgba(76,110,245,0.45); outline-offset: 2px; }
 .engine-selector--inline .engine-selector__icon { width: 30px; height: 30px; border-radius: var(--radius-sm); background: rgba(76,110,245,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -96,7 +98,8 @@ body {
 .engine-option__name { font-size: 14px; text-align: left; }
 
 .search-input-group { display: flex; flex-direction: column; gap: 12px; }
-.search-input-wrapper { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; background: rgba(255,255,255,.9); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid rgba(76,110,245,.08); transition: box-shadow var(--transition), transform var(--transition); }
+.search-input-wrapper { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; background: rgba(255,255,255,0.96); padding: 12px 18px; border-radius: 18px; border: 1px solid rgba(76,110,245,0.22); box-shadow: 0 18px 36px rgba(76,110,245,0.14); transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition); }
+.search-input-wrapper:hover { border-color: rgba(76,110,245,0.3); box-shadow: 0 24px 48px rgba(76,110,245,0.18); }
 .search-input-wrapper:focus-within { box-shadow: 0 20px 40px rgba(76,110,245,.25); transform: translateY(-1px); animation: searchExpand 0.3s ease-out; }
 
 @keyframes searchExpand {
