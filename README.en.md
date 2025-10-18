@@ -25,7 +25,7 @@
 - **Background Filters**: Add white or black overlay filters with adjustable opacity
 - **Smooth Animations**: Fluid transitions and micro-interactions throughout the interface
 
-### 🔖 Bookmark Management
+###🔖 Bookmark Management
 - **Category Organization**: Create custom categories to organize your bookmarks
 - **Icon Support**: Use emoji, custom image URLs, or auto-fetch site favicons
 - **Simple Icons Integration**: Search and select from thousands of brand logos
@@ -140,9 +140,11 @@ home/
 ├── index.html          # Main HTML structure
 ├── app.css            # Styling and themes
 ├── script.js          # Application logic
+├── i18n/
+│   └── translations.js # Translation files
 ├── assets/
 │   └── favicon.svg    # Site favicon
-└── README.md          # This file
+└── README.md          # Documentation
 ```
 
 ---
