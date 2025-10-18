@@ -213,6 +213,11 @@ input[type="text"], input[type="url"], input[type="color"], select { width: 100%
 input[type="text"]:focus, input[type="url"]:focus, input[type="color"]:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(76,110,245,.18); }
 .icon-row { display: flex; gap: 8px; align-items: center; }
 .icon-row--with-preview { align-items: stretch; }
+.bookmark-form-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.bookmark-form-main, .bookmark-form-side { display: flex; flex-direction: column; gap: 12px; }
+.bookmark-form-side { padding: 16px; border-radius: 18px; background: rgba(76, 110, 245, 0.08); border: 1px solid rgba(76, 110, 245, 0.12); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); }
+.bookmark-form-side .icon-row { flex-direction: column; align-items: stretch; }
+.bookmark-form-side .btn { align-self: stretch; }
 .bookmark-icon-preview { width: 46px; height: 46px; border-radius: 14px; border: 1px dashed rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color var(--transition), background var(--transition); position: relative; overflow: hidden; }
 .bookmark-icon-preview.is-empty { border-style: solid; border-color: rgba(0,0,0,0.08); }
 .bookmark-icon-preview img { width: 70%; height: 70%; object-fit: contain; display: block; border-radius: 10px; }
@@ -267,6 +272,11 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 .settings-card__header h4 { font-size: 16px; font-weight: 700; color: var(--text); }
 .settings-card__content { display: flex; flex-direction: column; gap: 16px; position: relative; z-index: 1; }
 .settings-card__content--split { display: grid; gap: 16px; }
+.settings-card--dark { background: linear-gradient(160deg, rgba(76, 110, 245, 0.18) 0%, rgba(76, 110, 245, 0.06) 60%, rgba(255, 255, 255, 0.95) 100%); border: 1px solid rgba(76, 110, 245, 0.15); box-shadow: 0 20px 42px rgba(76, 110, 245, 0.16); }
+.settings-card--dark .settings-inline__label { color: var(--text); }
+.settings-card--background .settings-card__content { display: grid; gap: 18px; }
+.settings-card--appearance .settings-card__content { display: grid; gap: 18px; }
+.settings-card--actions .settings-card__header { align-items: flex-start; }
 .settings-card--actions .settings-card__content { padding: 20px; gap: 20px; }
 .settings-action-block { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-radius: var(--radius-md); border: 1px solid rgba(76,110,245,0.16); background: rgba(76,110,245,0.06); box-shadow: 0 8px 18px rgba(76,110,245,0.08); }
 .settings-action-block__icon { width: 40px; height: 40px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; display: grid; place-items: center; flex-shrink: 0; }
@@ -278,6 +288,8 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 
 @media (min-width: 720px) {
   .settings-card__content--split { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .settings-card--background .settings-card__content { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .settings-card--appearance .settings-card__content { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .settings-input,
@@ -478,12 +490,15 @@ body.dark-mode .btn.ghost:hover { background: rgba(174, 189, 255, 0.12); border-
   visibility: hidden;
   transition: opacity 0.25s ease;
   z-index: -1;
+  pointer-events: none;
 }
 
 .fab-backdrop.show {
   opacity: 1;
   visibility: visible;
   backdrop-filter: blur(2px);
+  z-index: 1;
+  pointer-events: auto;
 }
 
 .fab-button {
@@ -498,6 +513,8 @@ body.dark-mode .btn.ghost:hover { background: rgba(174, 189, 255, 0.12); border-
   place-items: center;
   box-shadow: 0 8px 24px rgba(76, 110, 245, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 3;
 }
 
 .fab-button:hover {
@@ -526,6 +543,7 @@ body.dark-mode .btn.ghost:hover { background: rgba(174, 189, 255, 0.12); border-
   transform: translateY(12px) scale(0.96);
   transform-origin: right bottom;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
 }
 
 .fab-menu.show {
