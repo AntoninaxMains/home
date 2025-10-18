@@ -1707,22 +1707,6 @@ async function refreshWeather({ force = false } = {}) {
     }
 }
 
-const WEATHER_ICON_MAP = {
-    'sun': '☀️',
-    'cloud-sun': '⛅',
-    'cloud': '☁️',
-    'cloud-fog': '🌫️',
-    'cloud-drizzle': '🌦️',
-    'cloud-rain': '🌧️',
-    'cloud-rain-wind': '🌧️',
-    'cloud-hail': '🌨️',
-    'cloud-snow': '❄️',
-    'cloud-lightning': '⛈️',
-    'loader-2': '⏳',
-    'help-circle': '❓',
-    'alert-triangle': '⚠️'
-};
-
 function resolveWeatherDescriptor(code) {
     const numericCode = Number(code);
     if (!Number.isFinite(numericCode)) {
@@ -1751,12 +1735,7 @@ function setWeatherIcon(container, iconName, animated = false) {
     if (!iconName) {
         container.innerHTML = '';
     } else {
-        const emoji = WEATHER_ICON_MAP[iconName];
-        if (emoji) {
-            container.innerHTML = `<span class="weather-emoji" role="img" aria-hidden="true">${emoji}</span>`;
-        } else {
-            container.innerHTML = `<i data-lucide="${iconName}"></i>`;
-        }
+        container.innerHTML = `<i data-lucide="${iconName}"></i>`;
     }
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
         window.lucide.createIcons();
