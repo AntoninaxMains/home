@@ -6,6 +6,33 @@
         <title>我的起始頁</title>
         <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
         <link rel="stylesheet" href="app.css" />
+        <script>
+            (function ensureUUID() {
+                const global = window;
+                if (!global.crypto) {
+                    global.crypto = global.msCrypto || {};
+                }
+                if (global.crypto && typeof global.crypto.randomUUID !== 'function') {
+                    const getRandomValues = typeof global.crypto.getRandomValues === 'function'
+                        ? global.crypto.getRandomValues.bind(global.crypto)
+                        : null;
+                    global.crypto.randomUUID = function randomUUID() {
+                        const bytes = new Uint8Array(16);
+                        if (getRandomValues) {
+                            getRandomValues(bytes);
+                        } else {
+                            for (let i = 0; i < 16; i++) {
+                                bytes[i] = Math.floor(Math.random() * 256);
+                            }
+                        }
+                        bytes[6] = (bytes[6] & 0x0f) | 0x40;
+                        bytes[8] = (bytes[8] & 0x3f) | 0x80;
+                        const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0'));
+                        return `${hex.slice(0, 4).join('')}-${hex.slice(4, 6).join('')}-${hex.slice(6, 8).join('')}-${hex.slice(8, 10).join('')}-${hex.slice(10, 16).join('')}`;
+                    };
+                }
+            })();
+        </script>
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body>
@@ -129,14 +156,20 @@
                                 <h4 data-i18n="darkModeSection">夜間模式</h4>
                             </header>
                             <div class="settings-card__content">
-                                <div class="settings-field settings-field--row">
-                                    <div class="settings-field__left">
-                                        <label data-i18n="darkMode">夜間模式</label>
-                                        <button id="darkModeToggleBtn" type="button" class="settings-toggle settings-toggle--no-label" aria-pressed="false" aria-label="切換夜間模式">
-                                            <span class="settings-toggle__state" aria-hidden="true"></span>
-                                        </button>
+                                <div class="dark-mode-panel">
+                                    <div class="dark-mode-panel__toggle">
+                                        <div class="dark-mode-panel__text">
+                                            <span class="dark-mode-panel__label" data-i18n="darkMode">夜間模式</span>
+                                            <p class="dark-mode-panel__hint" data-i18n="darkModeHint">為整個首頁套用柔和的深色主題，可減少夜間使用時的眩光。</p>
+                                        </div>
+                                        <div class="dark-mode-panel__actions">
+                                            <span class="dark-mode-toggle__status" data-state="off">日間模式</span>
+                                            <button id="darkModeToggleBtn" type="button" class="settings-toggle settings-toggle--no-label dark-mode-toggle" aria-pressed="false" aria-label="切換夜間模式">
+                                                <span class="settings-toggle__state" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="settings-field__right">
+                                    <div class="dark-mode-panel__slider">
                                         <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
                                         <div class="settings-range-group">
                                             <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
@@ -195,9 +228,12 @@
                                 <h4 data-i18n="appearanceSection">顯示效果（外觀）</h4>
                             </header>
                             <div class="settings-card__content">
-                                <div class="settings-field" id="blurControls">
+                                <div class="settings-field appearance-field" id="blurControls">
                                     <div class="settings-field__header">
-                                        <label for="blurRange" data-i18n="backgroundBlur">背景模糊</label>
+                                        <div class="appearance-field__meta">
+                                            <label for="blurRange" data-i18n="backgroundBlur">背景模糊</label>
+                                            <p class="appearance-field__hint" data-i18n="backgroundBlurHint">柔化背景，讓卡片與搜尋列更突出。</p>
+                                        </div>
                                         <button id="blurToggleBtn" type="button" class="settings-toggle settings-toggle--small settings-toggle--no-label" aria-pressed="false" aria-controls="blurRange" aria-label="切換背景模糊">
                                             <span class="settings-toggle__state" aria-hidden="true"></span>
                                         </button>
@@ -205,13 +241,18 @@
                                     <input id="blurRange" type="range" min="0" max="40" value="0" class="settings-range" />
                                     <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">0</span>px</div>
                                 </div>
-                                <div class="settings-field">
-                                    <label data-i18n="backgroundFilter">背景濾鏡</label>
-                                    <select id="overlaySelect" class="settings-select">
-                                        <option value="none" data-i18n="filterNone">無</option>
-                                        <option value="white" data-i18n="filterWhite">白色濾鏡</option>
-                                        <option value="black" data-i18n="filterBlack">黑色濾鏡</option>
-                                    </select>
+                                <div class="settings-field appearance-field appearance-field--filter">
+                                    <div class="settings-field__header">
+                                        <div class="appearance-field__meta">
+                                            <label for="overlaySelect" data-i18n="backgroundFilter">背景濾鏡</label>
+                                            <p class="appearance-field__hint" data-i18n="backgroundFilterHint">為背景增添白/黑濾鏡，加強文字與卡片的對比。</p>
+                                        </div>
+                                        <select id="overlaySelect" class="settings-select">
+                                            <option value="none" data-i18n="filterNone">無</option>
+                                            <option value="white" data-i18n="filterWhite">白色濾鏡</option>
+                                            <option value="black" data-i18n="filterBlack">黑色濾鏡</option>
+                                        </select>
+                                    </div>
                                     <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" class="settings-range" />
                                     <div class="hint"><span data-i18n="filterOpacity">濾鏡透明度</span>: <span id="overlayValue">0.40</span></div>
                                 </div>

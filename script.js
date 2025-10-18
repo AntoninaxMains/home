@@ -13,6 +13,7 @@ if (typeof window.currentLanguage === 'undefined') {
 }
 
 const __debugMessages = [];
+window.__debugMessages = __debugMessages;
 function logDebug(message) {
     try {
         const timestamp = new Date().toISOString().split('T')[1]?.replace('Z', '') || '';
@@ -49,6 +50,11 @@ function logDebug(message) {
 // 全局錯誤監聽器，便於在 UI 上顯示錯誤
 window.addEventListener('error', (event) => {
     try {
+        const message = event?.message || '';
+        if (message === 'Script error.' && !event?.filename) {
+            logDebug('Window error ignored: Script error without details (likely cross-origin)');
+            return;
+        }
         const existing = document.getElementById('app-error-banner');
         const banner = existing || document.createElement('div');
         banner.id = 'app-error-banner';
@@ -63,11 +69,19 @@ window.addEventListener('error', (event) => {
         banner.style.borderRadius = '999px';
         banner.style.fontSize = '14px';
         banner.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
-        banner.textContent = event?.message ? `Error: ${event.message}` : 'Unknown script error';
+        banner.textContent = message ? `Error: ${message}` : 'Unknown script error';
         if (!existing) {
             document.body.appendChild(banner);
         }
-        logDebug(`Window error: ${event?.message || 'unknown error'}`);
+        if (banner._hideTimer) {
+            window.clearTimeout(banner._hideTimer);
+        }
+        banner._hideTimer = window.setTimeout(() => {
+            if (banner.parentElement) {
+                banner.parentElement.removeChild(banner);
+            }
+        }, 6000);
+        logDebug(`Window error: ${message || 'unknown error'}`);
     } catch (innerError) {
         console.error('Failed to display error banner:', innerError);
     }
@@ -638,7 +652,19 @@ function updateUILanguage() {
 
     const darkModeToggleBtn = document.getElementById('darkModeToggleBtn');
     if (darkModeToggleBtn) {
-        updateToggleButton(darkModeToggleBtn, document.body.classList.contains('dark-mode'));
+        const isDark = document.body.classList.contains('dark-mode');
+        updateToggleButton(darkModeToggleBtn, isDark);
+        const toggleLabelKey = isDark ? 'disableDarkMode' : 'enableDarkMode';
+        const toggleLabel = t(toggleLabelKey);
+        darkModeToggleBtn.setAttribute('aria-label', toggleLabel);
+        darkModeToggleBtn.setAttribute('title', toggleLabel);
+    }
+
+    const darkModeStatus = document.querySelector('.dark-mode-toggle__status');
+    if (darkModeStatus) {
+        const isDark = document.body.classList.contains('dark-mode');
+        darkModeStatus.textContent = t(isDark ? 'darkMode' : 'lightMode');
+        darkModeStatus.dataset.state = isDark ? 'on' : 'off';
     }
 
     const blurToggleBtn = document.getElementById('blurToggleBtn');
@@ -890,6 +916,14 @@ function updateToggleButton(button, isActive) {
         
         labelEl.textContent = labelText;
         if (labelText) {
+            button.setAttribute('aria-label', labelText);
+            button.setAttribute('title', labelText);
+        }
+    } else if (button.dataset.toggleLabels) {
+        const [offKey, onKey] = button.dataset.toggleLabels.split(',').map(label => label && label.trim());
+        const labelKey = isActive ? (onKey || offKey) : offKey;
+        if (labelKey) {
+            const labelText = t(labelKey);
             button.setAttribute('aria-label', labelText);
             button.setAttribute('title', labelText);
         }
@@ -2707,7 +2741,20 @@ function toggleDarkMode(forceState, options = {}) {
     }
     
     const settingsToggleBtn = document.getElementById('darkModeToggleBtn');
-    if (settingsToggleBtn) updateToggleButton(settingsToggleBtn, isDark);
+    if (settingsToggleBtn) {
+        updateToggleButton(settingsToggleBtn, isDark);
+        const toggleLabelKey = isDark ? 'disableDarkMode' : 'enableDarkMode';
+        const toggleLabel = t(toggleLabelKey);
+        settingsToggleBtn.setAttribute('aria-label', toggleLabel);
+        settingsToggleBtn.setAttribute('title', toggleLabel);
+    }
+
+    const statusLabel = document.querySelector('.dark-mode-toggle__status');
+    if (statusLabel) {
+        const statusKey = isDark ? 'darkMode' : 'lightMode';
+        statusLabel.textContent = t(statusKey);
+        statusLabel.dataset.state = isDark ? 'on' : 'off';
+    }
     
     // 更新 FAB 圖標
     updateFabDarkModeIcon();
