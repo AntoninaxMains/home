@@ -1346,6 +1346,7 @@ function isWeatherEnabled() {
 function setWeatherEnabled(enabled) {
     localStorage.setItem(WEATHER_ENABLED_KEY, enabled ? 'true' : 'false');
     if (!enabled) {
+        closeModal('weatherModal');
         weatherState = {
             loading: false,
             error: null,
@@ -1385,6 +1386,7 @@ function updateWeatherControlsUI() {
 
     const input = document.getElementById('weatherLocationInput');
     const applyBtn = document.getElementById('weatherApplyBtn');
+    const modalInput = document.getElementById('weatherModalLocationInput');
     const field = document.querySelector('.weather-field');
     if (input) {
         input.disabled = !enabled;
@@ -1392,11 +1394,30 @@ function updateWeatherControlsUI() {
             input.value = getWeatherLocation();
         }
     }
+    if (modalInput) {
+        modalInput.disabled = !enabled;
+        modalInput.value = getWeatherLocation();
+    }
     if (applyBtn) {
         applyBtn.disabled = !enabled;
     }
     if (field) {
         field.classList.toggle('is-disabled', !enabled);
+    }
+
+    const weatherModalApplyBtn = document.getElementById('weatherModalApplyBtn');
+    if (weatherModalApplyBtn) {
+        weatherModalApplyBtn.disabled = !enabled;
+    }
+
+    const weatherModalRefreshBtn = document.getElementById('weatherModalRefreshBtn');
+    if (weatherModalRefreshBtn) {
+        weatherModalRefreshBtn.disabled = !enabled;
+    }
+
+    const weatherModalDisableBtn = document.getElementById('weatherModalDisableBtn');
+    if (weatherModalDisableBtn) {
+        weatherModalDisableBtn.disabled = !enabled;
     }
 
     updateWeatherStatusMessageFromState();
@@ -1429,6 +1450,20 @@ async function applyWeatherLocation() {
     if (isWeatherEnabled()) {
         await refreshWeather({ force: true });
     } else {
+        updateWeatherStatusMessageFromState();
+    }
+}
+
+async function applyWeatherLocationFromModal() {
+    const input = document.getElementById('weatherModalLocationInput');
+    if (!input) return;
+    const location = setWeatherLocation(input.value);
+    updateWeatherControlsUI();
+    if (isWeatherEnabled() && location) {
+        await refreshWeather({ force: true });
+    } else {
+        weatherState.resolvedName = location ? weatherState.resolvedName : '';
+        updateWeatherWidget();
         updateWeatherStatusMessageFromState();
     }
 }
@@ -1605,133 +1640,140 @@ function formatWeatherTimestamp(value) {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function updateWeatherWidget() {
-    const widget = document.getElementById('weatherWidget');
-    if (!widget) return;
+function getWeatherViewModel() {
     const enabled = isWeatherEnabled();
-    const wrapper = widget.closest('[data-weather-wrapper]');
-    if (wrapper) {
-        wrapper.classList.toggle('is-hidden', !enabled);
-    }
-    widget.classList.toggle('hidden', !enabled);
-    const refreshBtn = document.getElementById('weatherRefreshBtn');
-    if (refreshBtn) {
-        refreshBtn.classList.toggle('is-busy', weatherState.loading);
-    }
-    if (!enabled) return;
+    const storedLocation = getWeatherLocation();
+    const resolvedLocation = weatherState.resolvedName || storedLocation;
 
-    const iconContainer = widget.querySelector('.weather-widget__icon');
-    const locationEl = document.getElementById('weatherWidgetLocation');
-    const statusEl = document.getElementById('weatherWidgetStatus');
-    const tempEl = document.getElementById('weatherWidgetTemp');
-    const metaEl = document.getElementById('weatherWidgetMeta');
+    const view = {
+        enabled,
+        hasStoredLocation: Boolean(storedLocation),
+        locationText: resolvedLocation || '',
+        icon: 'cloud',
+        rotating: false,
+        tempText: '--°',
+        conditionText: '',
+        windText: '',
+        updatedText: '',
+        statusText: '',
+        errorType: weatherState.error || null
+    };
 
-    const location = weatherState.resolvedName || getWeatherLocation();
-    if (locationEl) {
-        locationEl.textContent = location || '';
+    if (!enabled) {
+        view.statusText = t('weatherStatusOff');
+        view.conditionText = view.statusText;
+        return view;
+    }
+
+    if (!storedLocation) {
+        view.statusText = t('weatherStatusLocationMissing');
+        view.conditionText = view.statusText;
+        view.icon = 'map-pin';
+        return view;
     }
 
     if (weatherState.loading) {
-        if (statusEl) statusEl.textContent = t('weatherStatusLoading');
-        if (tempEl) tempEl.textContent = '';
-        if (metaEl) metaEl.textContent = '';
-        setWeatherIcon(iconContainer, 'loader-2', true);
-        return;
-    }
-
-    if (!getWeatherLocation()) {
-        if (statusEl) statusEl.textContent = t('weatherStatusLocationMissing');
-        if (tempEl) tempEl.textContent = '';
-        if (metaEl) metaEl.textContent = '';
-        setWeatherIcon(iconContainer, 'map-pin');
-        return;
+        view.statusText = t('weatherStatusLoading');
+        view.conditionText = view.statusText;
+        view.icon = 'loader-2';
+        view.rotating = true;
+        view.tempText = '…';
+        return view;
     }
 
     if (weatherState.error === 'location-not-found') {
-        if (statusEl) statusEl.textContent = t('weatherStatusLocationNotFound');
-        if (tempEl) tempEl.textContent = '';
-        if (metaEl) metaEl.textContent = '';
-        setWeatherIcon(iconContainer, 'help-circle');
-        return;
+        view.statusText = t('weatherStatusLocationNotFound');
+        view.conditionText = view.statusText;
+        view.icon = 'help-circle';
+        return view;
     }
 
     if (weatherState.error) {
-        if (statusEl) statusEl.textContent = t('weatherStatusError');
-        if (tempEl) tempEl.textContent = '';
-        if (metaEl) metaEl.textContent = '';
-        setWeatherIcon(iconContainer, 'alert-triangle');
-        return;
+        view.statusText = t('weatherStatusError');
+        view.conditionText = view.statusText;
+        view.icon = 'alert-triangle';
+        return view;
     }
 
     if (!weatherState.data) {
-        if (statusEl) statusEl.textContent = t('weatherStatusLoading');
-        if (tempEl) tempEl.textContent = '';
-        if (metaEl) metaEl.textContent = '';
-        setWeatherIcon(iconContainer, 'cloud');
-        return;
+        view.statusText = t('weatherStatusLoading');
+        view.conditionText = view.statusText;
+        view.icon = 'cloud';
+        return view;
     }
 
     const descriptor = resolveWeatherDescriptor(weatherState.data.weathercode);
-    if (statusEl) statusEl.textContent = t(descriptor.key);
+    view.icon = descriptor.icon;
+    view.conditionText = t(descriptor.key);
 
-    if (tempEl) {
-        const temperature = typeof weatherState.data.temperature === 'number' ? Math.round(weatherState.data.temperature) : null;
-        tempEl.textContent = Number.isFinite(temperature) ? `${temperature}°C` : '';
+    const temperature = typeof weatherState.data.temperature === 'number' ? Math.round(weatherState.data.temperature) : null;
+    view.tempText = Number.isFinite(temperature) ? `${temperature}°C` : '--°';
+
+    if (typeof weatherState.data.windspeed === 'number') {
+        view.windText = templateReplace(t('weatherWind'), { speed: Math.round(weatherState.data.windspeed) });
     }
 
-    if (metaEl) {
-        const metaParts = [];
-        if (typeof weatherState.data.windspeed === 'number') {
-            metaParts.push(templateReplace(t('weatherWind'), { speed: Math.round(weatherState.data.windspeed) }));
-        }
-        const timeString = formatWeatherTimestamp(weatherState.data.time || weatherState.lastUpdated);
-        if (timeString) {
-            metaParts.push(templateReplace(t('weatherLastUpdated'), { time: timeString }));
-        }
-        metaEl.textContent = metaParts.join(' · ');
+    const timeString = formatWeatherTimestamp(weatherState.data.time || weatherState.lastUpdated);
+    if (timeString) {
+        view.updatedText = templateReplace(t('weatherLastUpdated'), { time: timeString });
+        view.statusText = view.updatedText;
+    } else {
+        view.statusText = '';
     }
 
-    setWeatherIcon(iconContainer, descriptor.icon);
+    return view;
+}
+
+function updateWeatherWidget() {
+    const view = getWeatherViewModel();
+
+    const tile = document.querySelector('[data-weather-bookmark]');
+    if (tile) {
+        tile.classList.toggle('is-inactive', !view.enabled);
+        const iconContainer = tile.querySelector('[data-weather-icon="tile"]');
+        setWeatherIcon(iconContainer, view.icon, view.rotating);
+        const tempEl = tile.querySelector('[data-weather-temp="tile"]');
+        if (tempEl) tempEl.textContent = view.tempText;
+        const locationEl = tile.querySelector('[data-weather-location="tile"]');
+        if (locationEl) locationEl.textContent = view.locationText || '';
+        const conditionEl = tile.querySelector('[data-weather-condition="tile"]');
+        if (conditionEl) conditionEl.textContent = view.conditionText || view.statusText || '';
+    }
+
+    const modal = document.getElementById('weatherModal');
+    if (modal) {
+        const iconContainer = modal.querySelector('[data-weather-icon="modal"]');
+        setWeatherIcon(iconContainer, view.icon, view.rotating);
+        const tempEl = modal.querySelector('[data-weather-temp="modal"]');
+        if (tempEl) tempEl.textContent = view.tempText;
+        const locationEl = modal.querySelector('[data-weather-location="modal"]');
+        if (locationEl) locationEl.textContent = view.locationText || '';
+        const conditionEl = modal.querySelector('[data-weather-condition]');
+        if (conditionEl) conditionEl.textContent = view.conditionText || view.statusText || '';
+        const updatedEl = modal.querySelector('[data-weather-updated]');
+        if (updatedEl) updatedEl.textContent = view.updatedText;
+        const windEl = modal.querySelector('[data-weather-wind]');
+        if (windEl) windEl.textContent = view.windText;
+        const statusEl = modal.querySelector('[data-weather-status]');
+        if (statusEl) statusEl.textContent = view.statusText;
+    }
+
+    document.querySelectorAll('[data-refresh-weather]').forEach(btn => {
+        btn.disabled = !view.enabled || !view.hasStoredLocation;
+        btn.classList.toggle('is-busy', !!weatherState.loading);
+    });
 }
 
 function updateWeatherStatusMessageFromState() {
+    const view = getWeatherViewModel();
     const statusEl = document.getElementById('weatherStatusText');
-    if (!statusEl) return;
-
-    const enabled = isWeatherEnabled();
-    if (!enabled) {
-        statusEl.textContent = t('weatherStatusOff');
-        return;
+    if (statusEl) {
+        statusEl.textContent = view.statusText || view.conditionText || '';
     }
-
-    const location = getWeatherLocation();
-    if (!location) {
-        statusEl.textContent = t('weatherStatusLocationMissing');
-        return;
+    const modalStatus = document.querySelector('#weatherModal [data-weather-status]');
+    if (modalStatus) {
+        modalStatus.textContent = view.statusText || view.conditionText || '';
     }
-
-    if (weatherState.loading) {
-        statusEl.textContent = t('weatherStatusLoading');
-        return;
-    }
-
-    if (weatherState.error === 'location-not-found') {
-        statusEl.textContent = t('weatherStatusLocationNotFound');
-        return;
-    }
-
-    if (weatherState.error) {
-        statusEl.textContent = t('weatherStatusError');
-        return;
-    }
-
-    if (weatherState.data) {
-        const timeString = formatWeatherTimestamp(weatherState.data.time || weatherState.lastUpdated);
-        statusEl.textContent = timeString ? templateReplace(t('weatherLastUpdated'), { time: timeString }) : '';
-        return;
-    }
-
-    statusEl.textContent = '';
 }
 
 // 開發者工具設定
@@ -2039,21 +2081,6 @@ function initEventListeners() {
         weatherApplyBtn.addEventListener('click', () => {
             applyWeatherLocation();
         });
-    }
-
-    const weatherRefreshBtn = document.getElementById('weatherRefreshBtn');
-    if (weatherRefreshBtn && weatherRefreshBtn.dataset.bound !== '1') {
-        weatherRefreshBtn.addEventListener('click', () => {
-            weatherRefreshBtn.classList.add('is-busy');
-            refreshWeather({ force: true })
-                .catch(error => {
-                    console.warn('Weather refresh failed:', error);
-                })
-                .finally(() => {
-                    weatherRefreshBtn.classList.remove('is-busy');
-                });
-        });
-        weatherRefreshBtn.dataset.bound = '1';
     }
 
     const weatherLocationInput = document.getElementById('weatherLocationInput');
@@ -3160,8 +3187,7 @@ function renderBookmarks() {
     });
 
     if (weatherEnabled) {
-        const weatherTile = createWeatherBookmarkTile();
-        mainGrid.appendChild(weatherTile);
+        mainGrid.appendChild(createWeatherBookmarkTile());
     }
 
     if (mainBookmarks.length) {
@@ -3169,7 +3195,7 @@ function renderBookmarks() {
             const bookmarkEl = createBookmarkElement(bookmark);
             mainGrid.appendChild(bookmarkEl);
         });
-    } else {
+    } else if (!weatherEnabled) {
         const emptyState = document.createElement('p');
         emptyState.className = 'bookmark-empty';
         emptyState.setAttribute('data-i18n', 'noBookmarks');
@@ -3267,56 +3293,46 @@ function createBookmarkElement(bookmark) {
 function createWeatherBookmarkTile() {
     const tile = document.createElement('div');
     tile.className = 'bookmark-item bookmark-item--weather';
-    tile.setAttribute('data-weather-wrapper', 'true');
+    tile.setAttribute('data-weather-bookmark', 'true');
     tile.innerHTML = `
-        <div class="bookmark-actions bookmark-actions--pinned">
+        <div class="bookmark-actions bookmark-actions--inline">
+            <button type="button" class="bookmark-actions__btn" data-refresh-weather data-i18n-attr="title:weatherApply,aria-label:weatherApply" title="${t('weatherApply')}">
+                <i data-lucide="refresh-cw"></i>
+            </button>
             <button type="button" class="bookmark-actions__btn" data-remove-weather data-i18n-attr="title:disableWeather,aria-label:disableWeather" title="${t('disableWeather')}">
                 <i data-lucide="x"></i>
             </button>
         </div>
-        <div id="weatherWidget" class="weather-widget weather-widget--tile" aria-live="polite">
-            <header class="weather-widget__header">
-                <div class="weather-widget__icon" aria-hidden="true">
-                    <i data-lucide="cloud-sun"></i>
-                </div>
-                <div class="weather-widget__heading">
-                    <span class="weather-widget__label" data-i18n="weatherWidgetLabel">${t('weatherWidgetLabel')}</span>
-                    <span id="weatherWidgetLocation" class="weather-widget__location"></span>
-                </div>
-                <button id="weatherRefreshBtn" type="button" class="weather-widget__refresh" data-i18n-attr="title:weatherApply,aria-label:weatherApply" title="${t('weatherApply')}">
-                    <i data-lucide="refresh-cw"></i>
-                </button>
-            </header>
-            <div class="weather-widget__body">
-                <div id="weatherWidgetStatus" class="weather-widget__status"></div>
-                <div class="weather-widget__metrics">
-                    <div id="weatherWidgetTemp" class="weather-widget__temp"></div>
-                    <div id="weatherWidgetMeta" class="weather-widget__meta"></div>
-                </div>
+        <div class="weather-tile" data-weather-trigger role="button" tabindex="0" data-i18n-attr="aria-label:weatherWidgetLabel">
+            <div class="bookmark-icon weather-tile__icon" aria-hidden="true">
+                <span data-weather-icon="tile"><i data-lucide="cloud"></i></span>
             </div>
+            <div class="bookmark-name weather-tile__temp" data-weather-temp="tile">--°</div>
+            <div class="weather-tile__location" data-weather-location="tile"></div>
+            <div class="weather-tile__condition" data-weather-condition="tile"></div>
         </div>
     `;
     return tile;
 }
 
 function bindWeatherBookmarkActions(root = document) {
-    const wrapper = root.querySelector('[data-weather-wrapper]');
-    if (!wrapper) return;
+    const tile = root.querySelector('[data-weather-bookmark]');
+    if (!tile) return;
 
-    const removeBtn = wrapper.querySelector('[data-remove-weather]');
-    if (removeBtn && removeBtn.dataset.bound !== '1') {
+    const removeBtn = tile.querySelector('[data-remove-weather]');
+    if (removeBtn) {
         removeBtn.addEventListener('click', (event) => {
             event.preventDefault();
             event.stopPropagation();
             setWeatherEnabled(false);
         });
-        removeBtn.dataset.bound = '1';
     }
 
-    const refreshBtn = wrapper.querySelector('#weatherRefreshBtn');
-    if (refreshBtn && refreshBtn.dataset.bound !== '1') {
+    const refreshBtn = tile.querySelector('[data-refresh-weather]');
+    if (refreshBtn) {
         refreshBtn.addEventListener('click', (event) => {
             event.preventDefault();
+            event.stopPropagation();
             refreshBtn.classList.add('is-busy');
             refreshWeather({ force: true })
                 .catch(error => {
@@ -3326,8 +3342,26 @@ function bindWeatherBookmarkActions(root = document) {
                     refreshBtn.classList.remove('is-busy');
                 });
         });
-        refreshBtn.dataset.bound = '1';
     }
+
+    const trigger = tile.querySelector('[data-weather-trigger]');
+    const openDetails = (event) => {
+        event.preventDefault();
+        if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) {
+            return;
+        }
+        openWeatherModal();
+    };
+    if (trigger) {
+        trigger.addEventListener('click', openDetails);
+        trigger.addEventListener('keydown', openDetails);
+    }
+}
+
+function openWeatherModal() {
+    openModal('weatherModal');
+    updateWeatherControlsUI();
+    updateWeatherWidget();
 }
 
 function openBookmarkModal(bookmark = null, defaultCategory = '') {
