@@ -1124,11 +1124,15 @@ function initEventListeners() {
     if (suggestionContainer) suggestionContainer.addEventListener('click', handleSuggestionClick);
     
     // 設定按鈕
-    document.getElementById('settingsBtn').addEventListener('click', function() {
-        openModal('settingsModal');
-    });
+    const settingsBtn = document.getElementById('settingsBtn');
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', function() {
+            openModal('settingsModal');
+        });
+    }
     
-    document.getElementById('saveSettings').addEventListener('click', saveSettings);
+    const saveSettingsBtn = document.getElementById('saveSettings');
+    if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
 
     const resetSettingsBtn = document.getElementById('resetSettings');
     if (resetSettingsBtn) resetSettingsBtn.addEventListener('click', handleResetSettings);
@@ -1147,7 +1151,8 @@ function initEventListeners() {
     const addBtn = document.getElementById('addBookmarkBtn');
     if (addBtn) addBtn.addEventListener('click', function() { openBookmarkModal(null, ''); });
     
-    document.getElementById('saveBookmark').addEventListener('click', saveBookmark);
+    const saveBookmarkBtn = document.getElementById('saveBookmark');
+    if (saveBookmarkBtn) saveBookmarkBtn.addEventListener('click', saveBookmark);
     // 關閉由 data-close 控制
     document.querySelectorAll('[data-close]').forEach(btn => {
         btn.addEventListener('click', function() {
