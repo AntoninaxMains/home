@@ -87,12 +87,7 @@ body.dark-mode .settings-nav__item.is-active {
 
 @media (max-width: 1023px) {
   .settings-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    position: relative;
-    gap: 4px;
-    padding: 6px;
-    z-index: 20;
+    display: none;
   }
   
   .settings-nav__item {
@@ -928,6 +923,13 @@ body.dark-mode .suggestion-item--skeleton {
   color: #4CACF0;
 }
 
+.weather-tile__icon [data-weather-icon] .weather-emoji {
+  font-size: 32px;
+  line-height: 1;
+  display: inline-block;
+  font-style: normal;
+}
+
 /* Weather icon colors for different conditions */
 .weather-tile__icon [data-weather-icon] i[data-lucide="sun"] {
   color: #FDB022;
@@ -1725,7 +1727,13 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 @media (max-width: 640px) {
   .dark-mode-panel { padding: 18px; }
   .dark-mode-panel__toggle { flex-direction: column; align-items: stretch; gap: 14px; }
-  .dark-mode-panel__actions { justify-content: space-between; }
+  .dark-mode-panel__text { max-width: 100%; flex: 1 1 auto; }
+  .dark-mode-panel__actions { justify-content: space-between; width: 100%; flex-wrap: wrap; }
+  .dark-mode-toggle__status,
+  .weather-toggle__status,
+  .debug-toggle__status { flex: 1 1 auto; min-width: fit-content; text-align: center; }
+  .settings-toggle { flex: 1 1 auto; min-width: fit-content; justify-content: center; white-space: nowrap; font-size: 12px; padding: 10px 14px; }
+  .settings-toggle__label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
   .weather-field__controls { justify-content: space-between; }
   .weather-location-controls { flex-direction: column; align-items: stretch; }
   .weather-location-controls .settings-input { min-width: 100%; }
