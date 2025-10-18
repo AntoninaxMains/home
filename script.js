@@ -1353,23 +1353,28 @@ function initEventListeners() {
     }
     
     // 管理分類按鈕
-    document.getElementById('manageCategoriesBtn').addEventListener('click', function() {
-        openCategoryManagement();
-    });
-    
-    document.getElementById('addCategoryBtn').addEventListener('click', addNewCategory);
+    const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
+    if (manageCategoriesBtn) {
+        manageCategoriesBtn.addEventListener('click', openCategoryManagement);
+    }
+
+    const addCategoryBtn = document.getElementById('addCategoryBtn');
+    if (addCategoryBtn) addCategoryBtn.addEventListener('click', addNewCategory);
     
     // 分類選擇
-    document.getElementById('bookmarkCategory').addEventListener('change', function(e) {
-        const newCategoryInput = document.getElementById('newCategoryInput');
-        if (!newCategoryInput) return;
-        if (e.target.value === 'new') {
-            newCategoryInput.classList.remove('hidden');
-            newCategoryInput.focus();
-        } else {
-            newCategoryInput.classList.add('hidden');
-        }
-    });
+    const bookmarkCategorySelect = document.getElementById('bookmarkCategory');
+    if (bookmarkCategorySelect) {
+        bookmarkCategorySelect.addEventListener('change', function(e) {
+            const newCategoryInput = document.getElementById('newCategoryInput');
+            if (!newCategoryInput) return;
+            if (e.target.value === 'new') {
+                newCategoryInput.classList.remove('hidden');
+                newCategoryInput.focus();
+            } else {
+                newCategoryInput.classList.add('hidden');
+            }
+        });
+    }
     
     // 語言選擇器
     const languageSelect = document.getElementById('languageSelect');
@@ -1690,8 +1695,15 @@ function getSuggestionProviderOrder() {
     const providers = [];
     const engine = currentSearchEngine || 'google';
     if (suggestionProviders[engine]) providers.push(engine);
-    if (!providers.includes('duckduckgo')) providers.push('duckduckgo');
-    return [...new Set(providers)];
+
+    const fallbackPriority = ['google', 'bing', 'baidu', 'duckduckgo'];
+    fallbackPriority.forEach(key => {
+        if (suggestionProviders[key] && !providers.includes(key)) {
+            providers.push(key);
+        }
+    });
+
+    return providers;
 }
 
 const suggestionProviders = {
@@ -2605,8 +2617,33 @@ function fetchFavicon() {
     alert(t('alertIconFetched') || '已自動填入網站圖示！');
 }
 
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    modal.classList.add('show');
+    document.body.classList.add('modal-open');
+
+    const focusable = modal.querySelector('[data-autofocus], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
+    if (focusable) {
+        window.setTimeout(() => {
+            try {
+                focusable.focus({ preventScroll: true });
+            } catch (err) {
+                focusable.focus();
+            }
+        }, 0);
+    }
+}
+
 function closeModal(modalId) {
-    document.getElementById(modalId).classList.remove('show');
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    modal.classList.remove('show');
+    if (!document.querySelector('.modal.show')) {
+        document.body.classList.remove('modal-open');
+    }
 }
 
 // FAB 輔助函數

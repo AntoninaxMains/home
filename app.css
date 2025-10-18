@@ -29,6 +29,10 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 .background-layer { position: fixed; inset: 0; background: transparent; backdrop-filter: blur(var(--backdrop-blur)); z-index: -1; }
 
 /* Overlay that can be white/black with adjustable opacity */
@@ -890,6 +894,12 @@ body.dark-mode .toolbar-btn.primary {
     grid-template-columns: 48px 1fr;
     grid-template-rows: auto auto;
     gap: 8px;
+  }
+  .search-input-wrapper .engine-selector--inline {
+    margin-right: 0;
+  }
+  .engine-selector--inline::after {
+    display: none;
   }
   .engine-selector--inline {
     padding: 4px;
