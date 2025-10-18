@@ -1582,6 +1582,10 @@ function updateWeatherWidget() {
     const widget = document.getElementById('weatherWidget');
     if (!widget) return;
     const enabled = isWeatherEnabled();
+    const heroAside = widget.closest('.hero-aside');
+    if (heroAside) {
+        heroAside.classList.toggle('is-hidden', !enabled);
+    }
     widget.classList.toggle('hidden', !enabled);
     if (!enabled) return;
 
