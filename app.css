@@ -285,6 +285,19 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 .settings-field.is-inactive { opacity: 0.55; }
 .settings-field.is-inactive .settings-field__header,
 .settings-field.is-inactive .settings-toggle { opacity: 1; }
+.settings-field--row { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.settings-field__left { display: flex; align-items: center; gap: 12px; }
+.settings-field__left label { font-weight: 700; font-size: 14px; color: var(--text); margin: 0; }
+.settings-field__right { display: flex; flex-direction: column; gap: 8px; }
+.settings-field__right label { font-weight: 600; font-size: 13px; color: var(--text-subtle); margin: 0; }
+.settings-range-group { display: flex; align-items: center; gap: 12px; }
+.settings-range-group .settings-range { flex: 1; }
+.settings-range-group .range-value { flex: 0 0 auto; min-width: 45px; text-align: right; }
+
+@media (min-width: 720px) {
+  .settings-field--row { grid-template-columns: 1fr 1fr; align-items: start; }
+}
+
 .hidden { display: none !important; }
 
 @media (min-width: 720px) {

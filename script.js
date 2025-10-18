@@ -1,13 +1,19 @@
-// 翻譯配置從 i18n/translations.js 載入
-// Translation configuration loaded from i18n/translations.js
-// translations 和 SUPPORTED_LANGUAGES 已在 translations.js 中定義
+// 翻譯配置從各個語言文件動態載入
+// Translation configuration dynamically loaded from individual language files
+// translations 對象在 index.html 中初始化，只載入當前語言
+// translations object initialized in index.html, only loads current language
 
-// 當前語言
-let currentLanguage = 'zh-TW';
+// 當前語言 (從 index.html 傳入)
+// Current language (passed from index.html)
+let currentLanguage = window.currentLanguage || 'zh-TW';
+let translations = window.translations || {};
+
+// 支援的語言列表
+const SUPPORTED_LANGUAGES = ['en', 'zh-CN', 'zh-TW', 'ja'];
 
 // 獲取翻譯文字
 function t(key) {
-    return translations[currentLanguage]?.[key] || translations['zh-TW'][key] || key;
+    return translations[currentLanguage]?.[key] || key;
 }
 
 // 搜尋引擎配置（使用真實品牌圖標）
@@ -356,20 +362,41 @@ function determinePreferredLanguage() {
     return 'en';
 }
 
-// 載入語言設定
+// 載入語言設定 (現在在 index.html 中處理)
+// Load language settings (now handled in index.html)
 function loadLanguage() {
-    const saved = localStorage.getItem('language');
-    if (saved && translations[saved]) {
-        currentLanguage = saved;
-        return;
+    // 語言已在 index.html 中初始化，這裡只需要確保 currentLanguage 正確
+    // Language already initialized in index.html, just ensure currentLanguage is correct
+    if (window.currentLanguage) {
+        currentLanguage = window.currentLanguage;
     }
-
-    currentLanguage = determinePreferredLanguage();
 }
 
 // 切換語言
-function changeLanguage(lang) {
-    if (!translations[lang]) return;
+async function changeLanguage(lang) {
+    // 如果語言尚未載入，動態載入 / If language not loaded, dynamically load it
+    if (!translations[lang]) {
+        try {
+            const response = await fetch(`i18n/${lang}.js`);
+            const code = await response.text();
+            eval(code);
+            
+            // 設置翻譯對象 / Set translation object
+            if (lang === 'en' && typeof en !== 'undefined') {
+                translations['en'] = en;
+            } else if (lang === 'zh-CN' && typeof zhCN !== 'undefined') {
+                translations['zh-CN'] = zhCN;
+            } else if (lang === 'zh-TW' && typeof zhTW !== 'undefined') {
+                translations['zh-TW'] = zhTW;
+            } else if (lang === 'ja' && typeof ja !== 'undefined') {
+                translations['ja'] = ja;
+            }
+        } catch (error) {
+            console.error(`Failed to load language ${lang}:`, error);
+            return;
+        }
+    }
+    
     currentLanguage = lang;
     localStorage.setItem('language', lang);
     updateUILanguage();
@@ -2441,9 +2468,7 @@ function toggleDarkMode(forceState, options = {}) {
     // 更新 FAB 圖標
     updateFabDarkModeIcon();
     
-    // 顯示/隱藏深度設置
-    const settings = document.getElementById('darkModeSettings');
-    if (settings) settings.classList.toggle('hidden', !isDark);
+    // 深色強度設置現在常駐顯示，不需要切換 hidden class
 }
 
 function updateDarkModeDepth(depth) {

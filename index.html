@@ -129,18 +129,20 @@
                                 <h4 data-i18n="darkModeSection">夜間模式</h4>
                             </header>
                             <div class="settings-card__content">
-                                <div class="settings-field">
-                                    <div class="settings-field__header">
+                                <div class="settings-field settings-field--row">
+                                    <div class="settings-field__left">
                                         <label data-i18n="darkMode">夜間模式</label>
-                                        <button id="darkModeToggleBtn" type="button" class="settings-toggle settings-toggle--no-label" aria-pressed="false" aria-controls="darkModeSettings" aria-label="切換夜間模式">
+                                        <button id="darkModeToggleBtn" type="button" class="settings-toggle settings-toggle--no-label" aria-pressed="false" aria-label="切換夜間模式">
                                             <span class="settings-toggle__state" aria-hidden="true"></span>
                                         </button>
                                     </div>
-                                </div>
-                                <div class="settings-field hidden" id="darkModeSettings">
-                                    <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
-                                    <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
-                                    <span class="range-value" id="darkModeDepthValue">35%</span>
+                                    <div class="settings-field__right">
+                                        <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
+                                        <div class="settings-range-group">
+                                            <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
+                                            <span class="range-value" id="darkModeDepthValue">35%</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -323,10 +325,52 @@
                 <footer class="modal-footer">
                     <button data-close="categoryModal" class="btn primary" data-i18n="done">完成</button>
                 </footer>
-            </div>
         </div>
+    </div>
 
-        <script src="i18n/translations.js"></script>
-        <script src="script.js"></script>
-    </body>
+    <!-- 動態載入語言文件 / Dynamically load language file -->
+    <script>
+        // 偵測用戶語言 / Detect user language
+        const savedLang = localStorage.getItem('language');
+        const browserLang = navigator.language || navigator.userLanguage;
+        const langMap = {
+            'en': 'en',
+            'en-US': 'en',
+            'en-GB': 'en',
+            'zh-CN': 'zh-CN',
+            'zh-Hans': 'zh-CN',
+            'zh-SG': 'zh-CN',
+            'zh-TW': 'zh-TW',
+            'zh-Hant': 'zh-TW',
+            'zh-HK': 'zh-TW',
+            'zh-MO': 'zh-TW',
+            'ja': 'ja',
+            'ja-JP': 'ja'
+        };
+        
+        const detectedLang = savedLang || langMap[browserLang] || (browserLang.startsWith('zh-') ? 'zh-TW' : (browserLang.startsWith('ja') ? 'ja' : 'en'));
+        const supportedLanguages = ['en', 'zh-CN', 'zh-TW', 'ja'];
+        const currentLanguage = supportedLanguages.includes(detectedLang) ? detectedLang : 'en';
+        
+        // 動態載入對應語言文件 / Dynamically load corresponding language file
+        const script = document.createElement('script');
+        script.src = `i18n/${currentLanguage}.js`;
+        script.onload = function() {
+            // 設置全局 translations 對象 / Set global translations object
+            let translations = {};
+            if (typeof en !== 'undefined') translations = { 'en': en };
+            if (typeof zhCN !== 'undefined') translations = { 'zh-CN': zhCN };
+            if (typeof zhTW !== 'undefined') translations = { 'zh-TW': zhTW };
+            if (typeof ja !== 'undefined') translations = { 'ja': ja };
+            window.translations = translations;
+            window.currentLanguage = currentLanguage;
+            
+            // 載入主腳本 / Load main script
+            const mainScript = document.createElement('script');
+            mainScript.src = 'script.js';
+            document.body.appendChild(mainScript);
+        };
+        document.body.appendChild(script);
+    </script>
+</body>
 </html>
