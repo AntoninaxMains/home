@@ -1582,7 +1582,102 @@ function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMI
     return result;
 }
 
-function getRemoteSuggestionLocale(lang = currentLanguage) {
+function getRemoteSuggestionMinLength() {
+    if (currentLanguage && currentLanguage.startsWith('zh')) {
+        return 1;
+    }
+    return REMOTE_SUGGESTION_MIN_LENGTH;
+}
+
+function getSuggestionProviderOrder() {
+    const providers = [];
+    const engine = currentSearchEngine || 'google';
+    if (suggestionProviders[engine]) providers.push(engine);
+    if (!providers.includes('duckduckgo')) providers.push('duckduckgo');
+    return [...new Set(providers)];
+}
+
+const suggestionProviders = {
+    google: {
+        buildRequest(query, lang, callbackId) {
+            const locale = getGoogleSuggestionLocale(lang);
+            const params = new URLSearchParams({
+                client: 'chrome',
+                q: query,
+                callback: callbackId
+            });
+            if (locale.hl) params.set('hl', locale.hl);
+            if (locale.gl) params.set('gl', locale.gl);
+            return {
+                url: `https://suggestqueries.google.com/complete/search?${params.toString()}`,
+                cacheKey: `${query.toLowerCase()}|${locale.hl || ''}|${locale.gl || ''}`
+            };
+        }
+    },
+    bing: {
+        buildRequest(query, lang, callbackId) {
+            const locale = getBingSuggestionLocale(lang);
+            const params = new URLSearchParams({
+                query,
+                JsonType: 'callback',
+                JsonCallback: callbackId
+            });
+            if (locale.language) params.set('language', locale.language);
+            if (locale.market) params.set('market', locale.market);
+            return {
+                url: `https://api.bing.com/osjson.aspx?${params.toString()}`,
+                cacheKey: `${query.toLowerCase()}|${locale.language || ''}|${locale.market || ''}`
+            };
+        }
+    },
+    duckduckgo: {
+        buildRequest(query, lang, callbackId) {
+            const locale = getDuckDuckGoLocale(lang);
+            const params = new URLSearchParams({
+                q: query,
+                type: 'list',
+                callback: callbackId
+            });
+            if (locale.kl) params.set('kl', locale.kl);
+            if (locale.kad) params.set('kad', locale.kad);
+            return {
+                url: `https://duckduckgo.com/ac/?${params.toString()}`,
+                cacheKey: `${query.toLowerCase()}|${locale.kl || ''}|${locale.kad || ''}`
+            };
+        }
+    },
+    baidu: {
+        buildRequest(query, lang, callbackId) {
+            const locale = getBaiduSuggestionLocale(lang);
+            const params = new URLSearchParams({
+                wd: query,
+                ie: locale.ie || 'utf-8',
+                json: '1',
+                p: '3',
+                cb: callbackId
+            });
+            if (locale.csor) params.set('csor', locale.csor);
+            return {
+                url: `https://suggestion.baidu.com/su?${params.toString()}`,
+                cacheKey: `${query.toLowerCase()}|${locale.ie || 'utf-8'}`
+            };
+        }
+    }
+};
+
+function getGoogleSuggestionLocale(lang = currentLanguage) {
+    switch (lang) {
+        case 'zh-CN':
+            return { hl: 'zh-CN', gl: 'cn' };
+        case 'zh-TW':
+            return { hl: 'zh-TW', gl: 'tw' };
+        case 'en':
+        default:
+            return { hl: 'en', gl: 'us' };
+    }
+}
+
+function getBingSuggestionLocale(lang = currentLanguage) {
     switch (lang) {
         case 'zh-CN':
             return { language: 'zh-cn', market: 'zh-CN' };
@@ -1594,11 +1689,27 @@ function getRemoteSuggestionLocale(lang = currentLanguage) {
     }
 }
 
-function getRemoteSuggestionMinLength() {
-    if (currentLanguage && currentLanguage.startsWith('zh')) {
-        return 1;
+function getDuckDuckGoLocale(lang = currentLanguage) {
+    switch (lang) {
+        case 'zh-CN':
+            return { kl: 'cn-zh', kad: 'zh-cn' };
+        case 'zh-TW':
+            return { kl: 'tw-tzh', kad: 'zh-tw' };
+        case 'en':
+        default:
+            return { kl: 'us-en', kad: 'en-us' };
     }
-    return REMOTE_SUGGESTION_MIN_LENGTH;
+}
+
+function getBaiduSuggestionLocale(lang = currentLanguage) {
+    switch (lang) {
+        case 'zh-CN':
+        case 'zh-TW':
+            return { ie: 'utf-8' };
+        case 'en':
+        default:
+            return { ie: 'utf-8' };
+    }
 }
 
 async function fetchRemoteSuggestions(query) {
@@ -1606,10 +1717,21 @@ async function fetchRemoteSuggestions(query) {
         return [];
     }
 
-    const locale = getRemoteSuggestionLocale();
-    const cacheKey = `${query.toLowerCase()}|${locale.language || ''}|${locale.market || ''}`;
-    if (remoteSuggestCache.has(cacheKey)) {
-        return remoteSuggestCache.get(cacheKey);
+    const providers = getSuggestionProviderOrder();
+    for (const providerKey of providers) {
+        const suggestions = await requestSuggestionsFromProvider(providerKey, query);
+        if (Array.isArray(suggestions) && suggestions.length > 0) {
+            return suggestions;
+        }
+    }
+
+    return [];
+}
+
+function requestSuggestionsFromProvider(providerKey, query) {
+    const provider = suggestionProviders[providerKey];
+    if (!provider || typeof provider.buildRequest !== 'function') {
+        return Promise.resolve([]);
     }
 
     if (remoteSuggestCancel) {
@@ -1617,18 +1739,25 @@ async function fetchRemoteSuggestions(query) {
         remoteSuggestCancel = null;
     }
 
-    return new Promise(resolve => {
-        const callbackId = `__bingSuggest_${Date.now()}_${remoteSuggestCallbackSeed++}`;
-        const params = new URLSearchParams({
-            query,
-            JsonType: 'callback'
-        });
-        if (locale.language) params.set('language', locale.language);
-        if (locale.market) params.set('market', locale.market);
-        params.set('JsonCallback', callbackId);
-        params.set('_', String(Date.now()));
+    const callbackId = `__suggest_${providerKey}_${Date.now()}_${remoteSuggestCallbackSeed++}`;
+    const request = provider.buildRequest(query, currentLanguage, callbackId);
+    if (!request || !request.url) {
+        return Promise.resolve([]);
+    }
 
+    const { url, cacheKey } = request;
+    const fullCacheKey = `${providerKey}|${cacheKey || query.toLowerCase()}`;
+    if (remoteSuggestCache.has(fullCacheKey)) {
+        return Promise.resolve(remoteSuggestCache.get(fullCacheKey));
+    }
+
+    return new Promise(resolve => {
         const script = document.createElement('script');
+        if (!script) {
+            resolve([]);
+            return;
+        }
+
         let settled = false;
 
         const finalize = (result) => {
@@ -1638,12 +1767,16 @@ async function fetchRemoteSuggestions(query) {
                 remoteSuggestCancel = null;
             }
             window.clearTimeout(timeoutId);
-            delete window[callbackId];
+            try {
+                delete window[callbackId];
+            } catch (err) {
+                // ignore
+            }
             if (script.parentNode) {
                 script.parentNode.removeChild(script);
             }
             if (Array.isArray(result) && result.length) {
-                remoteSuggestCache.set(cacheKey, result);
+                remoteSuggestCache.set(fullCacheKey, result);
             }
             resolve(Array.isArray(result) ? result : []);
         };
@@ -1653,16 +1786,17 @@ async function fetchRemoteSuggestions(query) {
 
         window[callbackId] = (payload) => {
             try {
-                const suggestions = extractRemoteSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
+                const parser = typeof provider.parse === 'function' ? provider.parse : extractRemoteSuggestions;
+                const suggestions = parser(payload, query, SEARCH_SUGGESTION_LIMIT);
                 finalize(suggestions);
             } catch (err) {
-                console.warn('Failed to parse remote suggestions', err);
+                console.warn(`Failed to parse ${providerKey} suggestions`, err);
                 finalize([]);
             }
         };
 
         script.onerror = cancel;
-        script.src = `https://api.bing.com/osjson.aspx?${params.toString()}`;
+        script.src = url;
         script.async = true;
         document.head.appendChild(script);
 
