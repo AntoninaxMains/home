@@ -1505,7 +1505,16 @@ async function searchWeatherLocation(query) {
     }
     
     try {
-        const url = `${WEATHER_GEOCODE_URL}?name=${encodeURIComponent(query)}&count=5&language=${currentLanguage || 'zh'}&format=json`;
+        // Map language codes to Open-Meteo supported languages
+        const langMap = {
+            'zh-TW': 'zh',
+            'zh-CN': 'zh',
+            'ja': 'ja',
+            'en': 'en'
+        };
+        const apiLang = langMap[currentLanguage] || 'en';
+        
+        const url = `${WEATHER_GEOCODE_URL}?name=${encodeURIComponent(query)}&count=8&language=${apiLang}&format=json`;
         const response = await fetch(url);
         
         if (!response.ok) {

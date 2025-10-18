@@ -1896,8 +1896,9 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 
 .settings-toggle:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 26px rgba(76, 110, 245, 0.18);
+  box-shadow: none;
   border-color: rgba(76, 110, 245, 0.35);
+  background: rgba(76, 110, 245, 0.16);
 }
 
 .settings-toggle:focus-visible {

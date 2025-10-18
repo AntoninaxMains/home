@@ -131,7 +131,7 @@ window.TRANSLATIONS['zh-TW'] = {
     weatherStatusOn: '天氣小工具已啟用',
     weatherStatusOff: '天氣小工具已關閉',
     weatherLocationLabel: '地點',
-    weatherLocationPlaceholder: '輸入城市或地標',
+    weatherLocationPlaceholder: '搜尋城市',
     weatherApply: '套用並刷新',
     weatherStatusLoading: '正在取得最新天氣…',
     weatherStatusError: '暫時無法取得天氣資料，稍後再試。',

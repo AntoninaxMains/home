@@ -131,7 +131,7 @@ window.TRANSLATIONS['ja'] = {
     weatherStatusOn: '天気ウィジェットが有効になっています',
     weatherStatusOff: '天気ウィジェットは無効です',
     weatherLocationLabel: '場所',
-    weatherLocationPlaceholder: '都市やスポットを入力',
+    weatherLocationPlaceholder: '都市を検索',
     weatherApply: '適用して更新',
     weatherStatusLoading: '最新の天気を取得しています…',
     weatherStatusError: '天気データを取得できません。しばらくしてからもう一度お試しください。',

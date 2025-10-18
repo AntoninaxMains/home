@@ -131,7 +131,7 @@ window.TRANSLATIONS['zh-CN'] = {
     weatherStatusOn: '天气小组件已启用',
     weatherStatusOff: '天气小组件已关闭',
     weatherLocationLabel: '位置',
-    weatherLocationPlaceholder: '输入城市或地标',
+    weatherLocationPlaceholder: '搜索城市',
     weatherApply: '应用并刷新',
     weatherStatusLoading: '正在获取最新天气…',
     weatherStatusError: '暂时无法获取天气数据，请稍后再试。',

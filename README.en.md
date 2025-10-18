@@ -1,199 +1,395 @@
-# Start Page
+# Start Page# Start Page
 
-<div align="center">
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+> A clean, fast, and highly customizable browser start page with multi-language support, weather widget, and intelligent search suggestions.<div align="center">
+
+
+
+[🌐 Live Demo](https://home.zakk.au) | [简体中文](README.zh-CN.md) | [繁體中文](README.md) | [日本語](README.ja.md)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 [![Live Demo](https://img.shields.io/badge/demo-live-success.svg)](https://home.zakk.au)
-[![Languages](https://img.shields.io/badge/languages-4-brightgreen.svg)](#-multilingual-support)
 
-**A beautiful, customizable browser start page with dark mode, bookmark management, and multilingual support.**
+---[![Languages](https://img.shields.io/badge/languages-4-brightgreen.svg)](#-multilingual-support)
 
-[🌐 Live Demo](https://home.zakk.au) • [📖 Documentation](#-features) • [🌍 Languages](#-multilingual-support)
 
-**Read this in other languages:** [简体中文](README.zh-CN.md) | [正體中文](README.zh-TW.md) | [日本語](README.ja.md)
 
-</div>
+## ✨ Key Features**A beautiful, customizable browser start page with dark mode, bookmark management, and multilingual support.**
 
----
+
+
+- 🚀 **Lightning Fast** - All assets loaded locally, zero latency[🌐 Live Demo](https://home.zakk.au) • [📖 Documentation](#-features) • [🌍 Languages](#-multilingual-support)
+
+- 🔍 **Smart Search** - Supports Google, Bing, DuckDuckGo, Baidu with real-time suggestions
+
+- 🎨 **Adaptive Themes** - Auto dark/light mode with custom backgrounds and filters**Read this in other languages:** [简体中文](README.zh-CN.md) | [正體中文](README.zh-TW.md) | [日本語](README.ja.md)
+
+- 📱 **Responsive Design** - Perfect on desktop, tablet, and mobile
+
+- 🌦️ **Weather Widget** - Powered by Open-Meteo API with Microsoft Fluent Emoji animations</div>
+
+- 🔖 **Bookmark Manager** - Category organization, custom icons, drag-to-sort
+
+- 🌍 **Multi-language** - Built-in English, Simplified Chinese, Traditional Chinese, Japanese---
+
+- 💾 **Local Storage** - All data saved in browser, no backend required
 
 ## ✨ Features
 
-### 🎨 Visual Customization
-- **Multiple Backgrounds**: Choose from gradient presets, custom images, or solid colors
-- **Dark Mode**: Elegant dark theme with adjustable depth control
-- **Background Blur**: Customizable blur effects with opacity controls
-- **Background Filters**: Add white or black overlay filters with adjustable opacity
-- **Smooth Animations**: Fluid transitions and micro-interactions throughout the interface
+---
 
-###🔖 Bookmark Management
+### 🎨 Visual Customization
+
+## 🎯 Feature Highlights- **Multiple Backgrounds**: Choose from gradient presets, custom images, or solid colors
+
+- **Dark Mode**: Elegant dark theme with adjustable depth control
+
+### Search & Suggestions- **Background Blur**: Customizable blur effects with opacity controls
+
+- Multiple search engines (Google/Bing/DuckDuckGo/Baidu/Custom)- **Background Filters**: Add white or black overlay filters with adjustable opacity
+
+- Real-time JSONP suggestions with i18n support- **Smooth Animations**: Fluid transitions and micro-interactions throughout the interface
+
+- Smart URL detection and direct navigation
+
+- Search history tracking###🔖 Bookmark Management
+
 - **Category Organization**: Create custom categories to organize your bookmarks
-- **Icon Support**: Use emoji, custom image URLs, or auto-fetch site favicons
-- **Simple Icons Integration**: Search and select from thousands of brand logos
-- **Quick Actions**: Edit and delete bookmarks with hover actions
-- **Drag & Drop**: (Coming soon) Reorder bookmarks easily
+
+### Bookmark System- **Icon Support**: Use emoji, custom image URLs, or auto-fetch site favicons
+
+- Card-based category management- **Simple Icons Integration**: Search and select from thousands of brand logos
+
+- Support for Emoji, image URLs, and auto-fetched favicons- **Quick Actions**: Edit and delete bookmarks with hover actions
+
+- Easy drag-and-drop sorting- **Drag & Drop**: (Coming soon) Reorder bookmarks easily
+
+- Quick add and edit
 
 ### 🔍 Smart Search
-- **Multiple Search Engines**: Google, Bing, DuckDuckGo, Baidu, or custom engine
-- **Search Suggestions**: Real-time suggestions as you type
-- **Search History**: Keep track of your recent searches
-- **Direct URL Opening**: Automatically detect and open URLs directly
-- **Keyboard Shortcuts**: Quick search with Enter key
 
-### 🌍 Multilingual Support
-- **English** (en)
-- **简体中文** (zh-CN) - Simplified Chinese
-- **正體中文** (zh-TW) - Traditional Chinese
-- **日本語** (ja) - Japanese
+### Appearance Customization- **Multiple Search Engines**: Google, Bing, DuckDuckGo, Baidu, or custom engine
+
+- Dark/light theme toggle- **Search Suggestions**: Real-time suggestions as you type
+
+- Custom backgrounds (gradient/image/solid color)- **Search History**: Keep track of your recent searches
+
+- Background blur and filter adjustments- **Direct URL Opening**: Automatically detect and open URLs directly
+
+- Animation effect controls- **Keyboard Shortcuts**: Quick search with Enter key
+
+
+
+### Weather Widget### 🌍 Multilingual Support
+
+- City search and location-based weather- **English** (en)
+
+- Microsoft Fluent Emoji 3D animated icons- **简体中文** (zh-CN) - Simplified Chinese
+
+- 6 CSS animation types (float, rotate, drift, bounce, pulse, fade)- **正體中文** (zh-TW) - Traditional Chinese
+
+- Manual refresh and timestamp display- **日本語** (ja) - Japanese
+
 - Auto-detection based on browser language
-- Easy language switching from settings
 
-### 📱 Responsive Design
+---- Easy language switching from settings
+
+
+
+## 🚀 Quick Start### 📱 Responsive Design
+
 - **Desktop & Mobile**: Fully responsive layout for all screen sizes
-- **Touch-Optimized**: Smooth interactions on mobile devices
-- **FAB Menu**: Floating action button for quick access on mobile
-- **Adaptive UI**: Interface elements adjust to screen size automatically
+
+### Online Usage- **Touch-Optimized**: Smooth interactions on mobile devices
+
+1. Visit [https://home.zakk.au](https://home.zakk.au)- **FAB Menu**: Floating action button for quick access on mobile
+
+2. Set as browser homepage or bookmark it- **Adaptive UI**: Interface elements adjust to screen size automatically
+
+3. All settings auto-save locally
 
 ### 💾 Data Persistence
-- **Local Storage**: All data saved in your browser
-- **No Server Required**: Completely static, works offline
-- **Import/Export**: (Coming soon) Backup and restore your settings
-- **Privacy First**: No data collection or external tracking
 
----
+### Self-Hosting- **Local Storage**: All data saved in your browser
 
-## 🚀 Quick Start
+```bash- **No Server Required**: Completely static, works offline
 
-### Option 1: Direct Use
-1. Visit [https://home.zakk.au](https://home.zakk.au)
-2. Set it as your browser's start page
-3. Start customizing!
+# Clone the repository- **Import/Export**: (Coming soon) Backup and restore your settings
 
-### Option 2: Self-Hosting
-```bash
-# Clone the repository
-git clone https://github.com/AntoninaxMains/home.git
+git clone https://github.com/AntoninaxMains/home.git- **Privacy First**: No data collection or external tracking
 
-# Navigate to the directory
 cd home
 
-# Open index.html in your browser
-# Or serve with any static file server
-python -m http.server 8000
-# Then visit http://localhost:8000
-```
-
-### Option 3: GitHub Pages
-1. Fork this repository
-2. Enable GitHub Pages in repository settings
-3. Set source to `main` branch
-4. Your start page will be available at `https://yourusername.github.io/home`
-
 ---
 
-## 🎯 Usage Guide
+# Start local server
 
-### Adding Bookmarks
-1. Click the **+ Add Bookmark** button in the top right
+python -m http.server 8000## 🚀 Quick Start
+
+# Or using Node.js
+
+npx serve### Option 1: Direct Use
+
+1. Visit [https://home.zakk.au](https://home.zakk.au)
+
+# Open http://localhost:8000 in browser2. Set it as your browser's start page
+
+```3. Start customizing!
+
+
+
+---### Option 2: Self-Hosting
+
+```bash
+
+## 📖 User Guide# Clone the repository
+
+git clone https://github.com/AntoninaxMains/home.git
+
+### Basic Operations
+
+- **Add Bookmark**: Click ➕ button (top-right) or FAB menu# Navigate to the directory
+
+- **Manage Categories**: Click ⚙️ icon on category cardscd home
+
+- **Switch Theme**: Settings → Night Mode
+
+- **Change Background**: Settings → Background Settings# Open index.html in your browser
+
+- **Set Weather**: Settings → Weather → Enter city name# Or serve with any static file server
+
+python -m http.server 8000
+
+### Keyboard Shortcuts# Then visit http://localhost:8000
+
+- `Ctrl/Cmd + K` - Quick search```
+
+- `Esc` - Close modals
+
+- Mobile: FAB floating button for quick actions### Option 3: GitHub Pages
+
+1. Fork this repository
+
+---2. Enable GitHub Pages in repository settings
+
+3. Set source to `main` branch
+
+## 🛠️ Technical Architecture4. Your start page will be available at `https://yourusername.github.io/home`
+
+
+
+### Tech Stack---
+
+- **Frontend**: HTML5 / CSS3 / Vanilla JavaScript
+
+- **Icons**: Lucide Icons + Microsoft Fluent Emoji 3D## 🎯 Usage Guide
+
+- **API**: Open-Meteo (Weather data)
+
+- **Storage**: LocalStorage### Adding Bookmarks
+
+- **Animation**: CSS Keyframes1. Click the **+ Add Bookmark** button in the top right
+
 2. Fill in the bookmark details:
-   - **Name**: Display name for your bookmark
-   - **URL**: Website address
-   - **Icon**: Emoji, image URL, or use auto-fetch
-   - **Category**: Select or create a new category
-3. Click **Save**
 
-### Managing Categories
-1. Click the **Folder** icon in the top right
-2. Create new categories with custom names and icons
-3. Rename or delete existing categories
-4. Bookmarks from deleted categories return to the main list
+### Project Structure   - **Name**: Display name for your bookmark
 
-### Customizing Appearance
-1. Click the **Settings** icon
+```   - **URL**: Website address
+
+home/   - **Icon**: Emoji, image URL, or use auto-fetch
+
+├── index.html          # Main page   - **Category**: Select or create a new category
+
+├── app.css            # Stylesheet (2910+ lines)3. Click **Save**
+
+├── script.js          # Core logic (4156+ lines)
+
+├── i18n/              # Translation files### Managing Categories
+
+│   ├── en.json1. Click the **Folder** icon in the top right
+
+│   ├── zh-CN.json2. Create new categories with custom names and icons
+
+│   ├── zh-TW.json3. Rename or delete existing categories
+
+│   └── ja.json4. Bookmarks from deleted categories return to the main list
+
+└── assets/            # Static resources
+
+    └── weather/       # Weather icons (11 PNGs)### Customizing Appearance
+
+```1. Click the **Settings** icon
+
 2. Choose your preferred:
-   - **Background Type**: Gradient, image, or solid color
-   - **Dark Mode**: Toggle and adjust intensity
-   - **Blur Effects**: Enable and adjust blur depth
-   - **Overlay Filter**: Add white or black filter layer
 
-### Changing Language
+### Core Modules   - **Background Type**: Gradient, image, or solid color
+
+- **Search System**: JSONP multi-engine suggestions, history tracking   - **Dark Mode**: Toggle and adjust intensity
+
+- **Bookmark System**: Category management, icon handling, storage sync   - **Blur Effects**: Enable and adjust blur depth
+
+- **Theme System**: Dark/light toggle, background customization, filter effects   - **Overlay Filter**: Add white or black filter layer
+
+- **Weather System**: City search, API integration, animated icons
+
+- **Internationalization**: i18n system, language detection, dynamic translation### Changing Language
+
 - **Desktop**: Click the globe icon in the top right
-- **Mobile**: Open the FAB menu and select language option
+
+---- **Mobile**: Open the FAB menu and select language option
+
 - **Settings**: Choose from 4 supported languages
 
+## 🌍 Multi-language Support
+
 ---
 
-## 🛠️ Technology Stack
+This project supports the following languages:
 
-- **HTML5**: Semantic markup
-- **CSS3**: Modern styling with CSS custom properties
+- 🇺🇸 **English** (Current)## 🛠️ Technology Stack
+
+- 🇨🇳 [简体中文](README.zh-CN.md)
+
+- 🇹🇼 [繁體中文](README.md)- **HTML5**: Semantic markup
+
+- 🇯🇵 [日本語](README.ja.md)- **CSS3**: Modern styling with CSS custom properties
+
 - **Vanilla JavaScript**: No frameworks, pure ES6+
-- **Lucide Icons**: Beautiful open-source icon library
+
+Thanks to all translation contributors!- **Lucide Icons**: Beautiful open-source icon library
+
 - **Simple Icons**: 2000+ brand logos
-- **LocalStorage API**: Data persistence
 
----
+---- **LocalStorage API**: Data persistence
 
-## 📁 Project Structure
+
+
+## 🎨 Screenshots---
+
+
+
+### Light Theme## 📁 Project Structure
+
+![Light Theme](https://via.placeholder.com/800x450?text=Light+Theme+Screenshot)
 
 ```
-home/
-├── index.html          # Main HTML structure
+
+### Dark Themehome/
+
+![Dark Theme](https://via.placeholder.com/800x450?text=Dark+Theme+Screenshot)├── index.html          # Main HTML structure
+
 ├── app.css            # Styling and themes
-├── script.js          # Application logic
-├── i18n/
+
+### Mobile View├── script.js          # Application logic
+
+![Mobile View](https://via.placeholder.com/400x800?text=Mobile+Screenshot)├── i18n/
+
 │   └── translations.js # Translation files
-├── assets/
+
+---├── assets/
+
 │   └── favicon.svg    # Site favicon
-└── README.md          # Documentation
+
+## 🤝 Contributing└── README.md          # Documentation
+
 ```
+
+Issues and Pull Requests are welcome!
 
 ---
 
-## 🌈 Customization
+### Development Workflow
 
-### Adding Custom Search Engines
-1. Go to Settings → Search Engine
-2. Select "Custom"
+1. Fork this repository## 🌈 Customization
+
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)### Adding Custom Search Engines
+
+4. Push to branch (`git push origin feature/AmazingFeature`)1. Go to Settings → Search Engine
+
+5. Open Pull Request2. Select "Custom"
+
 3. Enter your search URL with `{query}` placeholder
-   - Example: `https://example.com/search?q={query}`
-4. Click "Save and Apply"
 
-### Custom Background Images
-Use any image URL or upload your own:
-- **Unsplash**: `https://source.unsplash.com/1920x1080/?nature`
+### Translation Contributions   - Example: `https://example.com/search?q={query}`
+
+To add a new language:4. Click "Save and Apply"
+
+1. Copy `i18n/en.json` to new language file
+
+2. Translate all strings### Custom Background Images
+
+3. Register new language in `script.js`Use any image URL or upload your own:
+
+4. Add corresponding `README.{lang}.md`- **Unsplash**: `https://source.unsplash.com/1920x1080/?nature`
+
 - **Direct URLs**: Any publicly accessible image URL
-- **Local Upload**: Images stored in browser cache (max 5MB)
 
-### Theme Customization
+---- **Local Upload**: Images stored in browser cache (max 5MB)
+
+
+
+## 📄 License### Theme Customization
+
 Edit CSS custom properties in `app.css`:
-```css
+
+This project is licensed under the [MIT License](LICENSE).```css
+
 :root {
-  --primary: #4c6ef5;
+
+---  --primary: #4c6ef5;
+
   --primary-dark: #364fc7;
-  --text: #1a202c;
+
+## 🙏 Acknowledgments  --text: #1a202c;
+
   --text-subtle: #718096;
-  /* Add your custom colors */
-}
-```
 
----
+### Open Source Projects  /* Add your custom colors */
 
-## 🐛 Known Issues & Limitations
+- [Lucide Icons](https://lucide.dev/) - Beautiful icon library}
+
+- [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji) - Weather animated icons```
+
+- [Open-Meteo](https://open-meteo.com/) - Free weather API
+
+- [Simple Icons](https://simpleicons.org/) - Brand icons---
+
+
+
+### Community## 🐛 Known Issues & Limitations
+
+Thanks to everyone who starred, forked, and contributed to this project!
 
 - Images uploaded to browser cache have a 5MB size limit
-- Search suggestions require internet connection
+
+---- Search suggestions require internet connection
+
 - No cross-browser sync (data stored locally per browser)
-- Simple Icons library may take a moment to load
 
----
+## 📮 Contact- Simple Icons library may take a moment to load
 
-## 🗺️ Roadmap
 
-- [ ] Drag & drop bookmark reordering
+
+- 🌐 Website: [https://home.zakk.au](https://home.zakk.au)---
+
+- 💻 GitHub: [AntoninaxMains/home](https://github.com/AntoninaxMains/home)
+
+- 📧 Report Issues: [Issues](https://github.com/AntoninaxMains/home/issues)## 🗺️ Roadmap
+
+
+
+---- [ ] Drag & drop bookmark reordering
+
 - [ ] Import/Export settings and bookmarks
-- [ ] More search engine presets
-- [ ] Custom CSS themes
-- [ ] Cloud sync option (optional)
+
+<p align="center">- [ ] More search engine presets
+
+  Made with ❤️ by <a href="https://github.com/AntoninaxMains">AntoninaxMains</a>- [ ] Custom CSS themes
+
+</p>- [ ] Cloud sync option (optional)
+
 - [ ] Weather widget
 - [ ] Quick notes feature
 - [ ] Keyboard shortcuts customization
