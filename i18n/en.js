@@ -131,7 +131,7 @@ window.TRANSLATIONS['en'] = {
     weatherStatusOn: 'Weather widget enabled',
     weatherStatusOff: 'Weather widget disabled',
     weatherLocationLabel: 'Location',
-    weatherLocationPlaceholder: 'City or place name',
+    weatherLocationPlaceholder: 'Search city',
     weatherApply: 'Apply & refresh',
     weatherStatusLoading: 'Fetching the latest weather…',
     weatherStatusError: 'Weather data unavailable. Try again later.',

@@ -1554,6 +1554,15 @@ function displayWeatherSuggestions(locations) {
     
     container.hidden = false;
     
+    // Position the dropdown relative to the input
+    const input = document.getElementById('weatherLocationSearchInput');
+    if (input) {
+        const rect = input.getBoundingClientRect();
+        container.style.top = `${rect.bottom + 6}px`;
+        container.style.left = `${rect.left}px`;
+        container.style.width = `${rect.width}px`;
+    }
+    
     // Re-initialize Lucide icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();

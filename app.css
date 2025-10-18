@@ -1421,21 +1421,19 @@ body.dark-mode .weather-modal-info {
 .weather-location-search {
   position: relative;
   width: 100%;
-  z-index: 1000;
+  z-index: 100;
 }
 
 .weather-location-suggestions {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
+  position: fixed;
   background: #fff;
   border: 1px solid rgba(76, 110, 245, 0.2);
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
-  max-height: 240px;
+  max-height: 280px;
   overflow-y: auto;
-  z-index: 10000;
+  z-index: 99999;
+  min-width: 280px;
 }
 
 .weather-location-suggestions[hidden] {
@@ -1959,6 +1957,12 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   color: rgba(232, 236, 255, 0.9);
 }
 
+.dark-mode .settings-toggle:hover {
+  background: rgba(148, 163, 255, 0.22);
+  border-color: rgba(148, 163, 255, 0.35);
+  box-shadow: none;
+}
+
 .dark-mode .settings-toggle__icon {
   background: rgba(148, 163, 255, 0.2);
   color: #d6dcff;
@@ -1966,6 +1970,11 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 
 .dark-mode .settings-toggle.is-active {
   background: linear-gradient(135deg, rgba(148, 163, 255, 0.92), rgba(92, 107, 192, 0.92));
+  box-shadow: 0 12px 24px rgba(76, 110, 245, 0.3);
+}
+
+.dark-mode .settings-toggle.is-active:hover {
+  box-shadow: 0 16px 32px rgba(76, 110, 245, 0.4);
 }
 
 .dark-mode .settings-toggle.is-active .settings-toggle__icon {
