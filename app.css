@@ -788,7 +788,8 @@ body.dark-mode .engine-option.active {
 
 body.dark-mode .search-input-wrapper {
   background: rgba(17, 24, 39, 0.88);
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(174, 189, 255, 0.28);
+  box-shadow: 0 26px 52px rgba(0, 0, 0, 0.55);
 }
 
 body.dark-mode #searchInput {
@@ -806,6 +807,10 @@ body.dark-mode .search-action.secondary {
 
 body.dark-mode .search-action:hover {
   box-shadow: 0 14px 24px rgba(0, 0, 0, 0.55);
+}
+
+body.dark-mode .engine-selector--inline::after {
+  background: rgba(174, 189, 255, 0.4);
 }
 
 body.dark-mode .custom-engine {
