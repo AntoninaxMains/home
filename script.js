@@ -973,6 +973,18 @@ function initializeSettingsNavigation() {
 
     const handleScrollShadow = () => {
         content.classList.toggle('is-scrolled', content.scrollTop > 8);
+        
+        // Check if at bottom and update active nav
+        const scrollTop = content.scrollTop;
+        const contentHeight = content.scrollHeight;
+        const visibleHeight = content.clientHeight;
+        
+        if (scrollTop + visibleHeight >= contentHeight - 20) {
+            const lastSection = sections[sections.length - 1];
+            if (lastSection) {
+                setActive(lastSection.key);
+            }
+        }
     };
 
     settingsNavObserver = new IntersectionObserver((entries) => {
@@ -987,17 +999,29 @@ function initializeSettingsNavigation() {
         }
 
         const scrollTop = content.scrollTop;
+        const contentHeight = content.scrollHeight;
+        const visibleHeight = content.clientHeight;
+        
+        // Check if scrolled to bottom
+        if (scrollTop + visibleHeight >= contentHeight - 50) {
+            const lastSection = sections[sections.length - 1];
+            if (lastSection) {
+                setActive(lastSection.key);
+                return;
+            }
+        }
+        
         const fallback = sections
             .slice()
             .reverse()
-            .find(item => scrollTop >= item.section.offsetTop - 32);
+            .find(item => scrollTop >= item.section.offsetTop - 80);
         if (fallback) {
             setActive(fallback.key);
         }
     }, {
         root: content,
-        threshold: 0.35,
-        rootMargin: '-12% 0px -50% 0px'
+        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
+        rootMargin: '-10% 0px -40% 0px'
     });
 
     sections.forEach(({ section }) => settingsNavObserver.observe(section));

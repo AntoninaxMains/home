@@ -26,6 +26,8 @@
   align-self: flex-start;
   pointer-events: auto;
   z-index: 10;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 
 .settings-nav__item {
@@ -88,19 +90,19 @@ body.dark-mode .settings-nav__item.is-active {
     flex-direction: row;
     flex-wrap: wrap;
     position: relative;
-    gap: 8px;
-    padding: 10px;
+    gap: 6px;
+    padding: 8px;
     z-index: 20;
   }
   
   .settings-nav__item {
     width: auto;
-    flex: 1 1 calc(33.333% - 6px);
-    min-width: 100px;
-    padding: 12px 8px;
+    flex: 1 1 calc(33.333% - 4px);
+    min-width: 90px;
+    padding: 8px 6px;
     justify-content: center;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     position: relative;
     z-index: 21;
     pointer-events: auto;
@@ -109,15 +111,20 @@ body.dark-mode .settings-nav__item.is-active {
   
   .settings-nav__label {
     display: block;
-    font-size: 11px;
+    font-size: 10px;
     text-align: center;
     pointer-events: none;
+    line-height: 1.2;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   
   .settings-nav__icon {
     margin: 0 auto;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     pointer-events: none;
   }
 }
@@ -936,7 +943,7 @@ body.dark-mode .suggestion-item--skeleton {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 0;
   cursor: pointer;
   width: 100%;
 }
@@ -944,7 +951,7 @@ body.dark-mode .suggestion-item--skeleton {
 .weather-tile__icon {
   width: 36px;
   height: 36px;
-  margin: 10px auto 8px;
+  margin: 10px auto 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -965,6 +972,37 @@ body.dark-mode .suggestion-item--skeleton {
   color: #4CACF0;
 }
 
+/* Weather icon colors for different conditions */
+.weather-tile__icon [data-weather-icon] i[data-lucide="sun"] {
+  color: #FDB022;
+}
+
+.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-sun"] {
+  color: #4CACF0;
+}
+
+.weather-tile__icon [data-weather-icon] i[data-lucide="cloud"],
+.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-fog"] {
+  color: #94A3B8;
+}
+
+.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-rain"],
+.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-drizzle"] {
+  color: #60A5FA;
+}
+
+.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-snow"] {
+  color: #E0F2FE;
+}
+
+.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-lightning"] {
+  color: #FBBF24;
+}
+
+.weather-tile__icon [data-weather-icon] i[data-lucide="wind"] {
+  color: #A5B4FC;
+}
+
 .weather-tile__icon [data-weather-icon].is-rotating {
   animation: weatherSpin 2s linear infinite;
 }
@@ -980,6 +1018,7 @@ body.dark-mode .suggestion-item--skeleton {
   font-size: 14px;
   margin: 0;
   text-align: center;
+  line-height: 1.4;
 }
 
 .weather-tile__location {
@@ -1012,6 +1051,37 @@ body.dark-mode .bookmark-item--weather .bookmark-actions__btn {
 body.dark-mode .bookmark-item--weather .bookmark-actions__btn:hover {
   background: linear-gradient(135deg, rgba(148, 163, 255, 0.8), rgba(148, 163, 255, 0.6));
   color: #fff;
+}
+
+/* Dark mode weather icon colors */
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="sun"] {
+  color: #FCD34D;
+}
+
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-sun"] {
+  color: #60A5FA;
+}
+
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud"],
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-fog"] {
+  color: #CBD5E1;
+}
+
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-rain"],
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-drizzle"] {
+  color: #7DD3FC;
+}
+
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-snow"] {
+  color: #F0F9FF;
+}
+
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-lightning"] {
+  color: #FDE047;
+}
+
+body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="wind"] {
+  color: #C7D2FE;
 }
 
 body.dark-mode .bookmark-empty {
