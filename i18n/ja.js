@@ -52,6 +52,7 @@ window.TRANSLATIONS['ja'] = {
     manageCategoriesTitle: 'カテゴリ管理',
     categoriesDesc: 'カテゴリを作成してブックマークを整理。カテゴリ削除時、ブックマークはメインリストに戻ります。',
     noCategories: 'カテゴリがありません',
+    categoryBookmarkCount: 'ブックマーク {count} 件',
     addCategoryBtn: '+ 追加',
     deleteCategory: '削除',
     // 設定
