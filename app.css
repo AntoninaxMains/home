@@ -28,6 +28,15 @@ body.dark-mode {
   --text-subtle: rgba(208, 214, 255, 0.72);
   --border: rgba(255, 255, 255, 0.08);
   --shadow: 0 26px 60px rgba(5, 9, 28, 0.55);
+  background-color: #0b1120;
+}
+
+.dark-mode .background-layer {
+  background: linear-gradient(160deg, rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.45));
+}
+
+.dark-mode .background-overlay {
+  background: var(--overlay-color, rgba(8, 12, 24, 0.35));
 }
 
 html, body { height: 100%; }
@@ -36,7 +45,10 @@ body {
   font-family: 'Poppins', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text);
   background: url('assets/default-background.webp') center/cover fixed no-repeat;
+  background-color: #f3f4ff;
+  background-attachment: fixed;
   line-height: 1.6;
+  min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -44,10 +56,10 @@ body.modal-open {
   overflow: hidden;
 }
 
-.background-layer { position: fixed; inset: 0; background: transparent; backdrop-filter: blur(var(--backdrop-blur)); z-index: -1; }
+.background-layer { position: fixed; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06)); backdrop-filter: blur(var(--backdrop-blur)); z-index: -1; pointer-events: none; transition: background 0.4s ease; }
 
 /* Overlay that can be white/black with adjustable opacity */
-.background-overlay { position: fixed; inset: 0; pointer-events: none; background: var(--overlay-color, transparent); z-index: 0; }
+.background-overlay { position: fixed; inset: 0; pointer-events: none; background: var(--overlay-color, transparent); z-index: 0; transition: background 0.3s ease; }
 
 /* remove muted styling - show icons clearly */
 
@@ -75,6 +87,17 @@ body.modal-open {
 .weather-widget__meta { font-size: 12px; opacity: 0.75; display: flex; gap: 10px; flex-wrap: wrap; }
 .weather-widget__meta span { display: inline-flex; align-items: center; gap: 4px; }
 .weather-widget.is-loading .weather-widget__icon { animation: pulseGlow 1.2s ease-in-out infinite; }
+
+.dark-mode .weather-widget {
+  background: rgba(24, 32, 52, 0.82);
+  border: 1px solid rgba(140, 158, 255, 0.2);
+  box-shadow: 0 32px 70px rgba(2, 6, 20, 0.75);
+}
+
+.dark-mode .weather-widget__icon {
+  background: rgba(140, 158, 255, 0.22);
+  border-color: rgba(140, 158, 255, 0.32);
+}
 
 @keyframes pulseGlow {
   0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0.18); }
@@ -325,7 +348,210 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 }
 
 /* Settings modal */
-.settings-body { background: linear-gradient(180deg, rgba(76, 110, 245, 0.08) 0%, rgba(76, 110, 245, 0.04) 45%, transparent 100%); border-radius: 0 0 16px 16px; padding-top: 24px; padding-bottom: 28px; gap: 28px; }
+.settings-body {
+  background: linear-gradient(180deg, rgba(76, 110, 245, 0.08) 0%, rgba(76, 110, 245, 0.04) 45%, transparent 100%);
+  border-radius: 0 0 16px 16px;
+  padding: 24px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.settings-shell {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
+}
+
+.settings-sidebar {
+  flex: 0 0 240px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  height: fit-content;
+  position: sticky;
+  top: 0;
+  max-height: calc(75vh - 32px);
+  overflow-y: auto;
+}
+
+.settings-sidebar__header h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.settings-sidebar__header p {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-subtle);
+  margin: 0;
+}
+
+.settings-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-subtle);
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+  text-align: left;
+}
+
+.settings-sidebar__link .settings-sidebar__icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 10px;
+  background: rgba(76, 110, 245, 0.12);
+  display: grid;
+  place-items: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.settings-sidebar__link:hover,
+.settings-sidebar__link:focus-visible {
+  background: rgba(76, 110, 245, 0.12);
+  color: var(--text);
+  outline: none;
+}
+
+.settings-sidebar__link.active {
+  background: linear-gradient(135deg, rgba(76, 110, 245, 0.18), rgba(76, 110, 245, 0.1));
+  box-shadow: 0 14px 30px rgba(76, 110, 245, 0.22);
+  color: var(--text);
+}
+
+.settings-sidebar__link.active .settings-sidebar__icon {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+}
+
+.settings-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  min-height: 0;
+}
+
+.settings-content.is-scrolled::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  height: 12px;
+  display: block;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.12), transparent);
+  z-index: 1;
+}
+
+.dark-mode .settings-sidebar {
+  background: rgba(24, 28, 46, 0.9);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 26px 60px rgba(2, 4, 12, 0.65);
+}
+
+.dark-mode .settings-sidebar__header h4 {
+  color: #e8ecff;
+}
+
+.dark-mode .settings-sidebar__header p {
+  color: rgba(208, 214, 255, 0.72);
+}
+
+.dark-mode .settings-sidebar__link {
+  color: rgba(208, 214, 255, 0.75);
+}
+
+.dark-mode .settings-sidebar__link .settings-sidebar__icon {
+  background: rgba(140, 158, 255, 0.18);
+  color: #aebdff;
+}
+
+.dark-mode .settings-sidebar__link:hover,
+.dark-mode .settings-sidebar__link:focus-visible {
+  background: rgba(140, 158, 255, 0.16);
+  color: #fff;
+}
+
+.dark-mode .settings-sidebar__link.active {
+  background: linear-gradient(135deg, rgba(92, 107, 192, 0.55), rgba(76, 110, 245, 0.32));
+  color: #fff;
+}
+
+.dark-mode .settings-sidebar__link.active .settings-sidebar__icon {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+}
+
+.dark-mode .settings-content.is-scrolled::before {
+  background: linear-gradient(180deg, rgba(8, 12, 24, 0.32), transparent);
+}
+
+@media (max-width: 1023px) {
+  .settings-shell {
+    flex-direction: column;
+  }
+
+  .settings-sidebar {
+    flex: none;
+    width: 100%;
+    position: static;
+    max-height: none;
+  }
+
+  .settings-sidebar__nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .settings-sidebar__link {
+    flex: 1 1 calc(50% - 10px);
+  }
+
+  .settings-content {
+    padding-right: 0;
+    max-height: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .settings-sidebar {
+    padding: 16px;
+  }
+
+  .settings-sidebar__nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+  }
+
+  .settings-sidebar__link {
+    flex: 0 0 auto;
+    min-width: 160px;
+  }
+}
+
 .settings-layout { display: grid; grid-template-columns: 1fr; gap: 20px; animation: settingsFadeIn 0.4s ease both; }
 
 @media (min-width: 720px) {

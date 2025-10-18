@@ -31,6 +31,8 @@ let weatherState = {
     lastUpdated: null
 };
 let weatherRequestToken = 0;
+let settingsNavObserver = null;
+let settingsNavCleanup = null;
 
 function logDebug(message) {
     try {
@@ -427,6 +429,7 @@ const remoteSuggestCache = new Map();
 let remoteSuggestCancel = null;
 let latestSuggestQueryToken = 0;
 let remoteSuggestCallbackSeed = 0;
+let remoteSuggestAbortController = null;
 
 const ICON_ALIAS_OVERRIDES = {
     outlook: 'microsoftoutlook',
@@ -891,6 +894,120 @@ function saveSettings() {
     }
 
     closeModal('settingsModal');
+}
+
+function prepareSettingsModal() {
+    if (typeof settingsNavCleanup === 'function') {
+        try {
+            settingsNavCleanup();
+        } catch (error) {
+            console.warn('Failed to cleanup previous settings nav state:', error);
+        }
+    }
+
+    loadSettings();
+
+    const content = document.getElementById('settingsContent');
+    if (content) {
+        content.scrollTo({ top: 0, behavior: 'auto' });
+        content.classList.remove('is-scrolled');
+    }
+
+    window.requestAnimationFrame(() => {
+        initializeSettingsNavigation();
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    });
+}
+
+function initializeSettingsNavigation() {
+    const content = document.getElementById('settingsContent');
+    const navLinks = Array.from(document.querySelectorAll('[data-settings-nav]'));
+    if (!content || !navLinks.length) {
+        return;
+    }
+
+    const sections = navLinks
+        .map(link => {
+            const key = link.dataset.settingsNav;
+            const section = document.querySelector(`.settings-card[data-settings-area="${key}"]`);
+            return section ? { key, link, section } : null;
+        })
+        .filter(Boolean);
+
+    if (!sections.length) {
+        return;
+    }
+
+    const setActive = (key) => {
+        navLinks.forEach(link => link.classList.toggle('active', link.dataset.settingsNav === key));
+    };
+
+    navLinks.forEach(link => {
+        if (link.dataset.bound === '1') return;
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const matched = sections.find(item => item.link === link);
+            if (!matched) return;
+            const offset = matched.section.offsetTop;
+            content.scrollTo({
+                top: Math.max(0, offset - 12),
+                behavior: 'smooth'
+            });
+        });
+        link.dataset.bound = '1';
+    });
+
+    if (settingsNavObserver) {
+        settingsNavObserver.disconnect();
+        settingsNavObserver = null;
+    }
+
+    const handleScrollShadow = () => {
+        content.classList.toggle('is-scrolled', content.scrollTop > 8);
+    };
+
+    settingsNavObserver = new IntersectionObserver((entries) => {
+        const visible = entries
+            .filter(entry => entry.isIntersecting)
+            .sort((a, b) => a.target.offsetTop - b.target.offsetTop);
+
+        if (visible.length) {
+            const key = visible[0].target.getAttribute('data-settings-area');
+            if (key) setActive(key);
+            return;
+        }
+
+        const scrollTop = content.scrollTop;
+        const fallback = sections
+            .slice()
+            .reverse()
+            .find(item => scrollTop >= item.section.offsetTop - 32);
+        if (fallback) {
+            setActive(fallback.key);
+        }
+    }, {
+        root: content,
+        threshold: 0.35,
+        rootMargin: '-12% 0px -50% 0px'
+    });
+
+    sections.forEach(({ section }) => settingsNavObserver.observe(section));
+
+    setActive(sections[0].key);
+    handleScrollShadow();
+    content.addEventListener('scroll', handleScrollShadow);
+
+    settingsNavCleanup = () => {
+        content.removeEventListener('scroll', handleScrollShadow);
+        if (settingsNavObserver) {
+            settingsNavObserver.disconnect();
+            settingsNavObserver = null;
+        }
+        settingsNavCleanup = null;
+        navLinks.forEach(link => link.classList.remove('active'));
+    };
 }
 
 function handleResetSettings(event) {
@@ -2291,6 +2408,20 @@ const suggestionProviders = {
                 url: `https://suggestqueries.google.com/complete/search?${params.toString()}`,
                 cacheKey: `${query.toLowerCase()}|${locale.hl || ''}|${locale.gl || ''}`
             };
+        },
+        buildFetchRequest(query, lang) {
+            const locale = getGoogleSuggestionLocale(lang);
+            const params = new URLSearchParams({
+                client: 'firefox',
+                q: query
+            });
+            if (locale.hl) params.set('hl', locale.hl);
+            if (locale.gl) params.set('gl', locale.gl);
+            return {
+                url: `https://suggestqueries.google.com/complete/search?${params.toString()}`,
+                cacheKey: `${query.toLowerCase()}|${locale.hl || ''}|${locale.gl || ''}`,
+                responseType: 'json'
+            };
         }
     },
     bing: {
@@ -2307,6 +2438,19 @@ const suggestionProviders = {
                 url: `https://api.bing.com/osjson.aspx?${params.toString()}`,
                 cacheKey: `${query.toLowerCase()}|${locale.language || ''}|${locale.market || ''}`
             };
+        },
+        buildFetchRequest(query, lang) {
+            const locale = getBingSuggestionLocale(lang);
+            const params = new URLSearchParams({
+                query
+            });
+            if (locale.language) params.set('language', locale.language);
+            if (locale.market) params.set('market', locale.market);
+            return {
+                url: `https://api.bing.com/osjson.aspx?${params.toString()}`,
+                cacheKey: `${query.toLowerCase()}|${locale.language || ''}|${locale.market || ''}`,
+                responseType: 'json'
+            };
         }
     },
     duckduckgo: {
@@ -2322,6 +2466,26 @@ const suggestionProviders = {
             return {
                 url: `https://duckduckgo.com/ac/?${params.toString()}`,
                 cacheKey: `${query.toLowerCase()}|${locale.kl || ''}|${locale.kad || ''}`
+            };
+        },
+        buildFetchRequest(query, lang) {
+            const locale = getDuckDuckGoLocale(lang);
+            const params = new URLSearchParams({
+                q: query,
+                type: 'list'
+            });
+            if (locale.kl) params.set('kl', locale.kl);
+            if (locale.kad) params.set('kad', locale.kad);
+            return {
+                url: `https://duckduckgo.com/ac/?${params.toString()}`,
+                cacheKey: `${query.toLowerCase()}|${locale.kl || ''}|${locale.kad || ''}`,
+                responseType: 'json',
+                parser(payload) {
+                    if (Array.isArray(payload)) {
+                        return normalizeSuggestionPayload(payload.map(item => (typeof item === 'string' ? item : item?.phrase || item?.text || '')));
+                    }
+                    return normalizeSuggestionPayload(payload);
+                }
             };
         }
     },
@@ -2402,20 +2566,98 @@ async function fetchRemoteSuggestions(query) {
         return [];
     }
 
+    if (remoteSuggestAbortController) {
+        try {
+            remoteSuggestAbortController.abort();
+        } catch (err) {
+            console.warn('Abort previous suggest fetch failed:', err);
+        }
+        remoteSuggestAbortController = null;
+    }
+
+    if (remoteSuggestCancel) {
+        try {
+            remoteSuggestCancel();
+        } catch (err) {
+            console.warn('Cancel previous JSONP suggest failed:', err);
+        }
+        remoteSuggestCancel = null;
+    }
+
+    const abortController = new AbortController();
+    remoteSuggestAbortController = abortController;
+
     const providers = getSuggestionProviderOrder();
-    for (const providerKey of providers) {
-        const suggestions = await requestSuggestionsFromProvider(providerKey, query);
-        if (Array.isArray(suggestions) && suggestions.length > 0) {
-            return suggestions;
+    try {
+        for (const providerKey of providers) {
+            try {
+                const suggestions = await requestSuggestionsFromProvider(providerKey, query, abortController);
+                if (Array.isArray(suggestions) && suggestions.length > 0) {
+                    return suggestions;
+                }
+            } catch (error) {
+                if (error?.name === 'AbortError') {
+                    logDebug('Suggestion request aborted');
+                    return [];
+                }
+                console.warn(`Suggestion provider ${providerKey} failed:`, error);
+            }
+        }
+    } finally {
+        if (remoteSuggestAbortController === abortController) {
+            remoteSuggestAbortController = null;
         }
     }
 
     return [];
 }
 
-function requestSuggestionsFromProvider(providerKey, query) {
+function requestSuggestionsFromProvider(providerKey, query, abortController) {
     const provider = suggestionProviders[providerKey];
-    if (!provider || typeof provider.buildRequest !== 'function') {
+    if (!provider) {
+        return Promise.resolve([]);
+    }
+
+    const fetchRequest = typeof provider.buildFetchRequest === 'function'
+        ? provider.buildFetchRequest(query, currentLanguage)
+        : null;
+
+    if (fetchRequest?.url) {
+        const { url, cacheKey, responseType = 'json', parser, options = {} } = fetchRequest;
+        const fullCacheKey = `fetch|${providerKey}|${cacheKey || query.toLowerCase()}`;
+        if (remoteSuggestCache.has(fullCacheKey)) {
+            return Promise.resolve(remoteSuggestCache.get(fullCacheKey));
+        }
+
+        return fetch(url, {
+            method: options.method || 'GET',
+            mode: options.mode || 'cors',
+            credentials: options.credentials || 'omit',
+            headers: options.headers || {},
+            signal: abortController?.signal
+        }).then(async response => {
+            if (!response.ok) {
+                throw new Error(`HTTP_${response.status}`);
+            }
+            const payload = responseType === 'text' ? await response.text() : await response.json();
+            const parserFn = typeof parser === 'function'
+                ? parser
+                : (typeof provider.parse === 'function' ? provider.parse : extractRemoteSuggestions);
+            const suggestions = parserFn(payload, query, SEARCH_SUGGESTION_LIMIT) || [];
+            if (Array.isArray(suggestions) && suggestions.length) {
+                remoteSuggestCache.set(fullCacheKey, suggestions);
+            }
+            return suggestions;
+        }).catch(error => {
+            if (error?.name === 'AbortError') {
+                throw error;
+            }
+            logDebug(`Suggestion fetch failed for ${providerKey}: ${error?.message || error}`);
+            return [];
+        });
+    }
+
+    if (typeof provider.buildRequest !== 'function') {
         return Promise.resolve([]);
     }
 
@@ -3180,6 +3422,10 @@ function openModal(modalId) {
     modal.classList.add('show');
     document.body.classList.add('modal-open');
 
+    if (modalId === 'settingsModal') {
+        prepareSettingsModal();
+    }
+
     const focusable = modal.querySelector('[data-autofocus], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
     if (focusable) {
         window.setTimeout(() => {
@@ -3197,6 +3443,15 @@ function closeModal(modalId) {
     if (!modal) return;
 
     modal.classList.remove('show');
+
+    if (modalId === 'settingsModal' && typeof settingsNavCleanup === 'function') {
+        try {
+            settingsNavCleanup();
+        } catch (error) {
+            console.warn('Settings navigation cleanup failed:', error);
+        }
+    }
+
     if (!document.querySelector('.modal.show')) {
         document.body.classList.remove('modal-open');
     }
@@ -3395,30 +3650,6 @@ function ensureIconLibrary() {
 
     return iconLibraryPromise;
 }
-
-// 全域錯誤監聽器
-window.addEventListener('error', (event) => {
-    const { message, filename, lineno, colno, error: err } = event;
-    let errorMsg = `
-        <strong>發生錯誤：</strong> ${escapeHtml(message)}<br>
-        <strong>檔案：</strong> ${escapeHtml(filename)}<br>
-        <strong>行號：</strong> ${escapeHtml(lineno)}<br>
-        <strong>欄號：</strong> ${escapeHtml(colno)}<br>
-    `;
-    
-    // 如果有錯誤物件，顯示堆疊追蹤
-    if (err && err.stack) {
-        const stackTrace = err.stack
-            .split('\n')
-            .map(line => `<div>${escapeHtml(line.trim())}</div>`)
-            .join('');
-        errorMsg += `<div><strong>堆疊追蹤：</strong></div>${stackTrace}`;
-    }
-    
-    // 顯示錯誤訊息的 UI 實作
-    console.error('全域錯誤:', errorMsg);
-    alert('發生錯誤，請檢查控制台以獲取詳細資訊');
-});
 
 // 暴露全局函數
 window.openBookmarkModal = openBookmarkModal;

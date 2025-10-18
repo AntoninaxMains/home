@@ -56,6 +56,8 @@ window.TRANSLATIONS['ja'] = {
     deleteCategory: '削除',
     // 設定
     settingsTitle: '設定',
+    settingsNavTitle: 'セクション一覧',
+    settingsNavHint: 'よく使う設定へすぐにジャンプできます',
     searchEngineSection: '検索エンジン',
     engineGoogle: 'Google',
     engineBing: 'Bing',

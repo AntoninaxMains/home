@@ -56,6 +56,8 @@ window.TRANSLATIONS['en'] = {
     deleteCategory: 'Delete',
     // Settings
     settingsTitle: 'Settings',
+    settingsNavTitle: 'Navigation',
+    settingsNavHint: 'Jump quickly to a section you need',
     searchEngineSection: 'Search Engine',
     engineGoogle: 'Google',
     engineBing: 'Bing',

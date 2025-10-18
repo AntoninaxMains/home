@@ -56,6 +56,8 @@ window.TRANSLATIONS['zh-CN'] = {
     deleteCategory: '删除',
     // 设置
     settingsTitle: '设置',
+    settingsNavTitle: '设置导览',
+    settingsNavHint: '快速跳转到常用区域',
     searchEngineSection: '搜索引擎',
     engineGoogle: 'Google',
     engineBing: 'Bing',

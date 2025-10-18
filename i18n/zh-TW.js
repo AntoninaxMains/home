@@ -56,6 +56,8 @@ window.TRANSLATIONS['zh-TW'] = {
     deleteCategory: '刪除',
     // 設定
     settingsTitle: '設定',
+    settingsNavTitle: '設定導覽',
+    settingsNavHint: '快速跳到常用區域',
     searchEngineSection: '搜尋引擎',
     engineGoogle: 'Google',
     engineBing: 'Bing',

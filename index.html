@@ -162,7 +162,41 @@
                     <button class="modal-close" data-close="settingsModal" aria-label="關閉設定">×</button>
                 </header>
                 <div class="modal-body settings-body">
-                    <div class="settings-layout">
+                    <div class="settings-shell">
+                        <aside class="settings-sidebar" id="settingsSidebar">
+                            <div class="settings-sidebar__header">
+                                <h4 data-i18n="settingsNavTitle">設定導覽</h4>
+                                <p data-i18n="settingsNavHint">快速跳到常用區域</p>
+                            </div>
+                            <nav class="settings-sidebar__nav" aria-label="Settings navigation">
+                                <button type="button" class="settings-sidebar__link active" data-settings-nav="dark">
+                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
+                                    <span data-i18n="darkModeSection">夜間模式</span>
+                                </button>
+                                <button type="button" class="settings-sidebar__link" data-settings-nav="background">
+                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="palette"></i></span>
+                                    <span data-i18n="backgroundSection">背景設定</span>
+                                </button>
+                                <button type="button" class="settings-sidebar__link" data-settings-nav="appearance">
+                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="image"></i></span>
+                                    <span data-i18n="appearanceSection">顯示效果（外觀）</span>
+                                </button>
+                                <button type="button" class="settings-sidebar__link" data-settings-nav="weather">
+                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></span>
+                                    <span data-i18n="weatherSection">天氣</span>
+                                </button>
+                                <button type="button" class="settings-sidebar__link" data-settings-nav="developer">
+                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="terminal-square"></i></span>
+                                    <span data-i18n="developerSection">開發者工具</span>
+                                </button>
+                                <button type="button" class="settings-sidebar__link" data-settings-nav="actions">
+                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="wand-2"></i></span>
+                                    <span data-i18n="cleanupSectionTitle">維護與重置</span>
+                                </button>
+                            </nav>
+                        </aside>
+                        <div class="settings-content" id="settingsContent" tabindex="0">
+                            <div class="settings-layout">
                         <!-- 夜間模式 -->
                         <section class="settings-card settings-card--dark" data-settings-area="dark">
                             <header class="settings-card__header">
@@ -358,6 +392,8 @@
                                 </div>
                             </div>
                         </section>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <footer class="modal-footer">
