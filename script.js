@@ -1219,17 +1219,21 @@ function handleClearSearchHistory(event) {
 
 function updateToggleButton(button, isActive) {
     if (!button) return;
-    const labels = button.dataset.toggleLabels ? button.dataset.toggleLabels.split(',').map(label => label && label.trim()) : [];
-    const offKey = labels[0];
-    const onKey = labels[1] || labels[0];
-    const labelKey = isActive ? onKey : offKey;
-    const labelText = labelKey ? t(labelKey) : '';
-
+    
+    // 只在有標籤元素時更新文字（向後兼容）
     const labelEl = button.querySelector('.settings-toggle__label');
-    if (labelEl) labelEl.textContent = labelText;
-    if (labelText) {
-        button.setAttribute('aria-label', labelText);
-        button.setAttribute('title', labelText);
+    if (labelEl) {
+        const labels = button.dataset.toggleLabels ? button.dataset.toggleLabels.split(',').map(label => label && label.trim()) : [];
+        const offKey = labels[0];
+        const onKey = labels[1] || labels[0];
+        const labelKey = isActive ? onKey : offKey;
+        const labelText = labelKey ? t(labelKey) : '';
+        
+        labelEl.textContent = labelText;
+        if (labelText) {
+            button.setAttribute('aria-label', labelText);
+            button.setAttribute('title', labelText);
+        }
     }
 
     button.setAttribute('aria-pressed', isActive ? 'true' : 'false');

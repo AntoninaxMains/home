@@ -130,10 +130,12 @@
                             </header>
                             <div class="settings-card__content">
                                 <div class="settings-field">
-                                    <button id="darkModeToggleBtn" type="button" class="settings-toggle" data-toggle-labels="enableDarkMode,disableDarkMode" aria-pressed="false" aria-controls="darkModeSettings">
-                                        <span class="settings-toggle__state" aria-hidden="true"></span>
-                                        <span class="settings-toggle__label"></span>
-                                    </button>
+                                    <div class="settings-field__header">
+                                        <label data-i18n="darkMode">夜間模式</label>
+                                        <button id="darkModeToggleBtn" type="button" class="settings-toggle settings-toggle--no-label" aria-pressed="false" aria-controls="darkModeSettings" aria-label="切換夜間模式">
+                                            <span class="settings-toggle__state" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="settings-field hidden" id="darkModeSettings">
                                     <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
@@ -194,9 +196,8 @@
                                 <div class="settings-field" id="blurControls">
                                     <div class="settings-field__header">
                                         <label for="blurRange" data-i18n="backgroundBlur">背景模糊</label>
-                                        <button id="blurToggleBtn" type="button" class="settings-toggle settings-toggle--small" data-toggle-labels="enableBlur,disableBlur" aria-pressed="false" aria-controls="blurRange">
+                                        <button id="blurToggleBtn" type="button" class="settings-toggle settings-toggle--small settings-toggle--no-label" aria-pressed="false" aria-controls="blurRange" aria-label="切換背景模糊">
                                             <span class="settings-toggle__state" aria-hidden="true"></span>
-                                            <span class="settings-toggle__label"></span>
                                         </button>
                                     </div>
                                     <input id="blurRange" type="range" min="0" max="40" value="0" class="settings-range" />
