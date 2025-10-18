@@ -1639,9 +1639,8 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   justify-content: center;
   text-align: center;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 180px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 @media (max-width: 640px) {
@@ -1650,7 +1649,6 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   .debug-toggle__status {
     font-size: 10px;
     padding: 5px 9px;
-    max-width: 120px;
     letter-spacing: 0.01em;
   }
 }
@@ -1661,7 +1659,6 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   .debug-toggle__status {
     font-size: 11px;
     padding: 6px 10px;
-    max-width: 150px;
   }
 }
 .dark-mode-panel__slider { display: flex; flex-direction: column; gap: 12px; }
