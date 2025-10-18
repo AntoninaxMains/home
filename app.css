@@ -219,6 +219,7 @@ body.dark-mode .suggestion-item:focus-visible { box-shadow: 0 10px 18px rgba(0,0
 
 body.dark-mode .category-item { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); }
 body.dark-mode .category-item:hover { background: rgba(255,255,255,0.14); border-color: rgba(174, 189, 255, 0.32); box-shadow: 0 20px 46px rgba(0, 0, 0, 0.55); }
+body.dark-mode .category-item-icon { background: rgba(174, 189, 255, 0.24); color: #fff; }
 body.dark-mode .category-modal-intro { background: linear-gradient(135deg, rgba(76, 110, 245, 0.26), rgba(76, 110, 245, 0.08)); border-color: rgba(174, 189, 255, 0.3); }
 body.dark-mode .category-modal-icon { background: rgba(174, 189, 255, 0.22); color: #fff; }
 body.dark-mode .category-modal-copy p { color: rgba(235, 238, 255, 0.75); }
