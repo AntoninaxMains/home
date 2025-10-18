@@ -682,7 +682,11 @@ function updateUILanguage() {
             btn.classList.toggle('active', document.body.classList.contains('dark-mode'));
         }
     });
-    
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+    }
+
     // Bookmarks header
     const bookmarkHeader = document.querySelector('.bookmark-card__header h2');
     const bookmarkDesc = document.querySelector('.bookmark-card__header p');
