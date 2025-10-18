@@ -253,6 +253,7 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 .settings-card--actions .settings-card__content { padding: 20px; gap: 20px; }
 .settings-action-block { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-radius: var(--radius-md); border: 1px solid rgba(76,110,245,0.16); background: rgba(76,110,245,0.06); box-shadow: 0 8px 18px rgba(76,110,245,0.08); }
 .settings-action-block__icon { width: 40px; height: 40px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; display: grid; place-items: center; flex-shrink: 0; }
+.settings-action-block__icon i { width: 20px; height: 20px; }
 .settings-action-block__body { display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .settings-action-block__body h5 { font-size: 15px; font-weight: 700; color: var(--text); margin: 0; }
 .settings-action-block__body p { margin: 0; color: var(--text-subtle); line-height: 1.5; font-size: 13px; }

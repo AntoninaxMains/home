@@ -1641,9 +1641,7 @@ async function fetchRemoteSuggestions(query) {
 
         window[callbackId] = (payload) => {
             try {
-                console.log('遠端 API 原始回應:', payload);
                 const suggestions = extractRemoteSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
-                console.log('遠端 API 解析後建議詞:', suggestions);
                 finalize(suggestions);
             } catch (err) {
                 console.warn('Failed to parse remote suggestions', err);
