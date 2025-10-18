@@ -96,13 +96,13 @@ body.dark-mode .settings-nav__item.is-active {
   }
   
   .settings-nav__item {
-    width: auto;
+    width: calc(33.333% - 4px);
     flex: 1 1 calc(33.333% - 4px);
-    min-width: 90px;
-    padding: 8px 6px;
+    min-width: 72px;
+    padding: 12px 8px;
     justify-content: center;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
     position: relative;
     z-index: 21;
     pointer-events: auto;
@@ -110,21 +110,13 @@ body.dark-mode .settings-nav__item.is-active {
   }
   
   .settings-nav__label {
-    display: block;
-    font-size: 10px;
-    text-align: center;
-    pointer-events: none;
-    line-height: 1.2;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: none;
   }
   
   .settings-nav__icon {
     margin: 0 auto;
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     pointer-events: none;
   }
 }
@@ -468,12 +460,12 @@ body.modal-open {
 .hero-title { font-size: clamp(40px, 6vw, 56px); font-weight: 700; color: #fff; text-shadow: 0 10px 30px rgba(0,0,0,.35); }
 .hero-subtitle { color: rgba(255,255,255,.85); font-size: 18px; }
 .weather-widget {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.weather-widget--tile {
-  gap: 16px;
+        flex: 1 1 calc(33.333% - 4px);
+        min-width: 72px;
+    padding: 8px 6px;
+        justify-content: center;
+        flex-direction: column;
+        gap: 6px;
 }
 
 .weather-widget__header {
@@ -481,21 +473,13 @@ body.modal-open {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-}
-
-.weather-widget__heading {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-
+        display: none;
 .weather-widget__icon {
   width: 52px;
   height: 52px;
   border-radius: 16px;
-  display: grid;
-  place-items: center;
+     width: 32px;
+        height: 26px;
   background: rgba(76, 110, 245, 0.12);
   color: var(--primary);
   transition: background var(--transition), color var(--transition);
@@ -1596,7 +1580,7 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 }
 
 
-.settings-field__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.settings-field__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .dark-mode-panel { display: flex; flex-direction: column; gap: 20px; padding: 20px 22px; border-radius: 18px; background: rgba(76, 110, 245, 0.08); border: 1px solid rgba(76, 110, 245, 0.16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); }
 .dark-mode-panel__toggle { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .dark-mode-panel__text { display: flex; flex-direction: column; gap: 6px; max-width: clamp(220px, 60%, 340px); }
@@ -1638,21 +1622,39 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 .weather-field__hint,
 .developer-field__hint { margin: 0; font-size: 12px; line-height: 1.6; color: var(--text-subtle); }
 .weather-field__controls,
-.developer-field__controls { display: flex; align-items: center; justify-content: flex-end; gap: 14px; flex-wrap: wrap; }
+.developer-field__controls { display: flex; align-items: center; justify-content: flex-start; gap: 12px; flex-wrap: wrap; }
 .weather-field__body { display: flex; flex-direction: column; gap: 12px; }
 .weather-location-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .weather-location-controls .settings-input { flex: 1 1 220px; min-width: 200px; }
 .weather-field__hint-text { color: var(--text-subtle); min-height: 16px; }
 .weather-field.is-disabled { opacity: 0.6; }
+.weather-summary { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; background: rgba(76, 110, 245, 0.08); border: 1px solid rgba(76, 110, 245, 0.14); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); }
+.weather-summary.is-disabled { opacity: 0.6; }
+.weather-summary__icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(76, 110, 245, 0.12); display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2); }
+.weather-summary__icon span { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; font-size: 32px; color: #4CACF0; }
+.weather-summary__icon span.is-rotating { animation: weatherSpin 2s linear infinite; }
+.weather-summary__details { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.weather-summary__temp { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1; }
+.weather-summary__meta { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-subtle); }
+.weather-summary__meta span { display: block; word-break: break-word; }
 .developer-field__hint { color: var(--text-subtle); }
+
+body.dark-mode .weather-summary { background: rgba(148, 163, 255, 0.16); border-color: rgba(148, 163, 255, 0.28); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+body.dark-mode .weather-summary__icon { background: rgba(76, 110, 245, 0.25); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); }
+body.dark-mode .weather-summary__icon span { color: #60A5FA; }
+body.dark-mode .weather-summary__temp { color: rgba(224, 231, 255, 0.95); }
+body.dark-mode .weather-summary__meta { color: rgba(203, 213, 255, 0.78); }
 
 @media (max-width: 640px) {
   .dark-mode-panel { padding: 18px; }
   .dark-mode-panel__toggle { flex-direction: column; align-items: stretch; gap: 14px; }
   .dark-mode-panel__actions { justify-content: space-between; }
-  .weather-field__controls { justify-content: space-between; }
+  .weather-field__controls,
+  .developer-field__controls { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 12px; }
   .weather-location-controls { flex-direction: column; align-items: stretch; }
   .weather-location-controls .settings-input { min-width: 100%; }
+  .weather-summary { flex-direction: column; align-items: flex-start; }
+  .weather-summary__icon { width: 44px; height: 44px; }
 }
 .settings-toggle {
   display: inline-flex;

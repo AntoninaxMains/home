@@ -161,27 +161,27 @@
                 <div class="modal-body settings-body">
                     <div class="settings-container">
                         <nav class="settings-nav" id="settingsSidebar" aria-label="Settings navigation">
-                            <button type="button" class="settings-nav__item is-active" data-settings-nav="dark">
+                            <button type="button" class="settings-nav__item is-active" data-settings-nav="dark" aria-label="夜間模式" data-i18n-attr="aria-label:darkModeSection">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
                                 <span class="settings-nav__label" data-i18n="darkModeSection">夜間模式</span>
                             </button>
-                            <button type="button" class="settings-nav__item" data-settings-nav="background">
+                            <button type="button" class="settings-nav__item" data-settings-nav="background" aria-label="背景設定" data-i18n-attr="aria-label:backgroundSection">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="palette"></i></span>
                                 <span class="settings-nav__label" data-i18n="backgroundSection">背景設定</span>
                             </button>
-                            <button type="button" class="settings-nav__item" data-settings-nav="appearance">
+                            <button type="button" class="settings-nav__item" data-settings-nav="appearance" aria-label="顯示效果（外觀）" data-i18n-attr="aria-label:appearanceSection">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="image"></i></span>
                                 <span class="settings-nav__label" data-i18n="appearanceSection">顯示效果（外觀）</span>
                             </button>
-                            <button type="button" class="settings-nav__item" data-settings-nav="weather">
+                            <button type="button" class="settings-nav__item" data-settings-nav="weather" aria-label="天氣" data-i18n-attr="aria-label:weatherSection">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></span>
                                 <span class="settings-nav__label" data-i18n="weatherSection">天氣</span>
                             </button>
-                            <button type="button" class="settings-nav__item" data-settings-nav="developer">
+                            <button type="button" class="settings-nav__item" data-settings-nav="developer" aria-label="開發者工具" data-i18n-attr="aria-label:developerSection">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="terminal-square"></i></span>
                                 <span class="settings-nav__label" data-i18n="developerSection">開發者工具</span>
                             </button>
-                            <button type="button" class="settings-nav__item" data-settings-nav="actions">
+                            <button type="button" class="settings-nav__item" data-settings-nav="actions" aria-label="維護與重置" data-i18n-attr="aria-label:cleanupSectionTitle">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="wand-2"></i></span>
                                 <span class="settings-nav__label" data-i18n="cleanupSectionTitle">維護與重置</span>
                             </button>
@@ -338,6 +338,20 @@
                                                     <div class="weather-location-suggestions" id="weatherLocationSuggestions"></div>
                                                 </div>
                                                 <div class="hint weather-field__hint-text" id="weatherStatusText" role="status"></div>
+                                                    <div class="weather-summary" aria-live="polite">
+                                                        <div class="weather-summary__icon" aria-hidden="true">
+                                                            <span data-weather-icon="settings"><i data-lucide="cloud"></i></span>
+                                                        </div>
+                                                        <div class="weather-summary__details">
+                                                            <div class="weather-summary__temp" data-weather-temp="settings">--°</div>
+                                                            <div class="weather-summary__meta">
+                                                                <span class="weather-summary__condition" data-weather-condition="settings"></span>
+                                                                <span class="weather-summary__location" data-weather-location="settings"></span>
+                                                                <span class="weather-summary__updated" data-weather-updated="settings"></span>
+                                                                <span class="weather-summary__wind" data-weather-wind="settings"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
