@@ -260,7 +260,7 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 .settings-action-block .btn { width: 100%; }
 
 @media (min-width: 720px) {
-  .settings-card__content--split { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .settings-card__content--split { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 }
 
 .settings-input,
