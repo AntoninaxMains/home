@@ -212,7 +212,7 @@ input[type="text"]:focus, input[type="url"]:focus, input[type="color"]:focus, se
 .bookmark-icon-preview { width: 46px; height: 46px; border-radius: 14px; border: 1px dashed rgba(0,0,0,0.12); background: rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color var(--transition), background var(--transition); position: relative; overflow: hidden; }
 .bookmark-icon-preview.is-empty { border-style: solid; border-color: rgba(0,0,0,0.08); }
 .bookmark-icon-preview img { width: 70%; height: 70%; object-fit: contain; display: block; border-radius: 10px; }
-.bookmark-icon-preview .emoji-icon { font-size: 26px; line-height: 1; }
+.bookmark-icon-preview .bookmark-emoji { font-size: 26px; line-height: 1; }
 .bookmark-icon-preview svg { width: 70%; height: 70%; }
 .bookmark-icon-preview i[data-lucide] { width: 24px; height: 24px; color: var(--primary-dark); opacity: 0.8; }
 .bookmark-icon .bookmark-emoji { font-size: 24px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }

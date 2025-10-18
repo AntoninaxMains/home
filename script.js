@@ -525,7 +525,7 @@ function resolveBookmarkIcon(descriptor, size = 32, label = '') {
         const src = escapeAttribute(value);
         const alt = escapeAttribute(label || value);
         return {
-            html: `<img src="${src}" alt="${alt}" loading="lazy">`,
+            html: `<img src="${src}" alt="${alt}" loading="lazy" onerror="this.remove()">`,
             type: 'image'
         };
     }
@@ -534,7 +534,7 @@ function resolveBookmarkIcon(descriptor, size = 32, label = '') {
         const src = escapeAttribute(value);
         const alt = escapeAttribute(label || value);
         return {
-            html: `<img src="${src}" alt="${alt}" loading="lazy">`,
+            html: `<img src="${src}" alt="${alt}" loading="lazy" onerror="this.remove()">`,
             type: 'image'
         };
     }
