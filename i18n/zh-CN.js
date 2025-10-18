@@ -52,6 +52,7 @@ window.TRANSLATIONS['zh-CN'] = {
     manageCategoriesTitle: '管理分类',
     categoriesDesc: '创建分类来组织书签。删除分类时，书签会回到主列表。',
     noCategories: '还没有分类',
+    categoryBookmarkCount: '包含 {count} 个书签',
     addCategoryBtn: '+ 添加',
     deleteCategory: '删除',
     // 设置

@@ -52,6 +52,7 @@ window.TRANSLATIONS['en'] = {
     manageCategoriesTitle: 'Manage Categories',
     categoriesDesc: 'Create categories to organize bookmarks. When a category is deleted, bookmarks return to main list.',
     noCategories: 'No categories yet',
+    categoryBookmarkCount: '{count} bookmarks',
     addCategoryBtn: '+ Add',
     deleteCategory: 'Delete',
     // Settings

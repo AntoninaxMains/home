@@ -129,22 +129,6 @@
                             <div id="searchSuggestions" class="search-suggestions hidden" aria-live="polite"></div>
                         </div>
                     </div>
-                    <aside class="hero-aside is-hidden">
-                        <div id="weatherWidget" class="weather-widget hidden" aria-live="polite">
-                            <div class="weather-widget__icon" aria-hidden="true">
-                                <i data-lucide="cloud-sun"></i>
-                            </div>
-                            <div class="weather-widget__info">
-                                <div class="weather-widget__top">
-                                    <span class="weather-widget__label" data-i18n="weatherWidgetLabel">天氣</span>
-                                    <span id="weatherWidgetLocation" class="weather-widget__location"></span>
-                                </div>
-                                <div id="weatherWidgetStatus" class="weather-widget__status"></div>
-                                <div id="weatherWidgetTemp" class="weather-widget__temp"></div>
-                                <div id="weatherWidgetMeta" class="weather-widget__meta"></div>
-                            </div>
-                        </div>
-                    </aside>
                 </div>
             </section>
 
@@ -157,6 +141,29 @@
                     <div id="bookmarkGrid" class="bookmark-grid" aria-live="polite"></div>
                 </div>
                 <div id="categorySection"></div>
+                <div class="bookmarks-widgets" data-weather-wrapper>
+                    <div id="weatherWidget" class="weather-widget weather-widget--card hidden" aria-live="polite">
+                        <header class="weather-widget__header">
+                            <div class="weather-widget__icon" aria-hidden="true">
+                                <i data-lucide="cloud-sun"></i>
+                            </div>
+                            <div class="weather-widget__heading">
+                                <span class="weather-widget__label" data-i18n="weatherWidgetLabel">天氣</span>
+                                <span id="weatherWidgetLocation" class="weather-widget__location"></span>
+                            </div>
+                            <button id="weatherRefreshBtn" type="button" class="weather-widget__refresh" aria-label="刷新天氣" title="刷新天氣">
+                                <i data-lucide="refresh-cw"></i>
+                            </button>
+                        </header>
+                        <div class="weather-widget__body">
+                            <div id="weatherWidgetStatus" class="weather-widget__status"></div>
+                            <div class="weather-widget__metrics">
+                                <div id="weatherWidgetTemp" class="weather-widget__temp"></div>
+                                <div id="weatherWidgetMeta" class="weather-widget__meta"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
 
@@ -218,8 +225,9 @@
                                         </div>
                                         <div class="dark-mode-panel__actions">
                                             <span class="dark-mode-toggle__status" data-state="off">日間模式</span>
-                                            <button id="darkModeToggleBtn" type="button" class="settings-toggle settings-toggle--no-label dark-mode-toggle" aria-pressed="false" aria-label="切換夜間模式">
-                                                <span class="settings-toggle__state" aria-hidden="true"></span>
+                                            <button id="darkModeToggleBtn" type="button" class="settings-toggle dark-mode-toggle" aria-pressed="false" data-toggle-labels="enableDarkMode,disableDarkMode" data-icon-off="moon" data-icon-on="sun" aria-label="切換夜間模式">
+                                                <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
+                                                <span class="settings-toggle__label"></span>
                                             </button>
                                         </div>
                                     </div>
@@ -288,8 +296,9 @@
                                             <label for="blurRange" data-i18n="backgroundBlur">背景模糊</label>
                                             <p class="appearance-field__hint" data-i18n="backgroundBlurHint">柔化背景，讓卡片與搜尋列更突出。</p>
                                         </div>
-                                        <button id="blurToggleBtn" type="button" class="settings-toggle settings-toggle--small settings-toggle--no-label" aria-pressed="false" aria-controls="blurRange" aria-label="切換背景模糊">
-                                            <span class="settings-toggle__state" aria-hidden="true"></span>
+                                        <button id="blurToggleBtn" type="button" class="settings-toggle settings-toggle--compact" aria-pressed="false" aria-controls="blurRange" data-toggle-labels="enableBlur,disableBlur" data-icon-off="sparkles" data-icon-on="sparkles" aria-label="切換背景模糊">
+                                            <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+                                            <span class="settings-toggle__label"></span>
                                         </button>
                                     </div>
                                     <input id="blurRange" type="range" min="0" max="40" value="0" class="settings-range" />
@@ -328,8 +337,9 @@
                                         </div>
                                         <div class="weather-field__controls">
                                             <span class="weather-toggle__status" data-state="off" data-i18n="weatherStatusOff">天氣小工具已關閉</span>
-                                            <button id="weatherToggleBtn" type="button" class="settings-toggle settings-toggle--no-label" aria-pressed="false" data-toggle-labels="enableWeather,disableWeather" aria-label="切換天氣小工具">
-                                                <span class="settings-toggle__state" aria-hidden="true"></span>
+                                            <button id="weatherToggleBtn" type="button" class="settings-toggle" aria-pressed="false" data-toggle-labels="enableWeather,disableWeather" data-icon-off="cloud-off" data-icon-on="cloud-sun" aria-label="切換天氣小工具">
+                                                <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="cloud-off"></i></span>
+                                                <span class="settings-toggle__label"></span>
                                             </button>
                                         </div>
                                     </div>
@@ -360,8 +370,9 @@
                                         </div>
                                         <div class="developer-field__controls">
                                             <span class="debug-toggle__status" data-state="off" data-i18n="debugStatusOff">除錯面板已關閉</span>
-                                            <button id="debugToggleBtn" type="button" class="settings-toggle settings-toggle--no-label" aria-pressed="false" data-toggle-labels="enableDebugPanel,disableDebugPanel" aria-label="切換除錯面板">
-                                                <span class="settings-toggle__state" aria-hidden="true"></span>
+                                            <button id="debugToggleBtn" type="button" class="settings-toggle" aria-pressed="false" data-toggle-labels="enableDebugPanel,disableDebugPanel" data-icon-off="bug" data-icon-on="check-circle" aria-label="切換除錯面板">
+                                                <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="bug"></i></span>
+                                                <span class="settings-toggle__label"></span>
                                             </button>
                                         </div>
                                     </div>
@@ -484,26 +495,52 @@
     <!-- 動態載入語言文件 / Dynamically load language file -->
     <script>
         // 偵測用戶語言 / Detect user language
+        const supportedLanguages = ['en', 'zh-CN', 'zh-TW', 'ja'];
         const savedLang = localStorage.getItem('language');
-        const browserLang = navigator.language || navigator.userLanguage;
-        const langMap = {
-            'en': 'en',
-            'en-US': 'en',
-            'en-GB': 'en',
-            'zh-CN': 'zh-CN',
-            'zh-Hans': 'zh-CN',
-            'zh-SG': 'zh-CN',
-            'zh-TW': 'zh-TW',
-            'zh-Hant': 'zh-TW',
-            'zh-HK': 'zh-TW',
-            'zh-MO': 'zh-TW',
-            'ja': 'ja',
-            'ja-JP': 'ja'
+
+        const normalizeLanguage = (code) => {
+            if (!code || typeof code !== 'string') return null;
+            const lower = code.trim().toLowerCase();
+            if (!lower) return null;
+            if (supportedLanguages.includes(lower)) return lower;
+            if (lower === 'en' || lower.startsWith('en-')) return 'en';
+            if (lower === 'ja' || lower.startsWith('ja-') || lower.startsWith('jp')) return 'ja';
+            if (lower.startsWith('zh')) {
+                if (lower.includes('cn') || lower.includes('hans') || lower.includes('sg') || lower.includes('my')) {
+                    return 'zh-CN';
+                }
+                if (lower.includes('tw') || lower.includes('hk') || lower.includes('mo') || lower.includes('hant')) {
+                    return 'zh-TW';
+                }
+                return 'zh-TW';
+            }
+            return null;
         };
-        
-    const detectedLang = savedLang || langMap[browserLang] || (browserLang.startsWith('zh-') ? 'zh-TW' : (browserLang.startsWith('ja') ? 'ja' : 'en'));
-    const supportedLanguages = ['en', 'zh-CN', 'zh-TW', 'ja'];
-    const initialLanguage = supportedLanguages.includes(detectedLang) ? detectedLang : 'en';
+
+        const languageCandidates = [];
+        if (Array.isArray(navigator.languages)) {
+            navigator.languages.forEach(lang => languageCandidates.push(lang));
+        }
+        if (navigator.language) languageCandidates.push(navigator.language);
+        if (navigator.userLanguage) languageCandidates.push(navigator.userLanguage);
+        languageCandidates.push('en');
+
+        let detectedLang = savedLang;
+        if (!detectedLang) {
+            for (const candidate of languageCandidates) {
+                const resolved = normalizeLanguage(candidate);
+                if (resolved && supportedLanguages.includes(resolved)) {
+                    detectedLang = resolved;
+                    break;
+                }
+            }
+        }
+
+        if (!detectedLang || !supportedLanguages.includes(detectedLang)) {
+            detectedLang = 'en';
+        }
+
+        const initialLanguage = detectedLang;
         
         // 動態載入對應語言文件 / Dynamically load corresponding language file
         const script = document.createElement('script');

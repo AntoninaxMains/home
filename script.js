@@ -1120,9 +1120,21 @@ function updateToggleButton(button, isActive) {
     button.classList.toggle('is-active', !!isActive);
     button.dataset.state = isActive ? 'on' : 'off';
 
-    const stateEl = button.querySelector('.settings-toggle__state');
-    if (stateEl) {
-        stateEl.classList.toggle('is-active', !!isActive);
+    const iconContainer = button.querySelector('.settings-toggle__icon');
+    if (iconContainer) {
+        const iconOff = button.dataset.iconOff || '';
+        const iconOn = button.dataset.iconOn || iconOff;
+        const desiredIcon = isActive ? iconOn : iconOff;
+        if (desiredIcon) {
+            const existingIcon = iconContainer.querySelector('[data-lucide]');
+            if (!existingIcon || existingIcon.getAttribute('data-lucide') !== desiredIcon) {
+                iconContainer.innerHTML = `<i data-lucide="${desiredIcon}"></i>`;
+            }
+        }
+    }
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons({ nameAttr: 'data-lucide' });
     }
 }
 
@@ -1582,11 +1594,15 @@ function updateWeatherWidget() {
     const widget = document.getElementById('weatherWidget');
     if (!widget) return;
     const enabled = isWeatherEnabled();
-    const heroAside = widget.closest('.hero-aside');
-    if (heroAside) {
-        heroAside.classList.toggle('is-hidden', !enabled);
+    const wrapper = widget.closest('[data-weather-wrapper]');
+    if (wrapper) {
+        wrapper.classList.toggle('is-hidden', !enabled);
     }
     widget.classList.toggle('hidden', !enabled);
+    const refreshBtn = document.getElementById('weatherRefreshBtn');
+    if (refreshBtn) {
+        refreshBtn.classList.toggle('is-busy', weatherState.loading);
+    }
     if (!enabled) return;
 
     const iconContainer = widget.querySelector('.weather-widget__icon');
@@ -2007,6 +2023,20 @@ function initEventListeners() {
     if (weatherApplyBtn) {
         weatherApplyBtn.addEventListener('click', () => {
             applyWeatherLocation();
+        });
+    }
+
+    const weatherRefreshBtn = document.getElementById('weatherRefreshBtn');
+    if (weatherRefreshBtn) {
+        weatherRefreshBtn.addEventListener('click', () => {
+            weatherRefreshBtn.classList.add('is-busy');
+            refreshWeather({ force: true })
+                .catch(error => {
+                    console.warn('Weather refresh failed:', error);
+                })
+                .finally(() => {
+                    weatherRefreshBtn.classList.remove('is-busy');
+                });
         });
     }
 
@@ -3127,37 +3157,54 @@ function renderBookmarks() {
         const section = createCategorySection(category, categorizedBookmarks[category]);
         categoriesContainer.appendChild(section);
     });
+
+    if (window.lucide) {
+        window.lucide.createIcons({ nameAttr: 'data-lucide' });
+    }
 }
 
 function createCategorySection(category, categoryBookmarks) {
     const section = document.createElement('div');
     section.className = 'category-section';
-    
-    // 獲取分類對象
+
     const catObj = categories.find(c => (typeof c === 'string' ? c : c.name) === category);
     const catIcon = catObj && typeof catObj === 'object' ? catObj.icon : '📁';
-    
+    const safeCategory = category.replace(/'/g, "\\'");
+    const bookmarkCountText = t('categoryBookmarkCount').replace('{count}', categoryBookmarks.length);
+
     const header = document.createElement('div');
     header.className = 'category-header';
     header.innerHTML = `
-        <div class="category-title">${catIcon} ${category}</div>
-        <div class="category-actions" style="display: none;">
-            <button class="add-btn" onclick="openBookmarkModal(null, '${category.replace(/'/g, "\\'")}')">+ 新增</button>
-            <button class="manage-btn" onclick="deleteCategory('${category.replace(/'/g, "\\'")}')">刪除分類</button>
+        <div class="category-header__meta">
+            <div class="category-header__icon" aria-hidden="true">${catIcon}</div>
+            <div class="category-header__text">
+                <h3 class="category-header__title">${category}</h3>
+                <p class="category-header__count">${bookmarkCountText}</p>
+            </div>
+        </div>
+        <div class="category-header__actions">
+            <button type="button" class="category-header__btn" onclick="openBookmarkModal(null, '${safeCategory}')">
+                <i data-lucide="plus"></i>
+                <span>${t('addBookmark')}</span>
+            </button>
+            <button type="button" class="category-header__btn category-header__btn--ghost" onclick="openCategoryManagement('${safeCategory}')">
+                <i data-lucide="settings"></i>
+                <span>${t('manageCategories')}</span>
+            </button>
         </div>
     `;
-    
+
     const grid = document.createElement('div');
     grid.className = 'bookmarks-grid';
-    
+
     categoryBookmarks.forEach(bookmark => {
         const bookmarkEl = createBookmarkElement(bookmark);
         grid.appendChild(bookmarkEl);
     });
-    
+
     section.appendChild(header);
     section.appendChild(grid);
-    
+
     return section;
 }
 
@@ -3310,7 +3357,7 @@ function deleteCategory(category) {
 }
 
 // 分類管理彈窗
-function openCategoryManagement() {
+function openCategoryManagement(focusCategory = null) {
     const categoryList = document.getElementById('categoryList');
     if (!categoryList) return;
     categoryList.innerHTML = '';
@@ -3318,25 +3365,57 @@ function openCategoryManagement() {
     if (categories.length === 0) {
         categoryList.innerHTML = `<div class="category-empty">${t('noCategories')}</div>`;
     } else {
+        const focusName = focusCategory ? String(focusCategory) : '';
+        let focusElement = null;
         categories.forEach((cat, index) => {
             const catName = typeof cat === 'string' ? cat : cat.name;
             const catIcon = typeof cat === 'object' && cat.icon ? cat.icon : '📁';
+            const bookmarkCount = bookmarks.filter(b => b.category === catName).length;
+            const countText = t('categoryBookmarkCount').replace('{count}', bookmarkCount);
 
             const item = document.createElement('div');
             item.className = 'category-item';
+            item.dataset.categoryName = catName;
             item.innerHTML = `
-                <div class="category-item-info">
-                    <span class="category-item-icon">${catIcon}</span>
-                    <span class="category-item-name">${catName}</span>
+                <div class="category-item__meta">
+                    <span class="category-item__icon">${catIcon}</span>
+                    <div class="category-item__text">
+                        <span class="category-item__name">${catName}</span>
+                        <span class="category-item__count">${countText}</span>
+                    </div>
                 </div>
-                <div class="category-item-actions">
-                    <button type="button" onclick="renameCategoryPrompt(${index})" class="btn ghost" title="${t('renameCategory')}" aria-label="${t('renameCategory')}">${t('renameCategory')}</button>
-                    <button type="button" onclick="editCategoryIconPrompt(${index})" class="btn ghost" title="${t('editCategoryIcon')}" aria-label="${t('editCategoryIcon')}">${t('editCategoryIcon')}</button>
-                    <button type="button" onclick="deleteCategoryFromModal('${catName.replace(/'/g, "\\'")}')" class="btn ghost btn-danger" title="${t('deleteCategory')}" aria-label="${t('deleteCategory')}">${t('deleteCategory')}</button>
+                <div class="category-item__actions" role="group" aria-label="${t('manageCategories')}">
+                    <button type="button" onclick="renameCategoryPrompt(${index})" class="category-item__action" title="${t('renameCategory')}" aria-label="${t('renameCategory')}">
+                        <i data-lucide="edit-3"></i>
+                        <span>${t('renameCategory')}</span>
+                    </button>
+                    <button type="button" onclick="editCategoryIconPrompt(${index})" class="category-item__action" title="${t('editCategoryIcon')}" aria-label="${t('editCategoryIcon')}">
+                        <i data-lucide="image"></i>
+                        <span>${t('editCategoryIcon')}</span>
+                    </button>
+                    <button type="button" onclick="deleteCategoryFromModal('${catName.replace(/'/g, "\\'")}')" class="category-item__action category-item__action--danger" title="${t('deleteCategory')}" aria-label="${t('deleteCategory')}">
+                        <i data-lucide="trash-2"></i>
+                        <span>${t('deleteCategory')}</span>
+                    </button>
                 </div>
             `;
             categoryList.appendChild(item);
+            if (focusName && catName === focusName) {
+                focusElement = item;
+            }
         });
+
+        if (window.lucide) {
+            window.lucide.createIcons({ nameAttr: 'data-lucide' });
+        }
+
+        if (focusElement) {
+            requestAnimationFrame(() => {
+                focusElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                focusElement.classList.add('is-highlighted');
+                setTimeout(() => focusElement.classList.remove('is-highlighted'), 1600);
+            });
+        }
     }
     
     const newCatInput = document.getElementById('newCategoryName');

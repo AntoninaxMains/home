@@ -52,6 +52,7 @@ window.TRANSLATIONS['zh-TW'] = {
     manageCategoriesTitle: '管理分類',
     categoriesDesc: '建立分類來組織書籤。刪除分類時，書籤會回到主列表。',
     noCategories: '還沒有分類',
+    categoryBookmarkCount: '包含 {count} 個書籤',
     addCategoryBtn: '+ 新增',
     deleteCategory: '刪除',
     // 設定
