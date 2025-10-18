@@ -12,6 +12,40 @@ if (typeof window.currentLanguage === 'undefined') {
     window.currentLanguage = 'zh-TW';
 }
 
+const __debugMessages = [];
+function logDebug(message) {
+    try {
+        const timestamp = new Date().toISOString().split('T')[1]?.replace('Z', '') || '';
+        __debugMessages.push(`${timestamp} ${message}`);
+        if (document && document.body) {
+            let panel = document.getElementById('app-debug-panel');
+            if (!panel) {
+                panel = document.createElement('div');
+                panel.id = 'app-debug-panel';
+                panel.style.position = 'fixed';
+                panel.style.bottom = '12px';
+                panel.style.right = '12px';
+                panel.style.zIndex = '9999';
+                panel.style.maxWidth = '320px';
+                panel.style.maxHeight = '200px';
+                panel.style.overflowY = 'auto';
+                panel.style.background = 'rgba(15, 23, 42, 0.8)';
+                panel.style.color = '#fff';
+                panel.style.fontSize = '12px';
+                panel.style.lineHeight = '1.4';
+                panel.style.padding = '8px 10px';
+                panel.style.borderRadius = '10px';
+                panel.style.boxShadow = '0 8px 20px rgba(0,0,0,0.35)';
+                panel.style.fontFamily = 'Menlo, Consolas, monospace';
+                document.body.appendChild(panel);
+            }
+            panel.innerHTML = __debugMessages.map(line => `<div>• ${line}</div>`).join('');
+        }
+    } catch (error) {
+        console.error('Debug logger failed:', error);
+    }
+}
+
 // 全局錯誤監聽器，便於在 UI 上顯示錯誤
 window.addEventListener('error', (event) => {
     try {
@@ -33,6 +67,7 @@ window.addEventListener('error', (event) => {
         if (!existing) {
             document.body.appendChild(banner);
         }
+        logDebug(`Window error: ${event?.message || 'unknown error'}`);
     } catch (innerError) {
         console.error('Failed to display error banner:', innerError);
     }
@@ -58,6 +93,7 @@ window.addEventListener('unhandledrejection', (event) => {
         if (!existing) {
             document.body.appendChild(banner);
         }
+        logDebug(`Unhandled rejection: ${event?.reason || 'unknown reason'}`);
     } catch (innerError) {
         console.error('Failed to display rejection banner:', innerError);
     }
@@ -360,25 +396,39 @@ const POPULAR_ICON_FALLBACK = [
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
     try {
+        logDebug('DOMContentLoaded start');
         loadLanguage();
+        logDebug(`Language loaded: ${currentLanguage}`);
         loadSearchHistory();
+        logDebug(`Search history loaded: ${searchHistory.length} entries`);
         loadSettings();
+        logDebug('Settings loaded');
         loadCategories();
+        logDebug(`Categories loaded: ${categories.length}`);
         loadBookmarks();
+        logDebug(`Bookmarks loaded: ${bookmarks.length}`);
         loadDarkMode();
+        logDebug(`Dark mode: ${document.body.classList.contains('dark-mode')}`);
         initializeSearchUI();
+        logDebug('Search UI initialized');
         setCurrentSearchEngine(currentSearchEngine, { persist: false });
+        logDebug(`Search engine set: ${currentSearchEngine}`);
         initEventListeners();
+        logDebug('Event listeners registered');
         updateUILanguage();
+        logDebug('UI language applied');
         
         // initialize lucide icons
         if (window.lucide) {
             window.lucide.createIcons();
+            logDebug('Lucide icons initialized');
         } else {
             console.error('Lucide library not loaded');
+            logDebug('Lucide not available');
         }
     } catch (error) {
         console.error('Initialization error:', error);
+        logDebug(`Initialization error: ${error?.message || error}`);
     }
 });
 
