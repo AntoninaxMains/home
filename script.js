@@ -1404,10 +1404,10 @@ async function updateSearchSuggestions(query) {
     // 檢查是否需要遠端建議（輸入 1 個字符就開始）
     const minLength = 1;
     if (trimmed.length >= minLength && !isLikelyUrl(trimmed)) {
-        console.log('開始獲取遠程建議...');
-        // 獲取遠端建議
-        const remoteSuggestions = await fetchDuckDuckGoSuggestions(trimmed);
-        console.log('遠程建議結果:', remoteSuggestions);
+    console.log('開始獲取遠程建議...');
+    // 獲取遠端建議
+    const remoteSuggestions = await fetchRemoteSuggestions(trimmed);
+    console.log('遠程建議結果:', remoteSuggestions);
         if (callToken !== latestSuggestQueryToken) return;
         
         if (remoteSuggestions && remoteSuggestions.length > 0) {
@@ -1530,8 +1530,8 @@ function cleanSuggestionText(value) {
         .trim();
 }
 
-function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMIT) {
-    console.log('extractDuckDuckGoSuggestions 被調用，payload:', payload, 'query:', query);
+function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMIT) {
+    console.log('extractRemoteSuggestions 被調用，payload:', payload, 'query:', query);
     const suggestions = [];
     const seen = new Set();
 
@@ -1544,7 +1544,7 @@ function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_
         suggestions.push(cleaned);
     };
 
-    // DuckDuckGo 返回格式: [query, [suggestion1, suggestion2, ...]]
+    // 常見建議 API 返回格式: [query, [suggestion1, suggestion2, ...]]
     if (Array.isArray(payload)) {
         // 標準格式：第二個元素是建議數組
         if (payload.length >= 2 && Array.isArray(payload[1])) {
@@ -1581,19 +1581,19 @@ function extractDuckDuckGoSuggestions(payload, query, limit = SEARCH_SUGGESTION_
     }
 
     const result = suggestions.slice(0, limit);
-    console.log('extractDuckDuckGoSuggestions 返回結果:', result);
+    console.log('extractRemoteSuggestions 返回結果:', result);
     return result;
 }
 
-function getDuckDuckGoLocaleParams(lang = currentLanguage) {
+function getRemoteSuggestionLocale(lang = currentLanguage) {
     switch (lang) {
         case 'zh-CN':
-            return { kl: 'cn-zh', kad: 'zh-cn' };
+            return { language: 'zh-cn', market: 'zh-CN' };
         case 'zh-TW':
-            return { kl: 'tw-tzh', kad: 'zh-tw' };
+            return { language: 'zh-tw', market: 'zh-TW' };
         case 'en':
         default:
-            return { kl: 'us-en', kad: 'en-us' };
+            return { language: 'en-us', market: 'en-US' };
     }
 }
 
@@ -1604,13 +1604,13 @@ function getRemoteSuggestionMinLength() {
     return REMOTE_SUGGESTION_MIN_LENGTH;
 }
 
-async function fetchDuckDuckGoSuggestions(query) {
+async function fetchRemoteSuggestions(query) {
     if (!query || query.length < getRemoteSuggestionMinLength()) {
         return [];
     }
 
-    const locale = getDuckDuckGoLocaleParams();
-    const cacheKey = `${query.toLowerCase()}|${locale.kl || ''}`;
+    const locale = getRemoteSuggestionLocale();
+    const cacheKey = `${query.toLowerCase()}|${locale.language || ''}`;
     if (remoteSuggestCache.has(cacheKey)) {
         return remoteSuggestCache.get(cacheKey);
     }
@@ -1621,14 +1621,16 @@ async function fetchDuckDuckGoSuggestions(query) {
     }
 
     return new Promise(resolve => {
-        const callbackId = `__ddgSuggest_${Date.now()}_${remoteSuggestCallbackSeed++}`;
+        const callbackId = `__bingSuggest_${Date.now()}_${remoteSuggestCallbackSeed++}`;
         const params = new URLSearchParams({
-            q: query,
-            type: 'list'
+            query,
+            JsonType: 'callback'
         });
-        if (locale.kl) params.set('kl', locale.kl);
-        if (locale.kad) params.set('kad', locale.kad);
+        if (locale.language) params.set('language', locale.language);
+        if (locale.market) params.set('market', locale.market);
+        params.set('JsonCallback', callbackId);
         params.set('_', String(Date.now()));
+
         const script = document.createElement('script');
         let settled = false;
 
@@ -1654,18 +1656,18 @@ async function fetchDuckDuckGoSuggestions(query) {
 
         window[callbackId] = (payload) => {
             try {
-                console.log('DuckDuckGo 原始回應:', payload);
-                const suggestions = extractDuckDuckGoSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
-                console.log('DuckDuckGo 解析後建議詞:', suggestions);
+                console.log('遠端 API 原始回應:', payload);
+                const suggestions = extractRemoteSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
+                console.log('遠端 API 解析後建議詞:', suggestions);
                 finalize(suggestions);
             } catch (err) {
-                console.warn('Failed to parse DuckDuckGo suggestions', err);
+                console.warn('Failed to parse remote suggestions', err);
                 finalize([]);
             }
         };
 
         script.onerror = cancel;
-        script.src = `https://duckduckgo.com/ac/?${params.toString()}&callback=${callbackId}`;
+        script.src = `https://api.bing.com/osjson.aspx?${params.toString()}`;
         script.async = true;
         document.head.appendChild(script);
 
@@ -2356,73 +2358,75 @@ function deleteCategoryFromModal(category) {
 }
 
 // 抓取網站 favicon
-async function fetchFavicon() {
-    const urlInput = document.getElementById('bookmarkUrl');
-    const iconInput = document.getElementById('bookmarkIcon');
-    const url = urlInput.value.trim();
-    
-    if (!url) {
-        alert('請先輸入網址');
-        return;
+async function fetchRemoteSuggestions(query) {
+    if (!query || query.length < getRemoteSuggestionMinLength()) {
+        return [];
     }
-    
-    try {
-        // 確保 URL 有協議
-        const fullUrl = url.match(/^https?:\/\//) ? url : 'https://' + url;
-        const urlObj = new URL(fullUrl);
-        
-        // 嘗試多種 favicon 獲取方式
-        const faviconUrls = [
-            `https://www.google.com/s2/favicons?domain=${urlObj.hostname}&sz=128`,
-            `${urlObj.origin}/favicon.ico`,
-            `https://icon.horse/icon/${urlObj.hostname}`
-        ];
-        
-        // 使用第一個方法（Google favicon 服務）
-        iconInput.value = faviconUrls[0];
-        alert(t('alertIconFetched'));
-        
-    } catch (error) {
-        alert(t('alertInvalidUrl'));
+
+    const locale = getRemoteSuggestionLocale();
+    const cacheKey = `${query.toLowerCase()}|${locale.language || ''}`;
+    if (remoteSuggestCache.has(cacheKey)) {
+        return remoteSuggestCache.get(cacheKey);
     }
-}
 
-// 計算緩存大小
-function updateCacheSize() {
-    const cacheSizeElement = document.getElementById('cacheSize');
-    if (!cacheSizeElement) return;
+    if (remoteSuggestCancel) {
+        remoteSuggestCancel();
+        remoteSuggestCancel = null;
+    }
 
-    try {
-        let totalSize = 0;
-        
-        // 計算 localStorage 大小
-        for (let key in localStorage) {
-            if (localStorage.hasOwnProperty(key)) {
-                const value = localStorage.getItem(key);
-                if (value) {
-                    // 每個字符約 2 字節（UTF-16）
-                    totalSize += (key.length + value.length) * 2;
-                }
+    return new Promise(resolve => {
+        const callbackId = `__bingSuggest_${Date.now()}_${remoteSuggestCallbackSeed++}`;
+        const params = new URLSearchParams({
+            query,
+            JsonType: 'callback',
+            JsonCallback: callbackId
+        });
+        if (locale.language) params.set('language', locale.language);
+        if (locale.market) params.set('market', locale.market);
+        params.set('_', String(Date.now()));
+
+        const script = document.createElement('script');
+        let settled = false;
+
+        const finalize = (result) => {
+            if (settled) return;
+            settled = true;
+            if (remoteSuggestCancel === cancel) {
+                remoteSuggestCancel = null;
             }
-        }
-        
-        // 格式化大小
-        const formatSize = (bytes) => {
-            if (bytes < 1024) return bytes + ' B';
-            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
-            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            window.clearTimeout(timeoutId);
+            delete window[callbackId];
+            if (script.parentNode) {
+                script.parentNode.removeChild(script);
+            }
+            if (Array.isArray(result) && result.length) {
+                remoteSuggestCache.set(cacheKey, result);
+            }
+            resolve(Array.isArray(result) ? result : []);
         };
-        
-        cacheSizeElement.textContent = formatSize(totalSize);
-    } catch (error) {
-        cacheSizeElement.textContent = '無法計算';
-        console.error('計算緩存大小失敗:', error);
-    }
-}
 
-// 彈窗控制
-function openModal(modalId) {
-    document.getElementById(modalId).classList.add('show');
+        const cancel = () => finalize([]);
+        remoteSuggestCancel = cancel;
+
+        window[callbackId] = (payload) => {
+            try {
+                console.log('遠端 API 原始回應:', payload);
+                const suggestions = extractRemoteSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
+                console.log('遠端 API 解析後建議詞:', suggestions);
+                finalize(suggestions);
+            } catch (err) {
+                console.warn('Failed to parse remote suggestions', err);
+                finalize([]);
+            }
+        };
+
+        script.onerror = cancel;
+        script.src = `https://api.bing.com/osjson.aspx?${params.toString()}`;
+        script.async = true;
+        document.head.appendChild(script);
+
+        const timeoutId = window.setTimeout(cancel, 4000);
+    });
 }
 
 function closeModal(modalId) {
