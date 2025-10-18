@@ -2,308 +2,458 @@
 
 
 
-> 一個簡潔、快速且可高度自訂的瀏覽器起始頁，支援多語系、天氣小工具與智慧搜尋建議。> 舒適、快速又可自訂的瀏覽器起始頁，完整支援書籤分類、主題切換、天氣小工具與多語系。
+> A clean, fast, and highly customizable browser start page with multi-language support, weather widget, and intelligent search suggestions.<div align="center">
 
 
 
-[🌐 線上體驗](https://home.zakk.au) | [English](README.en.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)[網站體驗 https://home.zakk.au](https://home.zakk.au)
+[🌐 Live Demo](https://home.zakk.au) | [简体中文](README.zh-CN.md) | [繁體中文](README.md) | [日本語](README.ja.md)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+[![Live Demo](https://img.shields.io/badge/demo-live-success.svg)](https://home.zakk.au)
 
+---[![Languages](https://img.shields.io/badge/languages-4-brightgreen.svg)](#-multilingual-support)
 
-------
 
 
+## ✨ Key Features**A beautiful, customizable browser start page with dark mode, bookmark management, and multilingual support.**
 
-## ✨ 核心特色## 為什麼值得一用
 
-- **閃電啟動**：常用圖示與資產全部採本地載入，首頁瞬間就緒。
 
-- 🚀 **極速啟動** - 所有資源本地載入，無需等待- **專注搜尋**：智慧聯想只向遠端搜尋引擎請求，避免打擾既有書籤。
+- 🚀 **Lightning Fast** - All assets loaded locally, zero latency[🌐 Live Demo](https://home.zakk.au) • [📖 Documentation](#-features) • [🌍 Languages](#-multilingual-support)
 
-- 🔍 **智慧搜尋** - 支援 Google、Bing、DuckDuckGo、Baidu，即時建議不干擾書籤- **視覺一致**：搜尋卡、書籤卡與天氣卡共用同一組亮/暗色調。
+- 🔍 **Smart Search** - Supports Google, Bing, DuckDuckGo, Baidu with real-time suggestions
 
-- 🎨 **自適應主題** - 深淺色主題自動切換，支援自訂背景與濾鏡- **掌心大小也好操作**：桌面、平板與手機皆享有順手的版面與 FAB 快捷。
+- 🎨 **Adaptive Themes** - Auto dark/light mode with custom backgrounds and filters**Read this in other languages:** [简体中文](README.zh-CN.md) | [正體中文](README.zh-TW.md) | [日本語](README.ja.md)
 
-- 📱 **響應式設計** - 完美適配桌面、平板與手機- **永久保存**：所有設定、書籤與分類都保留在瀏覽器中，不需後端服務。
+- 📱 **Responsive Design** - Perfect on desktop, tablet, and mobile
 
-- 🌦️ **天氣小工具** - 整合 Open-Meteo API，搭配 Microsoft Fluent Emoji 動畫圖標
+- 🌦️ **Weather Widget** - Powered by Open-Meteo API with Microsoft Fluent Emoji animations</div>
 
-- 🔖 **書籤管理** - 分類整理、自訂圖標、拖曳排序---
+- 🔖 **Bookmark Manager** - Category organization, custom icons, drag-to-sort
 
-- 🌍 **多語系支援** - 內建英文、簡中、繁中、日文
+- 🌍 **Multi-language** - Built-in English, Simplified Chinese, Traditional Chinese, Japanese---
 
-- 💾 **本地儲存** - 所有資料保存在瀏覽器，無需後端## 功能地圖
+- 💾 **Local Storage** - All data saved in browser, no backend required
 
-
-
----### 🔍 搜尋與聯想
-
-- Google、Bing、DuckDuckGo、Baidu 與自訂搜尋引擎自由切換。
-
-## 🎯 功能亮點- 即時顯示建議與歷史紀錄，可辨識 URL 並直接開啟。
-
-- 多語系介面自動偵測，初次進站即可使用系統語言。
-
-### 搜尋與建議
-
-- 多搜尋引擎切換（Google/Bing/DuckDuckGo/Baidu/自訂）### 🔖 書籤與分類
-
-- JSONP 即時建議，支援多語系- 自訂分類、圖示與排序（分類採卡片式排版，附書籤數量提示）。
-
-- 智慧 URL 識別與直接跳轉- 書籤支援 emoji、圖片網址與自動抓取 favicon。
-
-- 搜尋歷史記錄- 每個分類卡提供快速新增書籤與管理捷徑。
-
-
-
-### 書籤系統### 🎨 外觀設定
-
-- 卡片式分類管理- 可調整的深淺色主題、背景模糊、覆寫濾鏡與漸層/圖片背景。
-
-- 支援 Emoji、圖片網址、Favicon 自動抓取- 所有設定皆以圖示按鈕呈現，兼具桌面與行動操作體驗。
-
-- 簡易拖曳排序
-
-- 快速新增與編輯### 🌦️ 小工具與附加功能
-
-- 天氣小工具支援城市搜尋、手動刷新與顯示最新更新時間。
-
-### 外觀自訂- 除錯面板、快速清除搜尋歷史與一鍵重置等維護工具。
-
-- 深淺色主題切換- 支援快速鍵與行動端懸浮球，常用操作一步到位。
-
-- 自訂背景（漸層/圖片/純色）
-
-- 背景模糊與濾鏡調整---
-
-- 動畫效果控制
-
-## 快速上手
-
-### 天氣小工具
-
-- 城市搜尋與定位### 直接使用
-
-- Microsoft Fluent Emoji 3D 動畫圖標1. 造訪 [https://home.zakk.au](https://home.zakk.au)。
-
-- 6 種 CSS 動畫效果（漂浮、旋轉、飄移、彈跳、閃爍、淡入淡出）2. 將頁面設為瀏覽器首頁或收藏。
-
-- 手動刷新與時間顯示3. 登入後所有設定都會保存在本機，不需額外註冊。
-
-
-
----### 自行佈署
-
-```bash
-
-## 🚀 快速開始# 取得程式碼
-
-git clone https://github.com/AntoninaxMains/home.git
-
-### 線上使用cd home
-
-1. 訪問 [https://home.zakk.au](https://home.zakk.au)
-
-2. 設為瀏覽器首頁或加入書籤# 以任意靜態伺服器啟動
-
-3. 所有設定自動保存在本地python -m http.server 8000
-
-# 然後於瀏覽器開啟 http://localhost:8000
-
-### 自行部署```
-
-```bash
-
-# 克隆專案---
-
-git clone https://github.com/AntoninaxMains/home.git
-
-cd home## 日常操作指引
-
-- **新增書籤**：點擊右上角「＋」或 FAB 選單的新增書籤，填寫資訊後儲存。
-
-# 啟動本地伺服器- **管理分類**：從分類卡點選「管理分類」即可開啟全新的卡片式管理面板，支援重新命名、換圖示與刪除。
-
-python -m http.server 8000- **調整外觀**：設定 → 夜間模式 / 背景設定 / 顯示效果即可調整顏色、模糊與濾鏡。
-
-# 或使用 Node.js- **天氣設定**：設定 → 天氣，可切換顯示、輸入地點並立即刷新。
-
-npx serve
+## ✨ Features
 
 ---
 
-# 瀏覽器開啟 http://localhost:8000
+### 🎨 Visual Customization
 
-```## 設定速查表
+## 🎯 Feature Highlights- **Multiple Backgrounds**: Choose from gradient presets, custom images, or solid colors
 
-| 區域 | 可調整項目 |
+- **Dark Mode**: Elegant dark theme with adjustable depth control
 
----| --- | --- |
+### Search & Suggestions- **Background Blur**: Customizable blur effects with opacity controls
 
-| 夜間模式 | 主題切換、深度滑桿 |
+- Multiple search engines (Google/Bing/DuckDuckGo/Baidu/Custom)- **Background Filters**: Add white or black overlay filters with adjustable opacity
 
-## 📖 使用指南| 背景設定 | 漸層、圖片上傳、純色、覆寫濾鏡 |
+- Real-time JSONP suggestions with i18n support- **Smooth Animations**: Fluid transitions and micro-interactions throughout the interface
 
-| 外觀效果 | 背景模糊、濾鏡透明度 |
+- Smart URL detection and direct navigation
 
-### 基本操作| 天氣 | 小工具開關、地點、手動刷新 |
+- Search history tracking###🔖 Bookmark Management
 
-- **新增書籤**：點擊右上角 ➕ 按鈕或 FAB 選單| 開發者工具 | 除錯面板開關 |
+- **Category Organization**: Create custom categories to organize your bookmarks
 
-- **管理分類**：點擊分類卡片右上角 ⚙️ 圖標| 維護與重置 | 清除搜尋歷史、一鍵重置所有設定 |
+### Bookmark System- **Icon Support**: Use emoji, custom image URLs, or auto-fetch site favicons
 
-- **切換主題**：設定 → 夜間模式
+- Card-based category management- **Simple Icons Integration**: Search and select from thousands of brand logos
 
-- **更改背景**：設定 → 背景設定---
+- Support for Emoji, image URLs, and auto-fetched favicons- **Quick Actions**: Edit and delete bookmarks with hover actions
 
-- **設定天氣**：設定 → 天氣 → 輸入城市名稱
+- Easy drag-and-drop sorting- **Drag & Drop**: (Coming soon) Reorder bookmarks easily
 
-## 在地化與感謝
+- Quick add and edit
 
-### 快捷鍵- English (en) — Core contributors
+### 🔍 Smart Search
 
-- `Ctrl/Cmd + K` - 快速搜尋- 简体中文 (zh-CN) — 社群翻譯支持
+### Appearance Customization- **Multiple Search Engines**: Google, Bing, DuckDuckGo, Baidu, or custom engine
 
-- `Esc` - 關閉彈窗- 正體中文 (zh-TW) — 社群翻譯支持
+- Dark/light theme toggle- **Search Suggestions**: Real-time suggestions as you type
 
-- 行動裝置：FAB 懸浮按鈕快速操作- 日本語 (ja) — 社群翻譯支持
+- Custom backgrounds (gradient/image/solid color)- **Search History**: Keep track of your recent searches
+
+- Background blur and filter adjustments- **Direct URL Opening**: Automatically detect and open URLs directly
+
+- Animation effect controls- **Keyboard Shortcuts**: Quick search with Enter key
 
 
 
----感謝所有協助校對與提供建議的朋友，讓首頁在多語系環境下維持一致體驗。
+### Weather Widget### 🌍 Multilingual Support
+
+- City search and location-based weather- **English** (en)
+
+- Microsoft Fluent Emoji 3D animated icons- **简体中文** (zh-CN) - Simplified Chinese
+
+- 6 CSS animation types (float, rotate, drift, bounce, pulse, fade)- **正體中文** (zh-TW) - Traditional Chinese
+
+- Manual refresh and timestamp display- **日本語** (ja) - Japanese
+
+- Auto-detection based on browser language
+
+---- Easy language switching from settings
 
 
 
-## 🛠️ 技術架構Open source 資源鳴謝：
+## 🚀 Quick Start### 📱 Responsive Design
 
-- [Lucide Icons](https://lucide.dev/)
+- **Desktop & Mobile**: Fully responsive layout for all screen sizes
 
-### 技術棧- [Simple Icons](https://simpleicons.org/)
+### Online Usage- **Touch-Optimized**: Smooth interactions on mobile devices
 
-- **前端**：HTML5 / CSS3 / Vanilla JavaScript- [Open-Meteo](https://open-meteo.com/)
+1. Visit [https://home.zakk.au](https://home.zakk.au)- **FAB Menu**: Floating action button for quick access on mobile
 
-- **圖標**：Lucide Icons + Microsoft Fluent Emoji 3D
+2. Set as browser homepage or bookmark it- **Adaptive UI**: Interface elements adjust to screen size automatically
 
-- **API**：Open-Meteo (天氣資料)---
+3. All settings auto-save locally
 
-- **儲存**：LocalStorage
+### 💾 Data Persistence
 
-- **動畫**：CSS Keyframes## 技術堆疊
+### Self-Hosting- **Local Storage**: All data saved in your browser
 
-- **HTML5 / CSS3 / Vanilla JS**：無需框架即可維護。
+```bash- **No Server Required**: Completely static, works offline
 
-### 專案結構- **LocalStorage**：所有資料持久化於瀏覽器。
+# Clone the repository- **Import/Export**: (Coming soon) Backup and restore your settings
 
-```- **Lucide + Simple Icons**：提供一致的圖示語彙。
+git clone https://github.com/AntoninaxMains/home.git- **Privacy First**: No data collection or external tracking
 
-home/- **Open-Meteo API**：即時天氣資料來源。
+cd home
 
-├── index.html          # 主頁面
+---
 
-├── app.css            # 樣式表 (2910+ 行)---
+# Start local server
 
-├── script.js          # 核心邏輯 (4156+ 行)
+python -m http.server 8000## 🚀 Quick Start
 
-├── i18n/              # 多語系翻譯檔## 開發筆記
+# Or using Node.js
 
-│   ├── en.json1. 安裝依賴：無需安裝，專案為純靜態資源。
+npx serve### Option 1: Direct Use
 
-│   ├── zh-CN.json2. 修改後建議以 `python -m http.server` 或任意靜態伺服器預覽。
+1. Visit [https://home.zakk.au](https://home.zakk.au)
 
-│   ├── zh-TW.json3. 主程式碼路徑：`index.html`、`app.css`、`script.js`、`i18n/`。
+# Open http://localhost:8000 in browser2. Set it as your browser's start page
 
-│   └── ja.json4. 建議於瀏覽器開發工具中清空 localStorage 以測試初次載入情境。
+```3. Start customizing!
 
-└── assets/            # 靜態資源
 
-    └── weather/       # 天氣圖標 (11 個 PNG)---
+
+---### Option 2: Self-Hosting
+
+```bash
+
+## 📖 User Guide# Clone the repository
+
+git clone https://github.com/AntoninaxMains/home.git
+
+### Basic Operations
+
+- **Add Bookmark**: Click ➕ button (top-right) or FAB menu# Navigate to the directory
+
+- **Manage Categories**: Click ⚙️ icon on category cardscd home
+
+- **Switch Theme**: Settings → Night Mode
+
+- **Change Background**: Settings → Background Settings# Open index.html in your browser
+
+- **Set Weather**: Settings → Weather → Enter city name# Or serve with any static file server
+
+python -m http.server 8000
+
+### Keyboard Shortcuts# Then visit http://localhost:8000
+
+- `Ctrl/Cmd + K` - Quick search```
+
+- `Esc` - Close modals
+
+- Mobile: FAB floating button for quick actions### Option 3: GitHub Pages
+
+1. Fork this repository
+
+---2. Enable GitHub Pages in repository settings
+
+3. Set source to `main` branch
+
+## 🛠️ Technical Architecture4. Your start page will be available at `https://yourusername.github.io/home`
+
+
+
+### Tech Stack---
+
+- **Frontend**: HTML5 / CSS3 / Vanilla JavaScript
+
+- **Icons**: Lucide Icons + Microsoft Fluent Emoji 3D## 🎯 Usage Guide
+
+- **API**: Open-Meteo (Weather data)
+
+- **Storage**: LocalStorage### Adding Bookmarks
+
+- **Animation**: CSS Keyframes1. Click the **+ Add Bookmark** button in the top right
+
+2. Fill in the bookmark details:
+
+### Project Structure   - **Name**: Display name for your bookmark
+
+```   - **URL**: Website address
+
+home/   - **Icon**: Emoji, image URL, or use auto-fetch
+
+├── index.html          # Main page   - **Category**: Select or create a new category
+
+├── app.css            # Stylesheet (2910+ lines)3. Click **Save**
+
+├── script.js          # Core logic (4156+ lines)
+
+├── i18n/              # Translation files### Managing Categories
+
+│   ├── en.json1. Click the **Folder** icon in the top right
+
+│   ├── zh-CN.json2. Create new categories with custom names and icons
+
+│   ├── zh-TW.json3. Rename or delete existing categories
+
+│   └── ja.json4. Bookmarks from deleted categories return to the main list
+
+└── assets/            # Static resources
+
+    └── weather/       # Weather icons (11 PNGs)### Customizing Appearance
+
+```1. Click the **Settings** icon
+
+2. Choose your preferred:
+
+### Core Modules   - **Background Type**: Gradient, image, or solid color
+
+- **Search System**: JSONP multi-engine suggestions, history tracking   - **Dark Mode**: Toggle and adjust intensity
+
+- **Bookmark System**: Category management, icon handling, storage sync   - **Blur Effects**: Enable and adjust blur depth
+
+- **Theme System**: Dark/light toggle, background customization, filter effects   - **Overlay Filter**: Add white or black filter layer
+
+- **Weather System**: City search, API integration, animated icons
+
+- **Internationalization**: i18n system, language detection, dynamic translation### Changing Language
+
+- **Desktop**: Click the globe icon in the top right
+
+---- **Mobile**: Open the FAB menu and select language option
+
+- **Settings**: Choose from 4 supported languages
+
+## 🌍 Multi-language Support
+
+---
+
+This project supports the following languages:
+
+- 🇺🇸 **English** (Current)## 🛠️ Technology Stack
+
+- 🇨🇳 [简体中文](README.zh-CN.md)
+
+- 🇹🇼 [繁體中文](README.md)- **HTML5**: Semantic markup
+
+- 🇯🇵 [日本語](README.ja.md)- **CSS3**: Modern styling with CSS custom properties
+
+- **Vanilla JavaScript**: No frameworks, pure ES6+
+
+Thanks to all translation contributors!- **Lucide Icons**: Beautiful open-source icon library
+
+- **Simple Icons**: 2000+ brand logos
+
+---- **LocalStorage API**: Data persistence
+
+
+
+## 🎨 Screenshots---
+
+
+
+### Light Theme## 📁 Project Structure
+
+![Light Theme](https://via.placeholder.com/800x450?text=Light+Theme+Screenshot)
 
 ```
 
-## 授權
+### Dark Themehome/
 
-### 核心功能模組專案採用 [MIT 授權](LICENSE)。歡迎 Fork、客製與分享，請保留授權聲明。
+![Dark Theme](https://via.placeholder.com/800x450?text=Dark+Theme+Screenshot)├── index.html          # Main HTML structure
 
-- **搜尋系統**：JSONP 多引擎建議、歷史記錄
-- **書籤系統**：分類管理、圖標處理、儲存同步
-- **主題系統**：深淺色切換、背景自訂、濾鏡效果
-- **天氣系統**：城市搜尋、API 整合、動畫圖標
-- **國際化**：i18n 系統、語言檢測、動態翻譯
+├── app.css            # Styling and themes
 
----
+### Mobile View├── script.js          # Application logic
 
-## 🌍 多語言支援
+![Mobile View](https://via.placeholder.com/400x800?text=Mobile+Screenshot)├── i18n/
 
-本專案支援以下語言：
-- 🇺🇸 [English](README.en.md)
-- 🇨🇳 [简体中文](README.zh-CN.md)
-- 🇹🇼 **正體中文** (當前)
-- 🇯🇵 [日本語](README.ja.md)
+│   └── translations.js # Translation files
 
-感謝所有翻譯貢獻者！
+---├── assets/
 
----
+│   └── favicon.svg    # Site favicon
 
-## 🎨 截圖預覽
+## 🤝 Contributing└── README.md          # Documentation
 
-### 淺色主題
-![Light Theme](https://via.placeholder.com/800x450?text=Light+Theme+Screenshot)
+```
 
-### 深色主題
-![Dark Theme](https://via.placeholder.com/800x450?text=Dark+Theme+Screenshot)
-
-### 手機版
-![Mobile View](https://via.placeholder.com/400x800?text=Mobile+Screenshot)
+Issues and Pull Requests are welcome!
 
 ---
 
-## 🤝 貢獻指南
+### Development Workflow
 
-歡迎提交 Issue 和 Pull Request！
+1. Fork this repository## 🌈 Customization
 
-### 開發流程
-1. Fork 本專案
-2. 建立特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送分支 (`git push origin feature/AmazingFeature`)
-5. 開啟 Pull Request
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
 
-### 翻譯貢獻
-如需新增語言支援，請：
-1. 複製 `i18n/en.json` 為新語言檔案
-2. 翻譯所有字串
-3. 在 `script.js` 中註冊新語言
-4. 新增對應的 `README.{lang}.md`
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)### Adding Custom Search Engines
+
+4. Push to branch (`git push origin feature/AmazingFeature`)1. Go to Settings → Search Engine
+
+5. Open Pull Request2. Select "Custom"
+
+3. Enter your search URL with `{query}` placeholder
+
+### Translation Contributions   - Example: `https://example.com/search?q={query}`
+
+To add a new language:4. Click "Save and Apply"
+
+1. Copy `i18n/en.json` to new language file
+
+2. Translate all strings### Custom Background Images
+
+3. Register new language in `script.js`Use any image URL or upload your own:
+
+4. Add corresponding `README.{lang}.md`- **Unsplash**: `https://source.unsplash.com/1920x1080/?nature`
+
+- **Direct URLs**: Any publicly accessible image URL
+
+---- **Local Upload**: Images stored in browser cache (max 5MB)
+
+
+
+## 📄 License### Theme Customization
+
+Edit CSS custom properties in `app.css`:
+
+This project is licensed under the [MIT License](LICENSE).```css
+
+:root {
+
+---  --primary: #4c6ef5;
+
+  --primary-dark: #364fc7;
+
+## 🙏 Acknowledgments  --text: #1a202c;
+
+  --text-subtle: #718096;
+
+### Open Source Projects  /* Add your custom colors */
+
+- [Lucide Icons](https://lucide.dev/) - Beautiful icon library}
+
+- [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji) - Weather animated icons```
+
+- [Open-Meteo](https://open-meteo.com/) - Free weather API
+
+- [Simple Icons](https://simpleicons.org/) - Brand icons---
+
+
+
+### Community## 🐛 Known Issues & Limitations
+
+Thanks to everyone who starred, forked, and contributed to this project!
+
+- Images uploaded to browser cache have a 5MB size limit
+
+---- Search suggestions require internet connection
+
+- No cross-browser sync (data stored locally per browser)
+
+## 📮 Contact- Simple Icons library may take a moment to load
+
+
+
+- 🌐 Website: [https://home.zakk.au](https://home.zakk.au)---
+
+- 💻 GitHub: [AntoninaxMains/home](https://github.com/AntoninaxMains/home)
+
+- 📧 Report Issues: [Issues](https://github.com/AntoninaxMains/home/issues)## 🗺️ Roadmap
+
+
+
+---- [ ] Drag & drop bookmark reordering
+
+- [ ] Import/Export settings and bookmarks
+
+<p align="center">- [ ] More search engine presets
+
+  Made with ❤️ by <a href="https://github.com/AntoninaxMains">AntoninaxMains</a>- [ ] Custom CSS themes
+
+</p>- [ ] Cloud sync option (optional)
+
+- [ ] Weather widget
+- [ ] Quick notes feature
+- [ ] Keyboard shortcuts customization
 
 ---
 
-## 📄 授權
+## 🤝 Contributing
 
-本專案採用 [MIT 授權](LICENSE)。
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes:
 
----
-
-## 🙏 致謝
-
-### 開源專案
-- [Lucide Icons](https://lucide.dev/) - 美觀的圖標庫
-- [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji) - 天氣動畫圖標
-- [Open-Meteo](https://open-meteo.com/) - 免費天氣 API
-- [Simple Icons](https://simpleicons.org/) - 品牌圖標
-
-### 社群貢獻
-感謝所有 Star、Fork 和提供建議的朋友們！
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
-## 📮 聯繫方式
+## 📄 License
 
-- 🌐 網站：[https://home.zakk.au](https://home.zakk.au)
-- 💻 GitHub：[AntoninaxMains/home](https://github.com/AntoninaxMains/home)
-- 📧 問題回報：[Issues](https://github.com/AntoninaxMains/home/issues)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/AntoninaxMains">AntoninaxMains</a>
-</p>
+## 🙏 Acknowledgements
+
+### Translation Contributors
+Special thanks to all contributors who helped make this project multilingual:
+
+- **English (en)**: Original translation
+- **简体中文 (zh-CN)**: Simplified Chinese translation support
+- **正體中文 (zh-TW)**: Traditional Chinese translation support  
+- **日本語 (ja)**: Japanese translation support
+
+Your contributions make this project accessible to users worldwide! 🌍
+
+### Open Source Projects
+This project wouldn't be possible without these amazing open-source libraries:
+
+- [**Lucide Icons**](https://lucide.dev/) - Beautiful & consistent icon set
+- [**Simple Icons**](https://simpleicons.org/) - SVG icons for popular brands
+- [**Unsplash**](https://unsplash.com/) - High-quality free images
+
+### Inspiration
+- Modern browser start pages and new tab extensions
+- Material Design and Fluent Design principles
+- Community feedback and feature requests
+
+---
+
+## 💬 Support
+
+- **Live Demo**: [https://home.zakk.au](https://home.zakk.au)
+- **Issues**: [GitHub Issues](https://github.com/AntoninaxMains/home/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/AntoninaxMains/home/discussions)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by the community**
+
+If you find this project helpful, please consider giving it a ⭐️!
+
+[⬆ Back to Top](#start-page)
+
+</div>
