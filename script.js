@@ -1710,35 +1710,40 @@ async function refreshWeather({ force = false } = {}) {
 function resolveWeatherDescriptor(code) {
     const numericCode = Number(code);
     if (!Number.isFinite(numericCode)) {
-        return { key: 'weatherConditionUnknown', icon: 'cloud' };
+        return { key: 'weatherConditionUnknown', emoji: '☁️' };
     }
 
-    if (numericCode === 0) return { key: 'weatherConditionClear', icon: 'sun' };
-    if (numericCode === 1 || numericCode === 2) return { key: 'weatherConditionMostlyClear', icon: 'cloud-sun' };
-    if (numericCode === 3) return { key: 'weatherConditionCloudy', icon: 'cloud' };
-    if (numericCode === 45 || numericCode === 48) return { key: 'weatherConditionFog', icon: 'cloud-fog' };
-    if (numericCode >= 51 && numericCode <= 57) return { key: 'weatherConditionDrizzle', icon: 'cloud-drizzle' };
-    if ([61, 63].includes(numericCode)) return { key: 'weatherConditionRain', icon: 'cloud-rain' };
-    if ([65, 80, 81, 82].includes(numericCode)) return { key: 'weatherConditionHeavyRain', icon: 'cloud-rain-wind' };
-    if (numericCode === 66 || numericCode === 67) return { key: 'weatherConditionFreezingRain', icon: 'cloud-hail' };
+    if (numericCode === 0) return { key: 'weatherConditionClear', emoji: '☀️' };
+    if (numericCode === 1 || numericCode === 2) return { key: 'weatherConditionMostlyClear', emoji: '🌤️' };
+    if (numericCode === 3) return { key: 'weatherConditionCloudy', emoji: '☁️' };
+    if (numericCode === 45 || numericCode === 48) return { key: 'weatherConditionFog', emoji: '🌫️' };
+    if (numericCode >= 51 && numericCode <= 57) return { key: 'weatherConditionDrizzle', emoji: '🌦️' };
+    if ([61, 63].includes(numericCode)) return { key: 'weatherConditionRain', emoji: '🌧️' };
+    if ([65, 80, 81, 82].includes(numericCode)) return { key: 'weatherConditionHeavyRain', emoji: '⛈️' };
+    if (numericCode === 66 || numericCode === 67) return { key: 'weatherConditionFreezingRain', emoji: '🌨️' };
     if ((numericCode >= 71 && numericCode <= 77) || numericCode === 85 || numericCode === 86) {
         const key = numericCode === 85 || numericCode === 86 ? 'weatherConditionSnowShower' : 'weatherConditionSnow';
-        return { key, icon: 'cloud-snow' };
+        return { key, emoji: '❄️' };
     }
-    if (numericCode === 95 || numericCode === 96 || numericCode === 99) return { key: 'weatherConditionThunderstorm', icon: 'cloud-lightning' };
-    return { key: 'weatherConditionUnknown', icon: 'cloud' };
+    if (numericCode === 95 || numericCode === 96 || numericCode === 99) return { key: 'weatherConditionThunderstorm', emoji: '⚡' };
+    return { key: 'weatherConditionUnknown', emoji: '☁️' };
 }
 
-function setWeatherIcon(container, iconName, animated = false) {
+function setWeatherIcon(container, iconContent, animated = false) {
     if (!container) return;
     container.classList.toggle('is-rotating', animated);
-    if (!iconName) {
+    if (!iconContent) {
         container.innerHTML = '';
+    } else if (iconContent.startsWith('emoji:')) {
+        // Emoji mode
+        const emoji = iconContent.substring(6);
+        container.innerHTML = `<span class="weather-emoji">${emoji}</span>`;
     } else {
-        container.innerHTML = `<i data-lucide="${iconName}"></i>`;
-    }
-    if (window.lucide && typeof window.lucide.createIcons === 'function') {
-        window.lucide.createIcons();
+        // Lucide icon mode (for loader, error states)
+        container.innerHTML = `<i data-lucide="${iconContent}"></i>`;
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
     }
 }
 
@@ -1758,7 +1763,7 @@ function getWeatherViewModel() {
         enabled,
         hasStoredLocation: Boolean(storedLocation),
         locationText: resolvedLocation || '',
-        icon: 'cloud-sun',
+        icon: 'emoji:🌤️',
         rotating: false,
         tempText: t('weatherSection') || '天氣',
         conditionText: '',
@@ -1778,7 +1783,7 @@ function getWeatherViewModel() {
     if (!storedLocation) {
         view.statusText = t('weatherStatusLocationMissing');
         view.conditionText = view.statusText;
-        view.icon = 'cloud-sun';
+        view.icon = 'emoji:🌤️';
         view.tempText = t('weatherSection') || '天氣';
         return view;
     }
@@ -1809,12 +1814,12 @@ function getWeatherViewModel() {
     if (!weatherState.data) {
         view.statusText = t('weatherStatusLoading');
         view.conditionText = view.statusText;
-        view.icon = 'cloud';
+        view.icon = 'emoji:☁️';
         return view;
     }
 
     const descriptor = resolveWeatherDescriptor(weatherState.data.weathercode);
-    view.icon = descriptor.icon;
+    view.icon = `emoji:${descriptor.emoji}`;
     view.conditionText = t(descriptor.key);
 
     const temperature = typeof weatherState.data.temperature === 'number' ? Math.round(weatherState.data.temperature) : null;
@@ -3430,7 +3435,7 @@ function createWeatherBookmarkTile() {
     tile.innerHTML = `
         <div class="weather-tile" data-weather-trigger role="button" tabindex="0" data-i18n-attr="aria-label:weatherWidgetLabel">
             <div class="bookmark-icon weather-tile__icon" aria-hidden="true">
-                <span data-weather-icon="tile"><i data-lucide="cloud-sun"></i></span>
+                <span data-weather-icon="tile"><span class="weather-emoji">🌤️</span></span>
             </div>
             <div class="bookmark-name weather-tile__temp" data-weather-temp="tile">--°</div>
         </div>

@@ -931,63 +931,28 @@ body.dark-mode .suggestion-item--skeleton {
   font-size: 32px;
 }
 
+.weather-tile__icon [data-weather-icon] .weather-emoji {
+  font-size: 32px;
+  line-height: 1;
+  display: block;
+}
+
 .weather-tile__icon [data-weather-icon] i {
   width: 32px;
   height: 32px;
-  color: #4CACF0;
-  filter: drop-shadow(0 2px 4px rgba(76, 172, 240, 0.3));
+  color: #3B82F6;
+  filter: drop-shadow(0 2px 5px rgba(59, 130, 246, 0.35));
   transition: all 0.3s ease;
 }
 
-/* Weather icon colors for different conditions with enhanced styling */
-.weather-tile__icon [data-weather-icon] i[data-lucide="sun"] {
-  color: #F59E0B;
-  filter: drop-shadow(0 2px 6px rgba(245, 158, 11, 0.4));
-}
-
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-sun"] {
-  color: #3B82F6;
-  filter: drop-shadow(0 2px 5px rgba(59, 130, 246, 0.35));
-}
-
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud"],
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-fog"] {
-  color: #64748B;
-  filter: drop-shadow(0 2px 4px rgba(100, 116, 139, 0.25));
-}
-
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-rain"],
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-drizzle"] {
-  color: #0EA5E9;
-  filter: drop-shadow(0 2px 5px rgba(14, 165, 233, 0.4));
-}
-
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-snow"] {
-  color: #38BDF8;
-  filter: drop-shadow(0 2px 6px rgba(56, 189, 248, 0.45));
-}
-
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-lightning"] {
-  color: #F59E0B;
-  filter: drop-shadow(0 2px 6px rgba(245, 158, 11, 0.5));
-}
-
-.weather-tile__icon [data-weather-icon] i[data-lucide="wind"],
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-rain-wind"],
-.weather-tile__icon [data-weather-icon] i[data-lucide="cloud-hail"] {
-  color: #818CF8;
-  filter: drop-shadow(0 2px 5px rgba(129, 140, 248, 0.35));
-}
-
+/* Only style loader and error icons (not weather condition icons - we use emoji now) */
 .weather-tile__icon [data-weather-icon] i[data-lucide="loader-2"] {
   color: #3B82F6;
-  filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
 }
 
 .weather-tile__icon [data-weather-icon] i[data-lucide="help-circle"],
 .weather-tile__icon [data-weather-icon] i[data-lucide="alert-triangle"] {
   color: #F97316;
-  filter: drop-shadow(0 2px 5px rgba(249, 115, 22, 0.35));
 }
 
 .weather-tile__icon [data-weather-icon].is-rotating {
@@ -1040,55 +1005,14 @@ body.dark-mode .bookmark-item--weather .bookmark-actions__btn:hover {
   color: #fff;
 }
 
-/* Dark mode weather icon colors with enhanced styling */
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="sun"] {
-  color: #FBBF24;
-  filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.5));
-}
-
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-sun"] {
-  color: #60A5FA;
-  filter: drop-shadow(0 2px 6px rgba(96, 165, 250, 0.45));
-}
-
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud"],
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-fog"] {
-  color: #E2E8F0;
-  filter: drop-shadow(0 2px 5px rgba(226, 232, 240, 0.3));
-}
-
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-rain"],
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-drizzle"] {
-  color: #38BDF8;
-  filter: drop-shadow(0 2px 6px rgba(56, 189, 248, 0.5));
-}
-
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-snow"] {
-  color: #DBEAFE;
-  filter: drop-shadow(0 2px 8px rgba(219, 234, 254, 0.55));
-}
-
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-lightning"] {
-  color: #FBBF24;
-  filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.6));
-}
-
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="wind"],
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-rain-wind"],
-body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="cloud-hail"] {
-  color: #A5B4FC;
-  filter: drop-shadow(0 2px 6px rgba(165, 180, 252, 0.45));
-}
-
+/* Dark mode: only style loader and error icons (emoji already colorful) */
 body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="loader-2"] {
   color: #60A5FA;
-  filter: drop-shadow(0 2px 5px rgba(96, 165, 250, 0.4));
 }
 
 body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="help-circle"],
 body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="alert-triangle"] {
   color: #FB923C;
-  filter: drop-shadow(0 2px 6px rgba(251, 146, 60, 0.45));
 }
 
 body.dark-mode .bookmark-empty {
@@ -1791,6 +1715,17 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   gap: 14px; 
   flex-wrap: wrap; 
   flex-shrink: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .weather-field__controls,
+  .developer-field__controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
 }
 .weather-field__body { 
   display: flex; 
@@ -1830,36 +1765,46 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   cursor: pointer;
   transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border-color var(--transition), color var(--transition);
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
   min-width: 0;
+  flex-shrink: 1;
+  max-width: 280px;
 }
 
 @media (max-width: 640px) {
   .settings-toggle {
-    padding: 8px 14px;
-    font-size: 12px;
-    gap: 8px;
-    max-width: calc(100vw - 140px);
+    padding: 8px 12px;
+    font-size: 11px;
+    gap: 6px;
+    max-width: 100%;
+    width: 100%;
   }
   .settings-toggle__label {
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
+    white-space: nowrap;
+  }
+  .settings-toggle__icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+  .settings-toggle__icon i {
+    width: 16px;
+    height: 16px;
   }
 }
 
 @media (min-width: 641px) and (max-width: 1023px) {
   .settings-toggle {
-    padding: 9px 16px;
+    padding: 8px 14px;
     font-size: 12px;
-    gap: 9px;
-    max-width: 240px;
+    gap: 8px;
+    max-width: 220px;
   }
   .settings-toggle__label {
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
+    white-space: nowrap;
   }
 }
 
