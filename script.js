@@ -1595,7 +1595,7 @@ async function fetchRemoteSuggestions(query) {
     }
 
     const locale = getRemoteSuggestionLocale();
-    const cacheKey = `${query.toLowerCase()}|${locale.language || ''}`;
+    const cacheKey = `${query.toLowerCase()}|${locale.language || ''}|${locale.market || ''}`;
     if (remoteSuggestCache.has(cacheKey)) {
         return remoteSuggestCache.get(cacheKey);
     }
