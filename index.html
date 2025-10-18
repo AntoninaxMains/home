@@ -45,27 +45,28 @@
             <i data-lucide="menu"></i>
         </button>
         <div class="fab-menu" id="fabMenu">
-            <button class="fab-option" id="fabAddBookmark" title="新增書籤">
+            <button class="fab-option" id="fabAddBookmark" data-i18n-attr="title:addBookmark" title="新增書籤">
                 <i data-lucide="plus"></i>
-                <span>新增書籤</span>
+                <span data-i18n="addBookmark">新增書籤</span>
             </button>
-            <button class="fab-option" id="fabManageCategories" title="管理分類">
+            <button class="fab-option" id="fabManageCategories" data-i18n-attr="title:manageCategories" title="管理分類">
                 <i data-lucide="folder"></i>
-                <span>管理分類</span>
+                <span data-i18n="manageCategories">管理分類</span>
             </button>
-            <button class="fab-option" id="fabSettings" title="設定">
+            <button class="fab-option" id="fabSettings" data-i18n-attr="title:settings" title="設定">
                 <i data-lucide="settings"></i>
-                <span>設定</span>
+                <span data-i18n="settings">設定</span>
             </button>
-            <button class="fab-option" id="fabLang" title="語言">
+            <button class="fab-option" id="fabLang" data-i18n-attr="title:languageSection" title="語言">
                 <i data-lucide="globe-2"></i>
-                <span>語言</span>
+                <span data-i18n="languageSection">語言</span>
             </button>
-            <button class="fab-option" id="fabDarkMode" title="夜間模式">
+            <button class="fab-option" id="fabDarkMode" data-i18n-attr="title:darkModeSection" title="夜間模式">
                 <i data-lucide="moon"></i>
-                <span>夜間模式</span>
+                <span data-i18n="darkModeSection">夜間模式</span>
             </button>
         </div>
+        <div id="fabBackdrop" class="fab-backdrop"></div>
     </div>
     
         <main class="app">
@@ -122,7 +123,7 @@
                 <div class="modal-body settings-body">
                     <div class="settings-layout">
                         <!-- 夜間模式 -->
-                        <section class="settings-card">
+                        <section class="settings-card settings-card--dark" data-settings-area="dark">
                             <header class="settings-card__header">
                                 <i data-lucide="moon"></i>
                                 <h4 data-i18n="darkModeSection">夜間模式</h4>
@@ -143,7 +144,7 @@
                         </section>
 
                         <!-- 背景設定 -->
-                        <section class="settings-card settings-card--wide">
+                        <section class="settings-card settings-card--wide settings-card--background" data-settings-area="background">
                             <header class="settings-card__header">
                                 <i data-lucide="palette"></i>
                                 <h4 data-i18n="backgroundSection">背景設定</h4>
@@ -184,7 +185,7 @@
                         </section>
 
                         <!-- 顯示效果 -->
-                        <section class="settings-card settings-card--wide">
+                        <section class="settings-card settings-card--wide settings-card--appearance" data-settings-area="appearance">
                             <header class="settings-card__header">
                                 <i data-lucide="image"></i>
                                 <h4 data-i18n="appearanceSection">顯示效果（外觀）</h4>
@@ -213,7 +214,7 @@
                         </section>
 
                         <!-- 快速清理 -->
-                        <section class="settings-card settings-card--wide settings-card--actions">
+                        <section class="settings-card settings-card--wide settings-card--actions" data-settings-area="actions">
                             <header class="settings-card__header">
                                 <i data-lucide="wand-2"></i>
                                 <h4 data-i18n="cleanupSectionTitle">維護與重置</h4>
@@ -257,25 +258,31 @@
                     <button class="modal-close" data-close="bookmarkModal" aria-label="關閉書籤表單">×</button>
                 </header>
                 <div class="modal-body">
-                    <label for="bookmarkCategory" data-i18n="categoryLabel">分類</label>
-                    <div class="category-picker">
-                        <select id="bookmarkCategory"></select>
-                        <input id="newCategoryInput" type="text" data-i18n-placeholder="enterNewCategory" placeholder="輸入新分類" class="hidden" />
+                    <div class="bookmark-form-grid">
+                        <div class="bookmark-form-main">
+                            <label for="bookmarkCategory" data-i18n="categoryLabel">分類</label>
+                            <div class="category-picker">
+                                <select id="bookmarkCategory"></select>
+                                <input id="newCategoryInput" type="text" data-i18n-placeholder="enterNewCategory" placeholder="輸入新分類" class="hidden" />
+                            </div>
+                            <label for="bookmarkName" data-i18n="nameLabel">名稱</label>
+                            <input id="bookmarkName" type="text" placeholder="網站名稱" data-i18n-placeholder="namePlaceholder" />
+                            <label for="bookmarkUrl" data-i18n="urlLabel">網址</label>
+                            <input id="bookmarkUrl" type="text" placeholder="https://example.com" data-i18n-placeholder="urlPlaceholder" />
+                        </div>
+                        <div class="bookmark-form-side">
+                            <label for="bookmarkIcon" data-i18n="iconLabel">圖示</label>
+                            <div class="icon-row icon-row--with-preview">
+                                <input id="bookmarkIcon" type="text" placeholder="🌐 Emoji 或圖片網址" data-i18n-placeholder="iconPlaceholder" />
+                                <button id="autoIconBtn" type="button" class="btn" data-i18n="autoFetch"><i data-lucide="sparkles" style="width:14px;height:14px;margin-right:4px;"></i>自動抓取</button>
+                                <div id="bookmarkIconPreview" class="bookmark-icon-preview" role="presentation" aria-hidden="true"></div>
+                            </div>
+                            <span class="hint" data-i18n="iconHint">可輸入 Emoji、圖片網址，或使用自動抓取</span>
+                            <a class="icon-library-link" href="https://simpleicons.org/" target="_blank" rel="noopener" style="margin-top: 8px;">
+                                <span data-i18n="iconSearchLibraryLink">前往 Simple Icons 圖標庫</span>
+                            </a>
+                        </div>
                     </div>
-                    <label for="bookmarkName" data-i18n="nameLabel">名稱</label>
-                    <input id="bookmarkName" type="text" placeholder="網站名稱" data-i18n-placeholder="namePlaceholder" />
-                    <label for="bookmarkUrl" data-i18n="urlLabel">網址</label>
-                    <input id="bookmarkUrl" type="text" placeholder="https://example.com" data-i18n-placeholder="urlPlaceholder" />
-                    <label for="bookmarkIcon" data-i18n="iconLabel">圖示</label>
-                    <div class="icon-row icon-row--with-preview">
-                        <input id="bookmarkIcon" type="text" placeholder="🌐 Emoji 或圖片網址" data-i18n-placeholder="iconPlaceholder" />
-                        <button id="autoIconBtn" type="button" class="btn" data-i18n="autoFetch"><i data-lucide="sparkles" style="width:14px;height:14px;margin-right:4px;"></i>自動抓取</button>
-                        <div id="bookmarkIconPreview" class="bookmark-icon-preview" role="presentation" aria-hidden="true"></div>
-                    </div>
-                    <span class="hint" data-i18n="iconHint">可輸入 Emoji、圖片網址，或使用自動抓取</span>
-                    <a class="icon-library-link" href="https://simpleicons.org/" target="_blank" rel="noopener" style="margin-top: 8px;">
-                        <span data-i18n="iconSearchLibraryLink">前往 Simple Icons 圖標庫</span>
-                    </a>
                 </div>
                 <footer class="modal-footer">
                     <button id="saveBookmark" class="btn primary" data-i18n="save">儲存</button>
@@ -291,12 +298,23 @@
                     <h3 id="categoryTitle"><i data-lucide="folder-open" style="width:18px;height:18px;margin-right:6px;"></i><span data-i18n="manageCategoriesTitle">管理分類</span></h3>
                     <button class="modal-close" data-close="categoryModal" aria-label="關閉分類管理">×</button>
                 </header>
-                <div class="modal-body">
-                    <p class="hint" style="margin-bottom: 16px;" data-i18n="categoriesDesc">建立分類來整理書籤。刪除分類時，書籤會回到主列表。</p>
-                    <div id="categoryList" class="category-list"></div>
-                    <div class="icon-row" style="margin-top: 16px;">
-                        <input id="newCategoryName" type="text" data-i18n-placeholder="enterCategoryName" placeholder="輸入新分類名稱" />
-                        <button id="addCategoryBtn" type="button" class="btn primary" data-i18n="addCategoryBtn">+ 新增</button>
+                <div class="modal-body category-modal-body">
+                    <div class="category-modal-intro">
+                        <div class="category-modal-icon">
+                            <i data-lucide="folder-plus"></i>
+                        </div>
+                        <div class="category-modal-copy">
+                            <h4 data-i18n="manageCategories">管理分類</h4>
+                            <p data-i18n="categoriesDesc">建立分類來整理書籤。刪除分類時，書籤會回到主列表。</p>
+                        </div>
+                    </div>
+                    <div id="categoryList" class="category-list category-list--panel"></div>
+                    <div class="category-form">
+                        <label for="newCategoryName" data-i18n="enterCategoryName">輸入新分類名稱</label>
+                        <div class="category-form__row">
+                            <input id="newCategoryName" type="text" data-i18n-placeholder="enterCategoryName" placeholder="輸入新分類名稱" />
+                            <button id="addCategoryBtn" type="button" class="btn primary" data-i18n="addCategoryBtn">+ 新增</button>
+                        </div>
                     </div>
                 </div>
                 <footer class="modal-footer">
