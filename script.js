@@ -499,6 +499,87 @@ function registerIconAlias(alias, slug) {
     iconAliasLookup.set(normalizeIconKey(alias), slug);
 }
 
+function isLikelyEmoji(value) {
+    if (!value) return false;
+    const trimmed = String(value).trim();
+    if (!trimmed) return false;
+    try {
+        return /\p{Extended_Pictographic}/u.test(trimmed);
+    } catch (err) {
+        // 某些較舊的瀏覽器不支援 Unicode 屬性匹配，退回至簡單檢查
+        return /[\u{1F300}-\u{1FAFF}\u{1F900}-\u{1F9FF}\u{2600}-\u{27BF}]/u.test(trimmed);
+    }
+}
+
+function resolveBookmarkIcon(descriptor, size = 32, label = '') {
+    const value = typeof descriptor === 'string' ? descriptor.trim() : '';
+    if (!value) {
+        return { html: '', type: 'empty' };
+    }
+
+    if (value.startsWith('lucide:')) {
+        return { html: getIconMarkup(value, size, label), type: 'lucide' };
+    }
+
+    if (/^(https?:\/\/|data:|\/\/)/i.test(value)) {
+        const src = escapeAttribute(value);
+        const alt = escapeAttribute(label || value);
+        return {
+            html: `<img src="${src}" alt="${alt}" loading="lazy">`,
+            type: 'image'
+        };
+    }
+
+    if (value.includes('favicon')) {
+        const src = escapeAttribute(value);
+        const alt = escapeAttribute(label || value);
+        return {
+            html: `<img src="${src}" alt="${alt}" loading="lazy">`,
+            type: 'image'
+        };
+    }
+
+    if (/^<svg/i.test(value)) {
+        return { html: value, type: 'svg' };
+    }
+
+    if (isLikelyEmoji(value)) {
+        return {
+            html: `<span class="bookmark-emoji">${escapeHtml(value)}</span>`,
+            type: 'emoji'
+        };
+    }
+
+    return { html: getIconMarkup(value, size, label), type: 'image' };
+}
+
+function updateBookmarkIconPreview(iconValue) {
+    const preview = document.getElementById('bookmarkIconPreview');
+    if (!preview) return;
+
+    const value = (iconValue || '').trim();
+    preview.innerHTML = '';
+    preview.classList.remove('is-empty', 'is-image', 'is-emoji', 'is-svg', 'is-lucide');
+
+    if (!value) {
+        preview.classList.add('is-empty');
+        preview.innerHTML = `<i data-lucide="bookmark" style="width:24px;height:24px;opacity:0.6;"></i>`;
+        if (window.lucide) window.lucide.createIcons({ nameAttr: 'data-lucide' });
+        return;
+    }
+
+    const { html, type } = resolveBookmarkIcon(value, 34, '');
+    if (!html) {
+        preview.classList.add('is-empty');
+        preview.innerHTML = `<i data-lucide="bookmark" style="width:24px;height:24px;opacity:0.6;"></i>`;
+    } else {
+        preview.innerHTML = html;
+        preview.classList.add(`is-${type}`);
+    }
+
+    if (window.lucide) window.lucide.createIcons({ nameAttr: 'data-lucide' });
+}
+
 // 背景漸層預設
 const gradientPresets = {
     default: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -1165,6 +1246,13 @@ function initEventListeners() {
         });
     });
     
+    const bookmarkIconInput = document.getElementById('bookmarkIcon');
+    if (bookmarkIconInput) {
+        updateBookmarkIconPreview(bookmarkIconInput.value);
+        bookmarkIconInput.addEventListener('input', (event) => updateBookmarkIconPreview(event.target.value));
+        bookmarkIconInput.addEventListener('change', (event) => updateBookmarkIconPreview(event.target.value));
+    }
+
     // 抓取圖示按鈕
     const autoIconBtn = document.getElementById('autoIconBtn');
     if (autoIconBtn) autoIconBtn.addEventListener('click', fetchFavicon);
@@ -2220,28 +2308,15 @@ function createBookmarkElement(bookmark) {
         }
     };
     
-    let iconHtml = '';
-    // allow explicit null/empty to mean no icon
-    if (!bookmark.icon) {
-        iconHtml = '';
-    } else if (bookmark.icon.startsWith('lucide:')) {
-        iconHtml = getIconMarkup(bookmark.icon, 32, bookmark.name);
-    } else if (bookmark.icon.startsWith('http')) {
-        iconHtml = `<img src="${bookmark.icon}" alt="${bookmark.name}" onerror="this.parentElement.innerHTML='';">`;
-    } else if (bookmark.icon.includes('favicon')) {
-        iconHtml = `<img src="${bookmark.icon}" alt="${bookmark.name}" onerror="this.parentElement.innerHTML='';">`;
-    } else if (/^<svg/i.test(bookmark.icon)) {
-        iconHtml = bookmark.icon;
-    } else {
-        iconHtml = getIconMarkup(bookmark.icon, 32, bookmark.name);
-    }
+    const { html: iconHtml, type: iconType } = resolveBookmarkIcon(bookmark.icon, 32, bookmark.name);
+    const iconTypeClass = iconType && iconType !== 'empty' ? ` bookmark-icon--${iconType}` : '';
     
     div.innerHTML = `
         <div class="bookmark-actions">
             <button onclick="editBookmark(${bookmark.id}); event.stopPropagation();" title="編輯"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
             <button onclick="deleteBookmark(${bookmark.id}); event.stopPropagation();" title="刪除"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
         </div>
-        <div class="bookmark-icon">${iconHtml}</div>
+        <div class="bookmark-icon${iconTypeClass}">${iconHtml}</div>
         <div class="bookmark-name">${bookmark.name}</div>
     `;
     
@@ -2264,7 +2339,12 @@ function openBookmarkModal(bookmark = null, defaultCategory = '') {
     if (categorySelect) categorySelect.value = bookmark ? bookmark.category : defaultCategory;
     if (nameInput) nameInput.value = bookmark ? bookmark.name : '';
     if (urlInput) urlInput.value = bookmark ? bookmark.url : '';
-    if (iconInput) iconInput.value = bookmark ? bookmark.icon : '';
+    if (iconInput) {
+        iconInput.value = bookmark ? (bookmark.icon || '') : '';
+        updateBookmarkIconPreview(iconInput.value);
+    } else {
+        updateBookmarkIconPreview('');
+    }
     
     const newCat = document.getElementById('newCategoryInput');
     if (newCat) newCat.classList.add('hidden');
@@ -2521,6 +2601,7 @@ function fetchFavicon() {
     const faviconUrl = `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(normalized.origin)}`;
     iconInput.value = faviconUrl;
     iconInput.dataset.fetched = '1';
+    updateBookmarkIconPreview(faviconUrl);
     alert(t('alertIconFetched') || '已自動填入網站圖示！');
 }
 
