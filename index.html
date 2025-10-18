@@ -357,11 +357,19 @@
         script.src = `i18n/${currentLanguage}.js`;
         script.onload = function() {
             // 設置全局 translations 對象 / Set global translations object
-            let translations = {};
-            if (typeof en !== 'undefined') translations = { 'en': en };
-            if (typeof zhCN !== 'undefined') translations = { 'zh-CN': zhCN };
-            if (typeof zhTW !== 'undefined') translations = { 'zh-TW': zhTW };
-            if (typeof ja !== 'undefined') translations = { 'ja': ja };
+            const translations = {};
+            
+            // 根據載入的語言設置對應的翻譯
+            if (currentLanguage === 'en' && typeof en !== 'undefined') {
+                translations['en'] = en;
+            } else if (currentLanguage === 'zh-CN' && typeof zhCN !== 'undefined') {
+                translations['zh-CN'] = zhCN;
+            } else if (currentLanguage === 'zh-TW' && typeof zhTW !== 'undefined') {
+                translations['zh-TW'] = zhTW;
+            } else if (currentLanguage === 'ja' && typeof ja !== 'undefined') {
+                translations['ja'] = ja;
+            }
+            
             window.translations = translations;
             window.currentLanguage = currentLanguage;
             

@@ -221,11 +221,12 @@ body.dark-mode .suggestion-item:focus-visible { box-shadow: 0 10px 18px rgba(0,0
 .category-list { display: flex; flex-direction: column; gap: 10px; }
 .category-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: rgba(76,110,245,0.05); border-radius: 10px; border: 1px solid rgba(76,110,245,0.12); transition: background var(--transition); }
 .category-modal-body { display: flex; flex-direction: column; gap: 24px; }
-.category-modal-intro { display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 18px; background: linear-gradient(135deg, rgba(76, 110, 245, 0.12), rgba(76, 110, 245, 0.02)); border: 1px solid rgba(76, 110, 245, 0.16); }
-.category-modal-icon { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: rgba(76, 110, 245, 0.18); color: var(--primary-dark); }
-.category-modal-icon i { width: 26px; height: 26px; }
-.category-modal-copy h4 { margin: 0 0 6px; font-size: 18px; font-weight: 700; color: var(--text); }
-.category-modal-copy p { margin: 0; color: var(--text-subtle); line-height: 1.5; }
+.category-modal-intro { display: flex; align-items: flex-start; gap: 14px; padding: 18px; border-radius: 18px; background: linear-gradient(135deg, rgba(76, 110, 245, 0.12), rgba(76, 110, 245, 0.02)); border: 1px solid rgba(76, 110, 245, 0.16); }
+.category-modal-icon { flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(76, 110, 245, 0.18); color: var(--primary-dark); }
+.category-modal-icon i { width: 24px; height: 24px; }
+.category-modal-copy { flex: 1; min-width: 0; }
+.category-modal-copy h4 { margin: 0 0 4px; font-size: 16px; font-weight: 700; color: var(--text); }
+.category-modal-copy p { margin: 0; color: var(--text-subtle); line-height: 1.45; font-size: 13px; }
 .category-list { display: flex; flex-direction: column; gap: 12px; }
 .category-list--panel { padding: 6px 2px; }
 .category-empty { text-align: center; padding: 28px 18px; border-radius: 16px; border: 1px dashed rgba(76,110,245,0.3); background: rgba(76,110,245,0.06); color: var(--text-subtle); font-weight: 600; }
@@ -1113,8 +1114,11 @@ body.dark-mode .toolbar-btn.primary {
   .modal-panel { width: calc(100% - 32px); max-height: 90vh; }
   .icon-row { flex-direction: column; }
   .bookmark-form-side { padding: 14px; }
-  .category-modal-intro { flex-direction: column; align-items: flex-start; }
-  .category-modal-icon { width: 42px; height: 42px; }
+  .category-modal-intro { flex-direction: row; align-items: flex-start; gap: 12px; }
+  .category-modal-icon { width: 40px; height: 40px; }
+  .category-modal-icon i { width: 22px; height: 22px; }
+  .category-modal-copy h4 { font-size: 15px; }
+  .category-modal-copy p { font-size: 12px; }
   .category-form__row { flex-direction: column; }
   .category-form__row .btn { width: 100%; }
 }
