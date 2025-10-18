@@ -1,0 +1,30 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Testing files
+test-translation.html
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+
+# Node modules (if you add them later)
+node_modules/
+
+# Build outputs (if applicable)
+dist/
+build/
