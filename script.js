@@ -233,6 +233,26 @@ function isLikelyEmoji(value) {
     }
 }
 
+function isLikelyUrl(value) {
+    if (!value) return false;
+    const trimmed = String(value).trim();
+    if (!trimmed || /\s/.test(trimmed)) return false;
+
+    if (/^(?:[a-z][a-z0-9+\-.]*:|(?:mailto|tel):)/i.test(trimmed)) {
+        return true;
+    }
+
+    if (/^localhost(?:\:\d{1,5})?(?:\/|$)/i.test(trimmed)) {
+        return true;
+    }
+
+    if (/^[\w-]+(?:\.[\w-]+)+(?:\:\d{1,5})?(?:[\/\?#]|$)/i.test(trimmed)) {
+        return true;
+    }
+
+    return false;
+}
+
 function resolveBookmarkIcon(descriptor, size = 32, label = '') {
     const value = typeof descriptor === 'string' ? descriptor.trim() : '';
     if (!value) {
@@ -394,9 +414,13 @@ const POPULAR_ICON_FALLBACK = [
 ];
 
 // 初始化
-document.addEventListener('DOMContentLoaded', function() {
+function initializeApp() {
+    if (initializeApp.__ran) {
+        return;
+    }
+    initializeApp.__ran = true;
     try {
-        logDebug('DOMContentLoaded start');
+        logDebug('App init start');
         loadLanguage();
         logDebug(`Language loaded: ${currentLanguage}`);
         loadSearchHistory();
@@ -430,7 +454,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Initialization error:', error);
         logDebug(`Initialization error: ${error?.message || error}`);
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp, { once: true });
+} else {
+    initializeApp();
+}
 
 function normalizeLanguageCode(code) {
     if (!code || typeof code !== 'string') return null;
@@ -1617,6 +1647,63 @@ function normalizeSuggestionPayload(payload, limit = SEARCH_SUGGESTION_LIMIT) {
     return suggestions.slice(0, limit);
 }
 
+function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMIT) {
+    if (!payload) {
+        return [];
+    }
+
+    if (Array.isArray(payload)) {
+        if (payload.length > 1 && Array.isArray(payload[1])) {
+            return normalizeSuggestionPayload(payload[1], limit);
+        }
+        return normalizeSuggestionPayload(payload, limit);
+    }
+
+    if (typeof payload === 'object') {
+        if (Array.isArray(payload.s)) {
+            return normalizeSuggestionPayload(payload.s, limit);
+        }
+        if (Array.isArray(payload.result)) {
+            return normalizeSuggestionPayload(payload.result, limit);
+        }
+        if (Array.isArray(payload.results)) {
+            return normalizeSuggestionPayload(payload.results, limit);
+        }
+        if (Array.isArray(payload.g)) {
+            const extracted = payload.g
+                .map(item => {
+                    if (!item) return '';
+                    if (typeof item === 'string') return item;
+                    return item.q || item.text || item.phrase || '';
+                });
+            return normalizeSuggestionPayload(extracted, limit);
+        }
+    }
+
+    return normalizeSuggestionPayload(payload, limit);
+}
+
+function getRemoteSuggestionMinLength() {
+    const stored = Number(localStorage.getItem('remoteSuggestionMinLength'));
+    if (Number.isFinite(stored) && stored >= 1 && stored <= 5) {
+        return stored;
+    }
+    return REMOTE_SUGGESTION_MIN_LENGTH;
+}
+
+function getSuggestionProviderOrder() {
+    const ordered = [];
+    if (currentSearchEngine && suggestionProviders[currentSearchEngine]) {
+        ordered.push(currentSearchEngine);
+    }
+    Object.keys(suggestionProviders).forEach(key => {
+        if (!ordered.includes(key)) {
+            ordered.push(key);
+        }
+    });
+    return ordered;
+}
+
 function updateOpenButtonState(value) {
     const button = document.getElementById('openUrlBtn');
     if (!button) return;
@@ -2030,6 +2117,36 @@ function updateSearchIcon() {
     el.style.setProperty('--selector-icon-size', `${selectorSize}px`);
     el.innerHTML = getIconMarkup(engine.icon, selectorSize, t(engine.labelKey || currentSearchEngine));
     if (window.lucide) window.lucide.createIcons();
+}
+
+function openQueryUrl(rawValue) {
+    const value = (rawValue || '').trim();
+    if (!value) return;
+
+    if (/^(mailto:|tel:)/i.test(value)) {
+        window.location.href = value;
+        return;
+    }
+
+    let target = value;
+    if (!/^[a-z][a-z0-9+\-.]*:/.test(value)) {
+        const sanitized = value.replace(/^\/+/, '');
+        target = `https://${sanitized}`;
+    }
+
+    try {
+        const url = new URL(target);
+        addSearchHistoryEntry(value);
+        updateSearchSuggestions(value);
+        window.open(url.toString(), '_blank', 'noopener');
+    } catch (error) {
+        console.warn('Invalid URL, falling back to search:', error);
+        const input = document.getElementById('searchInput');
+        if (input) {
+            input.value = value;
+            performSearch();
+        }
+    }
 }
 
 // 執行搜尋
@@ -2704,7 +2821,7 @@ function ensureIconLibrary() {
 // 全域錯誤監聽器
 window.addEventListener('error', (event) => {
     const { message, filename, lineno, colno, error: err } = event;
-    const errorMsg = `
+    let errorMsg = `
         <strong>發生錯誤：</strong> ${escapeHtml(message)}<br>
         <strong>檔案：</strong> ${escapeHtml(filename)}<br>
         <strong>行號：</strong> ${escapeHtml(lineno)}<br>
