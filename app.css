@@ -941,6 +941,87 @@ body.dark-mode .suggestion-item--skeleton {
   height: 36px;
   display: block;
   object-fit: contain;
+  animation: weatherFloat 3s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* Floating animation for weather icons */
+@keyframes weatherFloat {
+  0%, 100% { 
+    transform: translateY(0px) scale(1);
+  }
+  50% { 
+    transform: translateY(-3px) scale(1.02);
+  }
+}
+
+/* Sun rotating animation */
+.weather-tile__icon [data-weather-icon] .weather-icon-img[src*="sun.png"] {
+  animation: weatherFloat 3s ease-in-out infinite, sunRotate 20s linear infinite;
+}
+
+@keyframes sunRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Cloud drifting animation */
+.weather-tile__icon [data-weather-icon] .weather-icon-img[src*="cloud"] {
+  animation: cloudDrift 4s ease-in-out infinite;
+}
+
+@keyframes cloudDrift {
+  0%, 100% { 
+    transform: translateX(0px);
+  }
+  50% { 
+    transform: translateX(3px);
+  }
+}
+
+/* Rain/Snow animation - subtle bounce */
+.weather-tile__icon [data-weather-icon] .weather-icon-img[src*="rain"],
+.weather-tile__icon [data-weather-icon] .weather-icon-img[src*="snow"] {
+  animation: weatherBounce 2.5s ease-in-out infinite;
+}
+
+@keyframes weatherBounce {
+  0%, 100% { 
+    transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-4px);
+  }
+}
+
+/* Lightning animation - pulse effect */
+.weather-tile__icon [data-weather-icon] .weather-icon-img[src*="lightning"] {
+  animation: lightningPulse 2s ease-in-out infinite;
+}
+
+@keyframes lightningPulse {
+  0%, 100% { 
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  50% { 
+    filter: brightness(1.15);
+    transform: scale(1.03);
+  }
+}
+
+/* Fog animation - fade in/out */
+.weather-tile__icon [data-weather-icon] .weather-icon-img[src*="fog"] {
+  animation: fogFade 3s ease-in-out infinite;
+}
+
+@keyframes fogFade {
+  0%, 100% { 
+    opacity: 0.95;
+  }
+  50% { 
+    opacity: 0.85;
+  }
 }
 
 .weather-tile__icon [data-weather-icon] i {
@@ -1340,7 +1421,7 @@ body.dark-mode .weather-modal-info {
 .weather-location-search {
   position: relative;
   width: 100%;
-  z-index: 50;
+  z-index: 1000;
 }
 
 .weather-location-suggestions {
@@ -1354,7 +1435,7 @@ body.dark-mode .weather-modal-info {
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
   max-height: 240px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 10000;
 }
 
 .weather-location-suggestions[hidden] {

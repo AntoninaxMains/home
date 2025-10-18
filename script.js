@@ -1714,10 +1714,11 @@ function resolveWeatherDescriptor(code) {
     }
 
     if (numericCode === 0) return { key: 'weatherConditionClear', icon: 'sun.png' };
-    if (numericCode === 1 || numericCode === 2) return { key: 'weatherConditionMostlyClear', icon: 'sun-behind-cloud.png' };
-    if (numericCode === 3) return { key: 'weatherConditionCloudy', icon: 'cloud.png' };
+    if (numericCode === 1) return { key: 'weatherConditionMostlyClear', icon: 'sun-behind-small-cloud.png' };
+    if (numericCode === 2) return { key: 'weatherConditionMostlyClear', icon: 'sun-behind-cloud.png' };
+    if (numericCode === 3) return { key: 'weatherConditionCloudy', icon: 'sun-behind-large-cloud.png' };
     if (numericCode === 45 || numericCode === 48) return { key: 'weatherConditionFog', icon: 'fog.png' };
-    if (numericCode >= 51 && numericCode <= 57) return { key: 'weatherConditionDrizzle', icon: 'cloud-with-rain.png' };
+    if (numericCode >= 51 && numericCode <= 57) return { key: 'weatherConditionDrizzle', icon: 'sun-behind-rain-cloud.png' };
     if ([61, 63].includes(numericCode)) return { key: 'weatherConditionRain', icon: 'cloud-with-rain.png' };
     if ([65, 80, 81, 82].includes(numericCode)) return { key: 'weatherConditionHeavyRain', icon: 'cloud-with-lightning-and-rain.png' };
     if (numericCode === 66 || numericCode === 67) return { key: 'weatherConditionFreezingRain', icon: 'cloud-with-snow.png' };
@@ -3439,7 +3440,7 @@ function createWeatherBookmarkTile() {
     tile.innerHTML = `
         <div class="weather-tile" data-weather-trigger role="button" tabindex="0" data-i18n-attr="aria-label:weatherWidgetLabel">
             <div class="bookmark-icon weather-tile__icon" aria-hidden="true">
-                <span data-weather-icon="tile"><img src="assets/weather/sun-behind-cloud.png" alt="weather" class="weather-icon-img" /></span>
+                <span data-weather-icon="tile"><img src="assets/weather/sun-behind-small-cloud.png" alt="weather" class="weather-icon-img" /></span>
             </div>
             <div class="bookmark-name weather-tile__temp" data-weather-temp="tile">--°</div>
         </div>
