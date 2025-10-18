@@ -862,6 +862,23 @@ function updateUILanguage() {
         }
     });
     
+    // Update attribute-based translations (e.g., title, aria-label)
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+        const attrSpec = el.getAttribute('data-i18n-attr');
+        if (!attrSpec) return;
+        const pairs = attrSpec.split(/[,;]/).map(part => part.trim()).filter(Boolean);
+        const hasExplicitAria = pairs.some(pair => pair.trim().startsWith('aria-label'));
+        pairs.forEach(pair => {
+            const [attr, key] = pair.split(':').map(part => part && part.trim());
+            if (!attr || !key) return;
+            const value = t(key);
+            el.setAttribute(attr, value);
+            if (attr === 'title' && !hasExplicitAria) {
+                el.setAttribute('aria-label', value);
+            }
+        });
+    });
+    
     // Hero
     const heroTitle = document.querySelector('.hero-title');
     const heroSubtitle = document.querySelector('.hero-subtitle');
@@ -902,12 +919,6 @@ function updateUILanguage() {
         window.lucide.createIcons();
     }
 
-    // Bookmarks header
-    const bookmarkHeader = document.querySelector('.bookmark-card__header h2');
-    const bookmarkDesc = document.querySelector('.bookmark-card__header p');
-    if (bookmarkHeader) bookmarkHeader.textContent = t('myBookmarks');
-    if (bookmarkDesc) bookmarkDesc.textContent = t('bookmarksDesc');
-    
     // Update gradient select options
     const gradientSelect = document.getElementById('gradientPreset');
     if (gradientSelect) {
@@ -944,6 +955,8 @@ function updateUILanguage() {
         const isActive = option.getAttribute('data-lang') === currentLanguage;
         option.classList.toggle('active', isActive);
     });
+    
+    updateFabDarkModeIcon();
     
     // Reinitialize lucide icons
     if (window.lucide) window.lucide.createIcons();
@@ -1429,13 +1442,27 @@ function initEventListeners() {
     // 移動端懸浮球
     const fabBtn = document.getElementById('fabBtn');
     const fabMenu = document.getElementById('fabMenu');
+    const fabBackdrop = document.getElementById('fabBackdrop');
     
     if (fabBtn && fabMenu) {
+        const toggleFabMenu = (show) => {
+            const isOpen = show !== undefined ? show : !fabMenu.classList.contains('show');
+            fabMenu.classList.toggle('show', isOpen);
+            fabBtn.classList.toggle('active', isOpen);
+            fabBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            if (fabBackdrop) {
+                fabBackdrop.classList.toggle('show', isOpen);
+            }
+        };
+
+        fabBtn.setAttribute('aria-expanded', 'false');
+
         fabBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            fabMenu.classList.toggle('show');
-            fabBtn.classList.toggle('active');
+            toggleFabMenu();
         });
+        
+        fabBackdrop?.addEventListener('click', () => closeFabMenu());
         
         // FAB 選項事件
         document.getElementById('fabAddBookmark')?.addEventListener('click', function() {
@@ -1451,32 +1478,6 @@ function initEventListeners() {
         document.getElementById('fabSettings')?.addEventListener('click', function() {
             openModal('settingsModal');
             closeFabMenu();
-        });
-        
-        document.getElementById('fabLang')?.addEventListener('click', function() {
-            cycleFabLanguage();
-            closeFabMenu();
-        });
-        
-        document.getElementById('fabDarkMode')?.addEventListener('click', function() {
-            toggleDarkMode();
-            updateFabDarkModeIcon();
-        });
-        
-        // 點擊外部關閉 FAB 選單
-        document.addEventListener('click', function(e) {
-            if (fabBtn && fabMenu && !fabBtn.contains(e.target) && !fabMenu.contains(e.target)) {
-                closeFabMenu();
-            }
-        });
-    }
-    
-    // 夜間模式切換
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener('change', function() {
-            toggleDarkMode(this.checked);
-            document.getElementById('darkModeSettings').style.display = this.checked ? 'block' : 'none';
         });
     }
     
@@ -2609,12 +2610,12 @@ function openCategoryManagement() {
     categoryList.innerHTML = '';
     
     if (categories.length === 0) {
-        categoryList.innerHTML = `<p style="text-align:center; color: var(--text-subtle); padding: 20px;">${t('noCategories')}</p>`;
+        categoryList.innerHTML = `<div class="category-empty">${t('noCategories')}</div>`;
     } else {
         categories.forEach((cat, index) => {
             const catName = typeof cat === 'string' ? cat : cat.name;
             const catIcon = typeof cat === 'object' && cat.icon ? cat.icon : '📁';
-            
+
             const item = document.createElement('div');
             item.className = 'category-item';
             item.innerHTML = `
@@ -2623,9 +2624,9 @@ function openCategoryManagement() {
                     <span class="category-item-name">${catName}</span>
                 </div>
                 <div class="category-item-actions">
-                    <button onclick="renameCategoryPrompt(${index})" class="btn" style="padding: 6px 12px; font-size: 12px;" title="${t('renameCategory')}">${t('renameCategory')}</button>
-                    <button onclick="editCategoryIconPrompt(${index})" class="btn" style="padding: 6px 12px; font-size: 12px;" title="${t('editCategoryIcon')}">${t('editCategoryIcon')}</button>
-                    <button onclick="deleteCategoryFromModal('${catName.replace(/'/g, "\\\'")}')" class="btn" style="padding: 6px 12px; font-size: 12px;">${t('deleteCategory')}</button>
+                    <button type="button" onclick="renameCategoryPrompt(${index})" class="btn ghost" title="${t('renameCategory')}" aria-label="${t('renameCategory')}">${t('renameCategory')}</button>
+                    <button type="button" onclick="editCategoryIconPrompt(${index})" class="btn ghost" title="${t('editCategoryIcon')}" aria-label="${t('editCategoryIcon')}">${t('editCategoryIcon')}</button>
+                    <button type="button" onclick="deleteCategoryFromModal('${catName.replace(/'/g, "\\'")}')" class="btn ghost btn-danger" title="${t('deleteCategory')}" aria-label="${t('deleteCategory')}">${t('deleteCategory')}</button>
                 </div>
             `;
             categoryList.appendChild(item);
@@ -2793,8 +2794,11 @@ function closeModal(modalId) {
 function closeFabMenu() {
     const fabMenu = document.getElementById('fabMenu');
     const fabBtn = document.getElementById('fabBtn');
+    const fabBackdrop = document.getElementById('fabBackdrop');
     if (fabMenu) fabMenu.classList.remove('show');
     if (fabBtn) fabBtn.classList.remove('active');
+    if (fabBtn) fabBtn.setAttribute('aria-expanded', 'false');
+    if (fabBackdrop) fabBackdrop.classList.remove('show');
 }
 
 function cycleFabLanguage() {
