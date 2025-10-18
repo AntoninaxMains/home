@@ -511,8 +511,10 @@ function initializeApp() {
         logDebug(`Search engine set: ${currentSearchEngine}`);
         initEventListeners();
         logDebug('Event listeners registered');
-    initializeWeather();
-    logDebug('Weather module initialized');
+        initializeWeather();
+        logDebug('Weather module initialized');
+        initializeWeatherLocationSearch();
+        logDebug('Weather location search initialized');
         updateUILanguage();
         logDebug('UI language applied');
         
