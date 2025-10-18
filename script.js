@@ -1717,16 +1717,16 @@ function resolveWeatherDescriptor(code) {
     if (numericCode === 1 || numericCode === 2) return { key: 'weatherConditionMostlyClear', icon: 'sun-behind-cloud.png' };
     if (numericCode === 3) return { key: 'weatherConditionCloudy', icon: 'cloud.png' };
     if (numericCode === 45 || numericCode === 48) return { key: 'weatherConditionFog', icon: 'fog.png' };
-    if (numericCode >= 51     if (numericCode >= 51 && numericCode <= 57) return { key: 'weatherConditionDrizzle', icon: '🌦' };    if (numericCode >= 51 && numericCode <= 57) return { key: 'weatherConditionDrizzle', icon: '🌦' }; numericCode <= 57) return { key: 'weatherConditionDrizzle', icon: 'cloud-with-rain.png' };
+    if (numericCode >= 51 && numericCode <= 57) return { key: 'weatherConditionDrizzle', icon: 'cloud-with-rain.png' };
     if ([61, 63].includes(numericCode)) return { key: 'weatherConditionRain', icon: 'cloud-with-rain.png' };
     if ([65, 80, 81, 82].includes(numericCode)) return { key: 'weatherConditionHeavyRain', icon: 'cloud-with-lightning-and-rain.png' };
     if (numericCode === 66 || numericCode === 67) return { key: 'weatherConditionFreezingRain', icon: 'cloud-with-snow.png' };
     if ((numericCode >= 71 && numericCode <= 77) || numericCode === 85 || numericCode === 86) {
         const key = numericCode === 85 || numericCode === 86 ? 'weatherConditionSnowShower' : 'weatherConditionSnow';
-        return { key, icon: '❄' };
-    if (numericCode === 95 || numericCode === 96 || numericCode === 99) return { key: 'weatherConditionThunderstorm', icon: 'cloud-with-lightning.png' };
+        return { key, icon: 'cloud-with-snow.png' };
+    }
+    if (numericCode === 95 || numericCode === 96 || numericCode === 99) return { key: 'weatherConditionThunderstorm', icon: 'cloud-with-lightning-and-rain.png' };
     return { key: 'weatherConditionUnknown', icon: 'cloud.png' };
-    return { key: 'weatherConditionUnknown', icon: '☁' };
 }
 
 function setWeatherIcon(container, iconContent, animated = false) {
