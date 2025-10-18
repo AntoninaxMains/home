@@ -1929,7 +1929,7 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 18px 36px rgba(54, 79, 199, 0.32);
+  box-shadow: none;
 }
 
 .settings-toggle.is-active .settings-toggle__icon {
@@ -1970,11 +1970,11 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 
 .dark-mode .settings-toggle.is-active {
   background: linear-gradient(135deg, rgba(148, 163, 255, 0.92), rgba(92, 107, 192, 0.92));
-  box-shadow: 0 12px 24px rgba(76, 110, 245, 0.3);
+  box-shadow: none;
 }
 
 .dark-mode .settings-toggle.is-active:hover {
-  box-shadow: 0 16px 32px rgba(76, 110, 245, 0.4);
+  box-shadow: none;
 }
 
 .dark-mode .settings-toggle.is-active .settings-toggle__icon {
