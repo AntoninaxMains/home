@@ -936,6 +936,13 @@ body.dark-mode .suggestion-item--skeleton {
   display: block;
 }
 
+.weather-tile__icon [data-weather-icon] .weather-icon-img {
+  width: 36px;
+  height: 36px;
+  display: block;
+  object-fit: contain;
+}
+
 .weather-tile__icon [data-weather-icon] i {
   width: 32px;
   height: 32px;
