@@ -1394,12 +1394,9 @@ async function updateSearchSuggestions(query) {
     const callToken = ++latestSuggestQueryToken;
     const trimmed = (query || '').trim();
     
-    console.log('updateSearchSuggestions 調用，query:', trimmed);
-    
     // 如果沒有輸入，只顯示搜索歷史
     if (!trimmed) {
         const historyOnly = searchHistory.slice(0, SEARCH_SUGGESTION_LIMIT);
-        console.log('顯示搜索歷史:', historyOnly);
         renderSuggestionList(container, historyOnly, false);
         return;
     }
@@ -1407,10 +1404,8 @@ async function updateSearchSuggestions(query) {
     // 檢查是否需要遠端建議（輸入 1 個字符就開始）
     const minLength = 1;
     if (trimmed.length >= minLength && !isLikelyUrl(trimmed)) {
-    console.log('開始獲取遠程建議...');
     // 獲取遠端建議
     const remoteSuggestions = await fetchRemoteSuggestions(trimmed);
-    console.log('遠程建議結果:', remoteSuggestions);
         if (callToken !== latestSuggestQueryToken) return;
         
         if (remoteSuggestions && remoteSuggestions.length > 0) {
@@ -1418,7 +1413,6 @@ async function updateSearchSuggestions(query) {
             const localSuggestions = buildLocalSuggestions(query);
             // 合併本地和遠端建議
             const combined = mergeSuggestions(localSuggestions, remoteSuggestions, SEARCH_SUGGESTION_LIMIT);
-            console.log('合併後的建議:', combined);
             renderSuggestionList(container, combined, true);
             return;
         }
@@ -1426,7 +1420,6 @@ async function updateSearchSuggestions(query) {
 
     // 如果沒有遠端建議，只顯示本地建議
     const localSuggestions = buildLocalSuggestions(query);
-    console.log('只有本地建議:', localSuggestions);
     renderSuggestionList(container, localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT), true);
 }
 
