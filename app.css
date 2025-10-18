@@ -357,6 +357,9 @@ body.dark-mode .settings-card__header h4 { color: #f5f7ff; }
 body.dark-mode .settings-card__header i { color: #aebdff; }
 body.dark-mode .settings-card__content label,
 body.dark-mode .settings-card__content .hint { color: rgba(235, 238, 255, 0.72); }
+body.dark-mode .settings-action-block { background: rgba(84, 90, 140, 0.24); border-color: rgba(174, 189, 255, 0.24); box-shadow: 0 18px 34px rgba(0, 0, 0, 0.55); }
+body.dark-mode .settings-action-block__body h5 { color: #f5f7ff; }
+body.dark-mode .settings-action-block__body p { color: rgba(235, 238, 255, 0.78); }
 body.dark-mode .settings-select,
 body.dark-mode .settings-input,
 body.dark-mode .settings-file,

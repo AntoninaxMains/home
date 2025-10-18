@@ -66,6 +66,7 @@ const translations = {
     customSearchInlineHint: 'Use {query} as the search keyword placeholder',
     customSearchSave: 'Save and apply',
     customSearchPlaceholder: 'https://example.com/search?q={query}',
+    cleanupSectionTitle: 'Cleanup & reset',
     clearSettings: 'Reset all settings',
     clearSettingsDescription: 'Restore the homepage to its default appearance and content.',
     clearSettingsAction: 'Reset now',
