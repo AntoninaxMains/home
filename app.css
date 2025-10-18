@@ -130,8 +130,7 @@ body.dark-mode .settings-nav__item.is-active {
 }
 
 .settings-panels {
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -1194,6 +1193,7 @@ body.dark-mode .bookmark-empty {
 
 .modal-panel--settings .settings-panels {
   max-height: calc(88vh - 180px);
+  overflow-y: auto;
 }
 
 @media (max-width: 1023px) {
@@ -1216,7 +1216,7 @@ body.dark-mode .bookmark-empty {
   .modal-panel--settings .settings-panels {
     max-height: none;
     padding: 20px;
-    overflow-y: visible;
+    overflow: visible;
   }
 }
 
@@ -1765,6 +1765,7 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   min-width: 0;
   flex-shrink: 1;
   max-width: 280px;
+  box-shadow: none;
 }
 
 @media (max-width: 640px) {
