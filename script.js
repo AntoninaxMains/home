@@ -931,7 +931,8 @@ function initializeSettingsNavigation() {
     const sections = navLinks
         .map(link => {
             const key = link.dataset.settingsNav;
-            const section = document.querySelector(`.settings-card[data-settings-area="${key}"]`);
+            const section = document.querySelector(`.settings-section[data-settings-area="${key}"]`) ||
+                document.querySelector(`.settings-card[data-settings-area="${key}"]`);
             return section ? { key, link, section } : null;
         })
         .filter(Boolean);
@@ -941,7 +942,11 @@ function initializeSettingsNavigation() {
     }
 
     const setActive = (key) => {
-        navLinks.forEach(link => link.classList.toggle('active', link.dataset.settingsNav === key));
+        navLinks.forEach(link => {
+            const isTarget = link.dataset.settingsNav === key;
+            link.classList.toggle('active', isTarget);
+            link.classList.toggle('is-active', isTarget);
+        });
     };
 
     navLinks.forEach(link => {
@@ -1006,7 +1011,10 @@ function initializeSettingsNavigation() {
             settingsNavObserver = null;
         }
         settingsNavCleanup = null;
-        navLinks.forEach(link => link.classList.remove('active'));
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            link.classList.remove('is-active');
+        });
     };
 }
 
@@ -1328,17 +1336,16 @@ function setWeatherLocation(value) {
 }
 
 function isWeatherEnabled() {
-    return localStorage.getItem(WEATHER_ENABLED_KEY) === 'true';
+    const stored = localStorage.getItem(WEATHER_ENABLED_KEY);
+    if (stored === null) {
+        return true;
+    }
+    return stored === 'true';
 }
 
 function setWeatherEnabled(enabled) {
     localStorage.setItem(WEATHER_ENABLED_KEY, enabled ? 'true' : 'false');
-    updateWeatherControlsUI();
-    if (enabled) {
-        refreshWeather({ force: true }).catch(error => {
-            console.error('Weather refresh failed:', error);
-        });
-    } else {
+    if (!enabled) {
         weatherState = {
             loading: false,
             error: null,
@@ -1346,6 +1353,14 @@ function setWeatherEnabled(enabled) {
             resolvedName: '',
             lastUpdated: null
         };
+    }
+    updateWeatherControlsUI();
+    renderBookmarks();
+    if (enabled) {
+        refreshWeather({ force: true }).catch(error => {
+            console.error('Weather refresh failed:', error);
+        });
+    } else {
         updateWeatherWidget();
         updateWeatherStatusMessageFromState();
     }
@@ -2027,7 +2042,7 @@ function initEventListeners() {
     }
 
     const weatherRefreshBtn = document.getElementById('weatherRefreshBtn');
-    if (weatherRefreshBtn) {
+    if (weatherRefreshBtn && weatherRefreshBtn.dataset.bound !== '1') {
         weatherRefreshBtn.addEventListener('click', () => {
             weatherRefreshBtn.classList.add('is-busy');
             refreshWeather({ force: true })
@@ -2038,6 +2053,7 @@ function initEventListeners() {
                     weatherRefreshBtn.classList.remove('is-busy');
                 });
         });
+        weatherRefreshBtn.dataset.bound = '1';
     }
 
     const weatherLocationInput = document.getElementById('weatherLocationInput');
@@ -3127,11 +3143,13 @@ function renderBookmarks() {
     if (!mainGrid || !categoriesContainer) return;
     mainGrid.innerHTML = '';
     categoriesContainer.innerHTML = '';
-    
+
+    const weatherEnabled = isWeatherEnabled();
+
     // 分離主書籤和分類書籤
     const mainBookmarks = bookmarks.filter(b => !b.category || b.category === '');
     const categorizedBookmarks = {};
-    
+
     bookmarks.forEach(bookmark => {
         if (bookmark.category && bookmark.category !== '') {
             if (!categorizedBookmarks[bookmark.category]) {
@@ -3140,27 +3158,38 @@ function renderBookmarks() {
             categorizedBookmarks[bookmark.category].push(bookmark);
         }
     });
-    
-    // 渲染主書籤
-    mainBookmarks.forEach(bookmark => {
-        const bookmarkEl = createBookmarkElement(bookmark);
-        mainGrid.appendChild(bookmarkEl);
-    });
-    
-    // 如果沒有主書籤，顯示提示
-    if (mainBookmarks.length === 0) {
-        mainGrid.innerHTML = `<p style="text-align:center; color: var(--text-subtle); padding: 40px;">${t('noBookmarks')}</p>`;
+
+    if (weatherEnabled) {
+        const weatherTile = createWeatherBookmarkTile();
+        mainGrid.appendChild(weatherTile);
     }
-    
+
+    if (mainBookmarks.length) {
+        mainBookmarks.forEach(bookmark => {
+            const bookmarkEl = createBookmarkElement(bookmark);
+            mainGrid.appendChild(bookmarkEl);
+        });
+    } else {
+        const emptyState = document.createElement('p');
+        emptyState.className = 'bookmark-empty';
+        emptyState.setAttribute('data-i18n', 'noBookmarks');
+        emptyState.textContent = t('noBookmarks');
+        mainGrid.appendChild(emptyState);
+    }
+
     // 渲染分類書籤
     Object.keys(categorizedBookmarks).forEach(category => {
         const section = createCategorySection(category, categorizedBookmarks[category]);
         categoriesContainer.appendChild(section);
     });
 
+    bindWeatherBookmarkActions(mainGrid);
+
     if (window.lucide) {
         window.lucide.createIcons({ nameAttr: 'data-lucide' });
     }
+
+    updateWeatherWidget();
 }
 
 function createCategorySection(category, categoryBookmarks) {
@@ -3233,6 +3262,72 @@ function createBookmarkElement(bookmark) {
     if (window.lucide) window.lucide.createIcons({ nameAttr: 'data-lucide' });
     
     return div;
+}
+
+function createWeatherBookmarkTile() {
+    const tile = document.createElement('div');
+    tile.className = 'bookmark-item bookmark-item--weather';
+    tile.setAttribute('data-weather-wrapper', 'true');
+    tile.innerHTML = `
+        <div class="bookmark-actions bookmark-actions--pinned">
+            <button type="button" class="bookmark-actions__btn" data-remove-weather data-i18n-attr="title:disableWeather,aria-label:disableWeather" title="${t('disableWeather')}">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div id="weatherWidget" class="weather-widget weather-widget--tile" aria-live="polite">
+            <header class="weather-widget__header">
+                <div class="weather-widget__icon" aria-hidden="true">
+                    <i data-lucide="cloud-sun"></i>
+                </div>
+                <div class="weather-widget__heading">
+                    <span class="weather-widget__label" data-i18n="weatherWidgetLabel">${t('weatherWidgetLabel')}</span>
+                    <span id="weatherWidgetLocation" class="weather-widget__location"></span>
+                </div>
+                <button id="weatherRefreshBtn" type="button" class="weather-widget__refresh" data-i18n-attr="title:weatherApply,aria-label:weatherApply" title="${t('weatherApply')}">
+                    <i data-lucide="refresh-cw"></i>
+                </button>
+            </header>
+            <div class="weather-widget__body">
+                <div id="weatherWidgetStatus" class="weather-widget__status"></div>
+                <div class="weather-widget__metrics">
+                    <div id="weatherWidgetTemp" class="weather-widget__temp"></div>
+                    <div id="weatherWidgetMeta" class="weather-widget__meta"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    return tile;
+}
+
+function bindWeatherBookmarkActions(root = document) {
+    const wrapper = root.querySelector('[data-weather-wrapper]');
+    if (!wrapper) return;
+
+    const removeBtn = wrapper.querySelector('[data-remove-weather]');
+    if (removeBtn && removeBtn.dataset.bound !== '1') {
+        removeBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setWeatherEnabled(false);
+        });
+        removeBtn.dataset.bound = '1';
+    }
+
+    const refreshBtn = wrapper.querySelector('#weatherRefreshBtn');
+    if (refreshBtn && refreshBtn.dataset.bound !== '1') {
+        refreshBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            refreshBtn.classList.add('is-busy');
+            refreshWeather({ force: true })
+                .catch(error => {
+                    console.warn('Weather refresh failed:', error);
+                })
+                .finally(() => {
+                    refreshBtn.classList.remove('is-busy');
+                });
+        });
+        refreshBtn.dataset.bound = '1';
+    }
 }
 
 function openBookmarkModal(bookmark = null, defaultCategory = '') {

@@ -141,29 +141,6 @@
                     <div id="bookmarkGrid" class="bookmark-grid" aria-live="polite"></div>
                 </div>
                 <div id="categorySection"></div>
-                <div class="bookmarks-widgets" data-weather-wrapper>
-                    <div id="weatherWidget" class="weather-widget weather-widget--card hidden" aria-live="polite">
-                        <header class="weather-widget__header">
-                            <div class="weather-widget__icon" aria-hidden="true">
-                                <i data-lucide="cloud-sun"></i>
-                            </div>
-                            <div class="weather-widget__heading">
-                                <span class="weather-widget__label" data-i18n="weatherWidgetLabel">天氣</span>
-                                <span id="weatherWidgetLocation" class="weather-widget__location"></span>
-                            </div>
-                            <button id="weatherRefreshBtn" type="button" class="weather-widget__refresh" aria-label="刷新天氣" title="刷新天氣">
-                                <i data-lucide="refresh-cw"></i>
-                            </button>
-                        </header>
-                        <div class="weather-widget__body">
-                            <div id="weatherWidgetStatus" class="weather-widget__status"></div>
-                            <div class="weather-widget__metrics">
-                                <div id="weatherWidgetTemp" class="weather-widget__temp"></div>
-                                <div id="weatherWidgetMeta" class="weather-widget__meta"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </section>
         </main>
 
@@ -175,241 +152,246 @@
                     <button class="modal-close" data-close="settingsModal" aria-label="關閉設定">×</button>
                 </header>
                 <div class="modal-body settings-body">
-                    <div class="settings-shell">
-                        <aside class="settings-sidebar" id="settingsSidebar">
-                            <div class="settings-sidebar__header">
-                                <h4 data-i18n="settingsNavTitle">設定導覽</h4>
-                                <p data-i18n="settingsNavHint">快速跳到常用區域</p>
-                            </div>
-                            <nav class="settings-sidebar__nav" aria-label="Settings navigation">
-                                <button type="button" class="settings-sidebar__link active" data-settings-nav="dark">
-                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
-                                    <span data-i18n="darkModeSection">夜間模式</span>
-                                </button>
-                                <button type="button" class="settings-sidebar__link" data-settings-nav="background">
-                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="palette"></i></span>
-                                    <span data-i18n="backgroundSection">背景設定</span>
-                                </button>
-                                <button type="button" class="settings-sidebar__link" data-settings-nav="appearance">
-                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="image"></i></span>
-                                    <span data-i18n="appearanceSection">顯示效果（外觀）</span>
-                                </button>
-                                <button type="button" class="settings-sidebar__link" data-settings-nav="weather">
-                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></span>
-                                    <span data-i18n="weatherSection">天氣</span>
-                                </button>
-                                <button type="button" class="settings-sidebar__link" data-settings-nav="developer">
-                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="terminal-square"></i></span>
-                                    <span data-i18n="developerSection">開發者工具</span>
-                                </button>
-                                <button type="button" class="settings-sidebar__link" data-settings-nav="actions">
-                                    <span class="settings-sidebar__icon" aria-hidden="true"><i data-lucide="wand-2"></i></span>
-                                    <span data-i18n="cleanupSectionTitle">維護與重置</span>
-                                </button>
-                            </nav>
-                        </aside>
-                        <div class="settings-content" id="settingsContent" tabindex="0">
-                            <div class="settings-layout">
-                        <!-- 夜間模式 -->
-                        <section class="settings-card settings-card--dark" data-settings-area="dark">
-                            <header class="settings-card__header">
-                                <i data-lucide="moon"></i>
-                                <h4 data-i18n="darkModeSection">夜間模式</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <div class="dark-mode-panel">
-                                    <div class="dark-mode-panel__toggle">
-                                        <div class="dark-mode-panel__text">
-                                            <span class="dark-mode-panel__label" data-i18n="darkMode">夜間模式</span>
-                                            <p class="dark-mode-panel__hint" data-i18n="darkModeHint">為整個首頁套用柔和的深色主題，可減少夜間使用時的眩光。</p>
-                                        </div>
-                                        <div class="dark-mode-panel__actions">
-                                            <span class="dark-mode-toggle__status" data-state="off">日間模式</span>
-                                            <button id="darkModeToggleBtn" type="button" class="settings-toggle dark-mode-toggle" aria-pressed="false" data-toggle-labels="enableDarkMode,disableDarkMode" data-icon-off="moon" data-icon-on="sun" aria-label="切換夜間模式">
-                                                <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
-                                                <span class="settings-toggle__label"></span>
-                                            </button>
-                                        </div>
+                    <div class="settings-container">
+                        <nav class="settings-nav" id="settingsSidebar" aria-label="Settings navigation">
+                            <button type="button" class="settings-nav__item is-active" data-settings-nav="dark">
+                                <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
+                                <span class="settings-nav__label" data-i18n="darkModeSection">夜間模式</span>
+                            </button>
+                            <button type="button" class="settings-nav__item" data-settings-nav="background">
+                                <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="palette"></i></span>
+                                <span class="settings-nav__label" data-i18n="backgroundSection">背景設定</span>
+                            </button>
+                            <button type="button" class="settings-nav__item" data-settings-nav="appearance">
+                                <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="image"></i></span>
+                                <span class="settings-nav__label" data-i18n="appearanceSection">顯示效果（外觀）</span>
+                            </button>
+                            <button type="button" class="settings-nav__item" data-settings-nav="weather">
+                                <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></span>
+                                <span class="settings-nav__label" data-i18n="weatherSection">天氣</span>
+                            </button>
+                            <button type="button" class="settings-nav__item" data-settings-nav="developer">
+                                <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="terminal-square"></i></span>
+                                <span class="settings-nav__label" data-i18n="developerSection">開發者工具</span>
+                            </button>
+                            <button type="button" class="settings-nav__item" data-settings-nav="actions">
+                                <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="wand-2"></i></span>
+                                <span class="settings-nav__label" data-i18n="cleanupSectionTitle">維護與重置</span>
+                            </button>
+                        </nav>
+                        <div class="settings-panels" id="settingsContent" tabindex="0">
+                            <section class="settings-section" data-settings-area="dark">
+                                <header class="settings-section__header">
+                                    <div class="settings-section__title">
+                                        <span class="settings-section__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
+                                        <h4 data-i18n="darkModeSection">夜間模式</h4>
                                     </div>
-                                    <div class="dark-mode-panel__slider">
-                                        <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
-                                        <div class="settings-range-group">
-                                            <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
-                                            <span class="range-value" id="darkModeDepthValue">35%</span>
+                                </header>
+                                <div class="settings-section__body">
+                                    <div class="settings-section__block">
+                                        <div class="dark-mode-panel">
+                                            <div class="dark-mode-panel__toggle">
+                                                <div class="dark-mode-panel__text">
+                                                    <span class="dark-mode-panel__label" data-i18n="darkMode">夜間模式</span>
+                                                    <p class="dark-mode-panel__hint" data-i18n="darkModeHint">為整個首頁套用柔和的深色主題，可減少夜間使用時的眩光。</p>
+                                                </div>
+                                                <div class="dark-mode-panel__actions">
+                                                    <span class="dark-mode-toggle__status" data-state="off">日間模式</span>
+                                                    <button id="darkModeToggleBtn" type="button" class="settings-toggle dark-mode-toggle" aria-pressed="false" data-toggle-labels="enableDarkMode,disableDarkMode" data-icon-off="moon" data-icon-on="sun" aria-label="切換夜間模式">
+                                                        <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
+                                                        <span class="settings-toggle__label"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="dark-mode-panel__slider">
+                                                <label for="darkModeDepth" data-i18n="darkModeDepth">深色強度</label>
+                                                <div class="settings-range-group">
+                                                    <input type="range" id="darkModeDepth" min="0" max="100" value="35" class="settings-range" />
+                                                    <span class="range-value" id="darkModeDepthValue">35%</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </section>
-
-                        <!-- 背景設定 -->
-                        <section class="settings-card settings-card--wide settings-card--background" data-settings-area="background">
-                            <header class="settings-card__header">
-                                <i data-lucide="palette"></i>
-                                <h4 data-i18n="backgroundSection">背景設定</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <div class="settings-field">
-                                    <label data-i18n="backgroundType">背景類型</label>
-                                    <div class="radio-list" id="bgTypeRadios">
-                                        <label><input type="radio" name="bgType" value="gradient" checked /> <span data-i18n="gradient">漸層</span></label>
-                                        <label><input type="radio" name="bgType" value="image" /> <span data-i18n="image">圖片</span></label>
-                                        <label><input type="radio" name="bgType" value="color" /> <span data-i18n="solidColor">純色</span></label>
+                            </section>
+                            <section class="settings-section" data-settings-area="background">
+                                <header class="settings-section__header">
+                                    <div class="settings-section__title">
+                                        <span class="settings-section__icon" aria-hidden="true"><i data-lucide="palette"></i></span>
+                                        <h4 data-i18n="backgroundSection">背景設定</h4>
                                     </div>
-                                </div>
-                                <div class="settings-field" id="gradientSettings">
-                                    <label for="gradientPreset" data-i18n="selectGradient">選擇漸層</label>
-                                    <select id="gradientPreset" class="settings-select">
-                                        <option value="default">天空藍</option>
-                                        <option value="sunset">日落橘紅</option>
-                                        <option value="ocean">海洋藍綠</option>
-                                        <option value="purple">夢幻紫</option>
-                                        <option value="green">森林綠</option>
-                                        <option value="dark">星夜黑</option>
-                                    </select>
-                                </div>
-                                <div class="settings-field hidden" id="imageSettings">
-                                    <label for="bgImageUrl" data-i18n="imageUrl">圖片網址</label>
-                                    <input id="bgImageUrl" type="text" placeholder="https://example.com/image.jpg" class="settings-input" />
-                                    <span class="hint" data-i18n="imageHint">提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature</span>
-                                    <label for="bgImageUpload" class="settings-sublabel" data-i18n="uploadImage">上傳圖片</label>
-                                    <input id="bgImageUpload" type="file" accept="image/*" class="settings-file" />
-                                    <span class="hint" data-i18n="uploadHint">上傳的圖片將保存在瀏覽器緩存中</span>
-                                </div>
-                                <div class="settings-field hidden" id="colorSettings">
-                                    <label for="bgColor" data-i18n="selectColor">選擇顏色</label>
-                                    <input id="bgColor" type="color" value="#1a1a2e" class="settings-color" />
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- 顯示效果 -->
-                        <section class="settings-card settings-card--wide settings-card--appearance" data-settings-area="appearance">
-                            <header class="settings-card__header">
-                                <i data-lucide="image"></i>
-                                <h4 data-i18n="appearanceSection">顯示效果（外觀）</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <div class="settings-field appearance-field" id="blurControls">
-                                    <div class="settings-field__header">
-                                        <div class="appearance-field__meta">
-                                            <label for="blurRange" data-i18n="backgroundBlur">背景模糊</label>
-                                            <p class="appearance-field__hint" data-i18n="backgroundBlurHint">柔化背景，讓卡片與搜尋列更突出。</p>
+                                </header>
+                                <div class="settings-section__body">
+                                    <div class="settings-section__block">
+                                        <div class="settings-field">
+                                            <label data-i18n="backgroundType">背景類型</label>
+                                            <div class="radio-list" id="bgTypeRadios">
+                                                <label><input type="radio" name="bgType" value="gradient" checked /> <span data-i18n="gradient">漸層</span></label>
+                                                <label><input type="radio" name="bgType" value="image" /> <span data-i18n="image">圖片</span></label>
+                                                <label><input type="radio" name="bgType" value="color" /> <span data-i18n="solidColor">純色</span></label>
+                                            </div>
                                         </div>
-                                        <button id="blurToggleBtn" type="button" class="settings-toggle settings-toggle--compact" aria-pressed="false" aria-controls="blurRange" data-toggle-labels="enableBlur,disableBlur" data-icon-off="sparkles" data-icon-on="sparkles" aria-label="切換背景模糊">
-                                            <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="sparkles"></i></span>
-                                            <span class="settings-toggle__label"></span>
-                                        </button>
-                                    </div>
-                                    <input id="blurRange" type="range" min="0" max="40" value="0" class="settings-range" />
-                                    <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">0</span>px</div>
-                                </div>
-                                <div class="settings-field appearance-field appearance-field--filter">
-                                    <div class="settings-field__header">
-                                        <div class="appearance-field__meta">
-                                            <label for="overlaySelect" data-i18n="backgroundFilter">背景濾鏡</label>
-                                            <p class="appearance-field__hint" data-i18n="backgroundFilterHint">為背景增添白/黑濾鏡，加強文字與卡片的對比。</p>
+                                        <div class="settings-field" id="gradientSettings">
+                                            <label for="gradientPreset" data-i18n="selectGradient">選擇漸層</label>
+                                            <select id="gradientPreset" class="settings-select">
+                                                <option value="default">天空藍</option>
+                                                <option value="sunset">日落橘紅</option>
+                                                <option value="ocean">海洋藍綠</option>
+                                                <option value="purple">夢幻紫</option>
+                                                <option value="green">森林綠</option>
+                                                <option value="dark">星夜黑</option>
+                                            </select>
                                         </div>
-                                        <select id="overlaySelect" class="settings-select">
-                                            <option value="none" data-i18n="filterNone">無</option>
-                                            <option value="white" data-i18n="filterWhite">白色濾鏡</option>
-                                            <option value="black" data-i18n="filterBlack">黑色濾鏡</option>
-                                        </select>
-                                    </div>
-                                    <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" class="settings-range" />
-                                    <div class="hint"><span data-i18n="filterOpacity">濾鏡透明度</span>: <span id="overlayValue">0.40</span></div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- 天氣小工具 -->
-                        <section class="settings-card settings-card--wide settings-card--weather" data-settings-area="weather">
-                            <header class="settings-card__header">
-                                <i data-lucide="cloud-sun"></i>
-                                <h4 data-i18n="weatherSection">天氣</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <div class="settings-field weather-field">
-                                    <div class="settings-field__header">
-                                        <div class="weather-field__meta">
-                                            <label data-i18n="weatherToggleHeading">天氣小工具</label>
-                                            <p class="weather-field__hint" data-i18n="weatherDescription">使用 Open-Meteo 提供的資料顯示目前天氣狀況。</p>
+                                        <div class="settings-field hidden" id="imageSettings">
+                                            <label for="bgImageUrl" data-i18n="imageUrl">圖片網址</label>
+                                            <input id="bgImageUrl" type="text" placeholder="https://example.com/image.jpg" class="settings-input" />
+                                            <span class="hint" data-i18n="imageHint">提示：可使用 Unsplash，如 https://source.unsplash.com/1920x1080/?nature</span>
+                                            <label for="bgImageUpload" class="settings-sublabel" data-i18n="uploadImage">上傳圖片</label>
+                                            <input id="bgImageUpload" type="file" accept="image/*" class="settings-file" />
+                                            <span class="hint" data-i18n="uploadHint">上傳的圖片將保存在瀏覽器緩存中</span>
                                         </div>
-                                        <div class="weather-field__controls">
-                                            <span class="weather-toggle__status" data-state="off" data-i18n="weatherStatusOff">天氣小工具已關閉</span>
-                                            <button id="weatherToggleBtn" type="button" class="settings-toggle" aria-pressed="false" data-toggle-labels="enableWeather,disableWeather" data-icon-off="cloud-off" data-icon-on="cloud-sun" aria-label="切換天氣小工具">
-                                                <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="cloud-off"></i></span>
-                                                <span class="settings-toggle__label"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="weather-field__body">
-                                        <label for="weatherLocationInput" data-i18n="weatherLocationLabel">地點</label>
-                                        <div class="weather-location-controls">
-                                            <input id="weatherLocationInput" type="text" class="settings-input" placeholder="輸入城市或地標" data-i18n-placeholder="weatherLocationPlaceholder" />
-                                            <button id="weatherApplyBtn" type="button" class="btn ghost" data-i18n="weatherApply">套用並刷新</button>
-                                        </div>
-                                        <div class="hint weather-field__hint-text" id="weatherStatusText" role="status"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- 開發者工具 -->
-                        <section class="settings-card settings-card--developer" data-settings-area="developer">
-                            <header class="settings-card__header">
-                                <i data-lucide="terminal-square"></i>
-                                <h4 data-i18n="developerSection">開發者工具</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <div class="settings-field developer-field">
-                                    <div class="settings-field__header">
-                                        <div class="developer-field__meta">
-                                            <label data-i18n="debugPanelLabel">顯示除錯面板</label>
-                                            <p class="developer-field__hint" data-i18n="debugPanelDescription">在右下角顯示即時除錯訊息，方便排查問題。</p>
-                                        </div>
-                                        <div class="developer-field__controls">
-                                            <span class="debug-toggle__status" data-state="off" data-i18n="debugStatusOff">除錯面板已關閉</span>
-                                            <button id="debugToggleBtn" type="button" class="settings-toggle" aria-pressed="false" data-toggle-labels="enableDebugPanel,disableDebugPanel" data-icon-off="bug" data-icon-on="check-circle" aria-label="切換除錯面板">
-                                                <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="bug"></i></span>
-                                                <span class="settings-toggle__label"></span>
-                                            </button>
+                                        <div class="settings-field hidden" id="colorSettings">
+                                            <label for="bgColor" data-i18n="selectColor">選擇顏色</label>
+                                            <input id="bgColor" type="color" value="#1a1a2e" class="settings-color" />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </section>
-
-                        <!-- 快速清理 -->
-                        <section class="settings-card settings-card--wide settings-card--actions" data-settings-area="actions">
-                            <header class="settings-card__header">
-                                <i data-lucide="wand-2"></i>
-                                <h4 data-i18n="cleanupSectionTitle">維護與重置</h4>
-                            </header>
-                            <div class="settings-card__content settings-card__content--split">
-                                <div class="settings-action-block">
-                                    <div class="settings-action-block__icon">
-                                        <i data-lucide="trash-2"></i>
+                            </section>
+                            <section class="settings-section" data-settings-area="appearance">
+                                <header class="settings-section__header">
+                                    <div class="settings-section__title">
+                                        <span class="settings-section__icon" aria-hidden="true"><i data-lucide="image"></i></span>
+                                        <h4 data-i18n="appearanceSection">顯示效果（外觀）</h4>
                                     </div>
-                                    <div class="settings-action-block__body">
-                                        <h5 data-i18n="clearSearchHistory">清空搜尋記錄</h5>
-                                        <p data-i18n="clearSearchHistoryDescription">刪除所有搜尋歷史記錄。</p>
-                                        <button id="clearSearchHistoryBtn" type="button" class="btn primary" data-i18n="clearSearchHistoryAction">立即清空</button>
+                                </header>
+                                <div class="settings-section__body">
+                                    <div class="settings-section__block settings-section__block--grid">
+                                        <div class="settings-field appearance-field" id="blurControls">
+                                            <div class="settings-field__header">
+                                                <div class="appearance-field__meta">
+                                                    <label for="blurRange" data-i18n="backgroundBlur">背景模糊</label>
+                                                    <p class="appearance-field__hint" data-i18n="backgroundBlurHint">柔化背景，讓卡片與搜尋列更突出。</p>
+                                                </div>
+                                                <button id="blurToggleBtn" type="button" class="settings-toggle settings-toggle--compact" aria-pressed="false" aria-controls="blurRange" data-toggle-labels="enableBlur,disableBlur" data-icon-off="sparkles" data-icon-on="sparkles" aria-label="切換背景模糊">
+                                                    <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+                                                    <span class="settings-toggle__label"></span>
+                                                </button>
+                                            </div>
+                                            <input id="blurRange" type="range" min="0" max="40" value="0" class="settings-range" />
+                                            <div class="hint"><span data-i18n="blurDepth">模糊深度</span>: <span id="blurValue">0</span>px</div>
+                                        </div>
+                                        <div class="settings-field appearance-field appearance-field--filter">
+                                            <div class="settings-field__header">
+                                                <div class="appearance-field__meta">
+                                                    <label for="overlaySelect" data-i18n="backgroundFilter">背景濾鏡</label>
+                                                    <p class="appearance-field__hint" data-i18n="backgroundFilterHint">為背景增添白/黑濾鏡，加強文字與卡片的對比。</p>
+                                                </div>
+                                                <select id="overlaySelect" class="settings-select">
+                                                    <option value="none" data-i18n="filterNone">無</option>
+                                                    <option value="white" data-i18n="filterWhite">白色濾鏡</option>
+                                                    <option value="black" data-i18n="filterBlack">黑色濾鏡</option>
+                                                </select>
+                                            </div>
+                                            <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" class="settings-range" />
+                                            <div class="hint"><span data-i18n="filterOpacity">濾鏡透明度</span>: <span id="overlayValue">0.40</span></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="settings-action-block">
-                                    <div class="settings-action-block__icon">
-                                        <i data-lucide="refresh-cw"></i>
+                            </section>
+                            <section class="settings-section" data-settings-area="weather">
+                                <header class="settings-section__header">
+                                    <div class="settings-section__title">
+                                        <span class="settings-section__icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></span>
+                                        <h4 data-i18n="weatherSection">天氣</h4>
                                     </div>
-                                    <div class="settings-action-block__body">
-                                        <h5 data-i18n="clearSettings">重設所有設定</h5>
-                                        <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
-                                        <button id="resetSettings" type="button" class="btn primary" data-i18n="clearSettingsAction">立即重設</button>
+                                </header>
+                                <div class="settings-section__body">
+                                    <div class="settings-section__block">
+                                        <div class="settings-field weather-field">
+                                            <div class="settings-field__header">
+                                                <div class="weather-field__meta">
+                                                    <label data-i18n="weatherToggleHeading">天氣小工具</label>
+                                                    <p class="weather-field__hint" data-i18n="weatherDescription">使用 Open-Meteo 提供的資料顯示目前天氣狀況。</p>
+                                                </div>
+                                                <div class="weather-field__controls">
+                                                    <span class="weather-toggle__status" data-state="off" data-i18n="weatherStatusOff">天氣小工具已關閉</span>
+                                                    <button id="weatherToggleBtn" type="button" class="settings-toggle" aria-pressed="false" data-toggle-labels="enableWeather,disableWeather" data-icon-off="cloud-off" data-icon-on="cloud-sun" aria-label="切換天氣小工具">
+                                                        <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="cloud-off"></i></span>
+                                                        <span class="settings-toggle__label"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="weather-field__body">
+                                                <label for="weatherLocationInput" data-i18n="weatherLocationLabel">地點</label>
+                                                <div class="weather-location-controls">
+                                                    <input id="weatherLocationInput" type="text" class="settings-input" placeholder="輸入城市或地標" data-i18n-placeholder="weatherLocationPlaceholder" />
+                                                    <button id="weatherApplyBtn" type="button" class="btn ghost" data-i18n="weatherApply">套用並刷新</button>
+                                                </div>
+                                                <div class="hint weather-field__hint-text" id="weatherStatusText" role="status"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </section>
-                            </div>
+                            </section>
+                            <section class="settings-section" data-settings-area="developer">
+                                <header class="settings-section__header">
+                                    <div class="settings-section__title">
+                                        <span class="settings-section__icon" aria-hidden="true"><i data-lucide="terminal-square"></i></span>
+                                        <h4 data-i18n="developerSection">開發者工具</h4>
+                                    </div>
+                                </header>
+                                <div class="settings-section__body">
+                                    <div class="settings-section__block">
+                                        <div class="settings-field developer-field">
+                                            <div class="settings-field__header">
+                                                <div class="developer-field__meta">
+                                                    <label data-i18n="debugPanelLabel">顯示除錯面板</label>
+                                                    <p class="developer-field__hint" data-i18n="debugPanelDescription">在右下角顯示即時除錯訊息，方便排查問題。</p>
+                                                </div>
+                                                <div class="developer-field__controls">
+                                                    <span class="debug-toggle__status" data-state="off" data-i18n="debugStatusOff">除錯面板已關閉</span>
+                                                    <button id="debugToggleBtn" type="button" class="settings-toggle" aria-pressed="false" data-toggle-labels="enableDebugPanel,disableDebugPanel" data-icon-off="bug" data-icon-on="check-circle" aria-label="切換除錯面板">
+                                                        <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="bug"></i></span>
+                                                        <span class="settings-toggle__label"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="settings-section" data-settings-area="actions">
+                                <header class="settings-section__header">
+                                    <div class="settings-section__title">
+                                        <span class="settings-section__icon" aria-hidden="true"><i data-lucide="wand-2"></i></span>
+                                        <h4 data-i18n="cleanupSectionTitle">維護與重置</h4>
+                                    </div>
+                                </header>
+                                <div class="settings-section__body">
+                                    <div class="settings-section__block settings-section__block--stack">
+                                        <div class="settings-action-card">
+                                            <div class="settings-action-card__icon">
+                                                <i data-lucide="trash-2"></i>
+                                            </div>
+                                            <div class="settings-action-card__content">
+                                                <h5 data-i18n="clearSearchHistory">清空搜尋記錄</h5>
+                                                <p data-i18n="clearSearchHistoryDescription">刪除所有搜尋歷史記錄。</p>
+                                                <button id="clearSearchHistoryBtn" type="button" class="btn primary" data-i18n="clearSearchHistoryAction">立即清空</button>
+                                            </div>
+                                        </div>
+                                        <div class="settings-action-card">
+                                            <div class="settings-action-card__icon settings-action-card__icon--danger">
+                                                <i data-lucide="refresh-cw"></i>
+                                            </div>
+                                            <div class="settings-action-card__content">
+                                                <h5 data-i18n="clearSettings">重設所有設定</h5>
+                                                <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
+                                                <button id="resetSettings" type="button" class="btn primary" data-i18n="clearSettingsAction">立即重設</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
                     </div>
                 </div>
