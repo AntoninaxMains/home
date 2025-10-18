@@ -1651,9 +1651,9 @@ function getWeatherViewModel() {
         enabled,
         hasStoredLocation: Boolean(storedLocation),
         locationText: resolvedLocation || '',
-        icon: 'cloud',
+        icon: 'cloud-sun',
         rotating: false,
-        tempText: '--°',
+        tempText: t('weatherSection') || '天氣',
         conditionText: '',
         windText: '',
         updatedText: '',
@@ -1664,13 +1664,15 @@ function getWeatherViewModel() {
     if (!enabled) {
         view.statusText = t('weatherStatusOff');
         view.conditionText = view.statusText;
+        view.tempText = t('weatherSection') || '天氣';
         return view;
     }
 
     if (!storedLocation) {
         view.statusText = t('weatherStatusLocationMissing');
         view.conditionText = view.statusText;
-        view.icon = 'map-pin';
+        view.icon = 'cloud-sun';
+        view.tempText = t('weatherSection') || '天氣';
         return view;
     }
 

@@ -90,6 +90,7 @@ body.dark-mode .settings-nav__item.is-active {
     position: relative;
     gap: 8px;
     padding: 10px;
+    z-index: 20;
   }
   
   .settings-nav__item {
@@ -100,18 +101,24 @@ body.dark-mode .settings-nav__item.is-active {
     justify-content: center;
     flex-direction: column;
     gap: 6px;
+    position: relative;
+    z-index: 21;
+    pointer-events: auto;
+    touch-action: manipulation;
   }
   
   .settings-nav__label {
     display: block;
     font-size: 11px;
     text-align: center;
+    pointer-events: none;
   }
   
   .settings-nav__icon {
     margin: 0 auto;
     width: 24px;
     height: 24px;
+    pointer-events: none;
   }
 }
 
@@ -929,19 +936,33 @@ body.dark-mode .suggestion-item--skeleton {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   cursor: pointer;
+  width: 100%;
 }
 
 .weather-tile__icon {
-  font-size: 36px;
-  margin: 12px auto 8px;
+  width: 36px;
+  height: 36px;
+  margin: 10px auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .weather-tile__icon [data-weather-icon] {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+}
+
+.weather-tile__icon [data-weather-icon] i {
+  width: 32px;
+  height: 32px;
+  color: #4CACF0;
 }
 
 .weather-tile__icon [data-weather-icon].is-rotating {
@@ -956,8 +977,9 @@ body.dark-mode .suggestion-item--skeleton {
 .weather-tile__temp {
   font-weight: 700;
   color: var(--text);
-  font-size: 18px;
+  font-size: 14px;
   margin: 0;
+  text-align: center;
 }
 
 .weather-tile__location {
@@ -1187,11 +1209,13 @@ body.dark-mode .bookmark-empty {
 
   .modal-panel--settings .modal-body.settings-body {
     padding: 24px;
+    overflow-y: auto;
   }
 
   .modal-panel--settings .settings-panels {
     max-height: none;
     padding: 20px;
+    overflow-y: visible;
   }
 }
 
@@ -1295,6 +1319,8 @@ body.dark-mode .weather-modal-info {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .weather-modal-controls label {
@@ -1306,6 +1332,7 @@ body.dark-mode .weather-modal-info {
 .weather-location-search {
   position: relative;
   width: 100%;
+  z-index: 10;
 }
 
 .weather-location-suggestions {
@@ -1317,9 +1344,9 @@ body.dark-mode .weather-modal-info {
   border: 1px solid rgba(76, 110, 245, 0.2);
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
-  max-height: 240px;
+  max-height: 200px;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: 100001;
   display: none;
 }
 
@@ -1494,6 +1521,8 @@ body.dark-mode .icon-library-link { color: #aebdff; }
   display: flex;
   flex-direction: column;
   overflow: visible;
+  position: relative;
+  z-index: 1;
 }
 
 
