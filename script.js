@@ -2496,75 +2496,32 @@ function deleteCategoryFromModal(category) {
 }
 
 // 抓取網站 favicon
-async function fetchRemoteSuggestions(query) {
-    if (!query || query.length < getRemoteSuggestionMinLength()) {
-        return [];
+function fetchFavicon() {
+    const urlInput = document.getElementById('bookmarkUrl');
+    const iconInput = document.getElementById('bookmarkIcon');
+
+    if (!urlInput || !iconInput) {
+        return;
     }
 
-    const locale = getRemoteSuggestionLocale();
-    const cacheKey = `${query.toLowerCase()}|${locale.language || ''}`;
-    if (remoteSuggestCache.has(cacheKey)) {
-        return remoteSuggestCache.get(cacheKey);
+    const rawUrl = (urlInput.value || '').trim();
+    if (!rawUrl) {
+        alert(t('alertInvalidUrl') || '請確認網址格式正確');
+        return;
     }
 
-    if (remoteSuggestCancel) {
-        remoteSuggestCancel();
-        remoteSuggestCancel = null;
+    let normalized;
+    try {
+        normalized = new URL(rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`);
+    } catch (error) {
+        alert(t('alertInvalidUrl') || '請確認網址格式正確');
+        return;
     }
 
-    return new Promise(resolve => {
-        const callbackId = `__bingSuggest_${Date.now()}_${remoteSuggestCallbackSeed++}`;
-        const params = new URLSearchParams({
-            query,
-            JsonType: 'callback',
-            JsonCallback: callbackId
-        });
-        if (locale.language) params.set('language', locale.language);
-        if (locale.market) params.set('market', locale.market);
-        params.set('_', String(Date.now()));
-
-        const script = document.createElement('script');
-        let settled = false;
-
-        const finalize = (result) => {
-            if (settled) return;
-            settled = true;
-            if (remoteSuggestCancel === cancel) {
-                remoteSuggestCancel = null;
-            }
-            window.clearTimeout(timeoutId);
-            delete window[callbackId];
-            if (script.parentNode) {
-                script.parentNode.removeChild(script);
-            }
-            if (Array.isArray(result) && result.length) {
-                remoteSuggestCache.set(cacheKey, result);
-            }
-            resolve(Array.isArray(result) ? result : []);
-        };
-
-        const cancel = () => finalize([]);
-        remoteSuggestCancel = cancel;
-
-        window[callbackId] = (payload) => {
-            try {
-                console.log('遠端 API 原始回應:', payload);
-                const suggestions = extractRemoteSuggestions(payload, query, SEARCH_SUGGESTION_LIMIT);
-                console.log('遠端 API 解析後建議詞:', suggestions);
-                finalize(suggestions);
-            } catch (err) {
-                console.warn('Failed to parse remote suggestions', err);
-                finalize([]);
-            }
-        };
-
-        script.onerror = cancel;
-        script.src = `https://api.bing.com/osjson.aspx?${params.toString()}`;
-        script.async = true;
-        document.head.appendChild(script);
-
-        const timeoutId = window.setTimeout(cancel, 4000);
-    });
+    const faviconUrl = `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(normalized.origin)}`;
+    iconInput.value = faviconUrl;
+    iconInput.dataset.fetched = '1';
+    alert(t('alertIconFetched') || '已自動填入網站圖示！');
 }
 
 function closeModal(modalId) {
