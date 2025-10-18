@@ -12,6 +12,57 @@ if (typeof window.currentLanguage === 'undefined') {
     window.currentLanguage = 'zh-TW';
 }
 
+// 全局錯誤監聽器，便於在 UI 上顯示錯誤
+window.addEventListener('error', (event) => {
+    try {
+        const existing = document.getElementById('app-error-banner');
+        const banner = existing || document.createElement('div');
+        banner.id = 'app-error-banner';
+        banner.style.position = 'fixed';
+        banner.style.top = '12px';
+        banner.style.left = '50%';
+        banner.style.transform = 'translateX(-50%)';
+        banner.style.zIndex = '9999';
+        banner.style.background = 'rgba(220, 38, 38, 0.95)';
+        banner.style.color = '#fff';
+        banner.style.padding = '10px 16px';
+        banner.style.borderRadius = '999px';
+        banner.style.fontSize = '14px';
+        banner.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
+        banner.textContent = event?.message ? `Error: ${event.message}` : 'Unknown script error';
+        if (!existing) {
+            document.body.appendChild(banner);
+        }
+    } catch (innerError) {
+        console.error('Failed to display error banner:', innerError);
+    }
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+    try {
+        const existing = document.getElementById('app-error-banner');
+        const banner = existing || document.createElement('div');
+        banner.id = 'app-error-banner';
+        banner.style.position = 'fixed';
+        banner.style.top = '12px';
+        banner.style.left = '50%';
+        banner.style.transform = 'translateX(-50%)';
+        banner.style.zIndex = '9999';
+        banner.style.background = 'rgba(234, 179, 8, 0.95)';
+        banner.style.color = '#1f2937';
+        banner.style.padding = '10px 16px';
+        banner.style.borderRadius = '999px';
+        banner.style.fontSize = '14px';
+        banner.style.boxShadow = '0 6px 16px rgba(0,0,0,0.2)';
+        banner.textContent = event?.reason ? `Unhandled rejection: ${event.reason}` : 'Unhandled promise rejection';
+        if (!existing) {
+            document.body.appendChild(banner);
+        }
+    } catch (innerError) {
+        console.error('Failed to display rejection banner:', innerError);
+    }
+});
+
 // 當前語言 (從 index.html 傳入)
 // Current language (passed from index.html)
 let currentLanguage = window.currentLanguage;
@@ -388,6 +439,9 @@ function determinePreferredLanguage() {
 function loadLanguage() {
     // 語言已在 index.html 中初始化，這裡只需要確保 currentLanguage 正確
     // Language already initialized in index.html, just ensure currentLanguage is correct
+    if (window.translations) {
+        translations = window.translations;
+    }
     if (window.currentLanguage) {
         currentLanguage = window.currentLanguage;
     }
@@ -398,27 +452,29 @@ async function changeLanguage(lang) {
     // 如果語言尚未載入，動態載入 / If language not loaded, dynamically load it
     if (!translations[lang]) {
         try {
-            const response = await fetch(`i18n/${lang}.js`);
-            const code = await response.text();
-            eval(code);
-            
-            // 設置翻譯對象 / Set translation object
-            if (lang === 'en' && typeof en !== 'undefined') {
-                translations['en'] = en;
-            } else if (lang === 'zh-CN' && typeof zhCN !== 'undefined') {
-                translations['zh-CN'] = zhCN;
-            } else if (lang === 'zh-TW' && typeof zhTW !== 'undefined') {
-                translations['zh-TW'] = zhTW;
-            } else if (lang === 'ja' && typeof ja !== 'undefined') {
-                translations['ja'] = ja;
+            await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = `i18n/${lang}.js`;
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error(`Failed to load ${lang} translation file`));
+                document.head.appendChild(script);
+            });
+
+            const globalTranslations = window.TRANSLATIONS || {};
+            if (globalTranslations[lang]) {
+                translations[lang] = globalTranslations[lang];
+            } else {
+                console.warn(`Translation data for ${lang} not found after loading script.`);
             }
         } catch (error) {
             console.error(`Failed to load language ${lang}:`, error);
             return;
         }
     }
-    
+
     currentLanguage = lang;
+    window.currentLanguage = lang;
+    window.translations = translations;
     localStorage.setItem('language', lang);
     updateUILanguage();
     renderBookmarks();
@@ -2594,6 +2650,30 @@ function ensureIconLibrary() {
 
     return iconLibraryPromise;
 }
+
+// 全域錯誤監聽器
+window.addEventListener('error', (event) => {
+    const { message, filename, lineno, colno, error: err } = event;
+    const errorMsg = `
+        <strong>發生錯誤：</strong> ${escapeHtml(message)}<br>
+        <strong>檔案：</strong> ${escapeHtml(filename)}<br>
+        <strong>行號：</strong> ${escapeHtml(lineno)}<br>
+        <strong>欄號：</strong> ${escapeHtml(colno)}<br>
+    `;
+    
+    // 如果有錯誤物件，顯示堆疊追蹤
+    if (err && err.stack) {
+        const stackTrace = err.stack
+            .split('\n')
+            .map(line => `<div>${escapeHtml(line.trim())}</div>`)
+            .join('');
+        errorMsg += `<div><strong>堆疊追蹤：</strong></div>${stackTrace}`;
+    }
+    
+    // 顯示錯誤訊息的 UI 實作
+    console.error('全域錯誤:', errorMsg);
+    alert('發生錯誤，請檢查控制台以獲取詳細資訊');
+});
 
 // 暴露全局函數
 window.openBookmarkModal = openBookmarkModal;

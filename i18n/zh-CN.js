@@ -1,7 +1,8 @@
 // Simplified Chinese Translation
 // 简体中文翻译
 
-const zhCN = {
+window.TRANSLATIONS = window.TRANSLATIONS || {};
+window.TRANSLATIONS['zh-CN'] = {
     // 标题区
     heroTitle: '起始页',
     heroSubtitle: '快速搜索、管理你的书签，一切从这里开始。',

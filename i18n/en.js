@@ -1,7 +1,8 @@
 // English Translation
 // 英語翻譯
 
-const en = {
+window.TRANSLATIONS = window.TRANSLATIONS || {};
+window.TRANSLATIONS['en'] = {
     // Hero
     heroTitle: 'Start Page',
     heroSubtitle: 'Quick search and manage your bookmarks, all starts here.',

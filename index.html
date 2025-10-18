@@ -356,22 +356,9 @@
         const script = document.createElement('script');
         script.src = `i18n/${currentLanguage}.js`;
         script.onload = function() {
-            // 設置全局 translations 對象 / Set global translations object
-            const translations = {};
-            
-            // 根據載入的語言設置對應的翻譯
-            if (currentLanguage === 'en' && typeof en !== 'undefined') {
-                translations['en'] = en;
-            } else if (currentLanguage === 'zh-CN' && typeof zhCN !== 'undefined') {
-                translations['zh-CN'] = zhCN;
-            } else if (currentLanguage === 'zh-TW' && typeof zhTW !== 'undefined') {
-                translations['zh-TW'] = zhTW;
-            } else if (currentLanguage === 'ja' && typeof ja !== 'undefined') {
-                translations['ja'] = ja;
-            }
-            
             // 確保全局變量在腳本載入前設置
-            window.translations = translations;
+            window.TRANSLATIONS = window.TRANSLATIONS || {};
+            window.translations = window.TRANSLATIONS;
             window.currentLanguage = currentLanguage;
             window.SUPPORTED_LANGUAGES = supportedLanguages;
             
@@ -386,7 +373,8 @@
         script.onerror = function() {
             console.error('Failed to load language file:', currentLanguage);
             // 降級到英語
-            window.translations = {};
+            window.TRANSLATIONS = window.TRANSLATIONS || {};
+            window.translations = window.TRANSLATIONS;
             window.currentLanguage = 'en';
             const mainScript = document.createElement('script');
             mainScript.src = 'script.js';

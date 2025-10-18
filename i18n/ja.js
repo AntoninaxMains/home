@@ -1,7 +1,8 @@
 // Japanese Translation
 // 日本語翻訳
 
-const ja = {
+window.TRANSLATIONS = window.TRANSLATIONS || {};
+window.TRANSLATIONS['ja'] = {
     // ヒーロー
     heroTitle: 'スタートページ',
     heroSubtitle: 'クイック検索とブックマーク管理、すべてここから始まります。',

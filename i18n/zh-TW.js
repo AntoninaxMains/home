@@ -1,7 +1,8 @@
 // Traditional Chinese Translation
 // 繁體中文翻譯
 
-const zhTW = {
+window.TRANSLATIONS = window.TRANSLATIONS || {};
+window.TRANSLATIONS['zh-TW'] = {
     // 標題區
     heroTitle: '起始頁',
     heroSubtitle: '快速搜尋、管理你的書籤，一切從這裡開始。',
