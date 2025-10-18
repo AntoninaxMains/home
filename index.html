@@ -239,29 +239,34 @@
                                 </div>
                             </div>
                         </section>
-                    </div>
 
-                    <!-- 清理與重置 -->
-                    <div class="settings-layout" style="margin-top: 24px;">
-                        <section class="settings-card">
+                        <!-- 快速清理 -->
+                        <section class="settings-card settings-card--wide settings-card--actions">
                             <header class="settings-card__header">
-                                <i data-lucide="trash-2"></i>
-                                <h4 data-i18n="clearSearchHistory">清空搜尋記錄</h4>
+                                <i data-lucide="sparkles"></i>
+                                <h4 data-i18n="cleanupSectionTitle">維護與重置</h4>
                             </header>
-                            <div class="settings-card__content">
-                                <p data-i18n="clearSearchHistoryDescription">刪除所有搜尋歷史記錄。</p>
-                                <button id="clearSearchHistoryBtn" type="button" class="btn primary" data-i18n="clearSearchHistoryAction" style="width: 100%; margin-top: 8px;">立即清空</button>
-                            </div>
-                        </section>
-
-                        <section class="settings-card">
-                            <header class="settings-card__header">
-                                <i data-lucide="refresh-cw"></i>
-                                <h4 data-i18n="clearSettings">重設所有設定</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
-                                <button id="resetSettings" type="button" class="btn primary" data-i18n="clearSettingsAction" style="width: 100%; margin-top: 8px;">立即重設</button>
+                            <div class="settings-card__content settings-card__content--split">
+                                <div class="settings-action-block">
+                                    <div class="settings-action-block__icon">
+                                        <i data-lucide="trash-2"></i>
+                                    </div>
+                                    <div class="settings-action-block__body">
+                                        <h5 data-i18n="clearSearchHistory">清空搜尋記錄</h5>
+                                        <p data-i18n="clearSearchHistoryDescription">刪除所有搜尋歷史記錄。</p>
+                                        <button id="clearSearchHistoryBtn" type="button" class="btn primary" data-i18n="clearSearchHistoryAction">立即清空</button>
+                                    </div>
+                                </div>
+                                <div class="settings-action-block">
+                                    <div class="settings-action-block__icon">
+                                        <i data-lucide="refresh-cw"></i>
+                                    </div>
+                                    <div class="settings-action-block__body">
+                                        <h5 data-i18n="clearSettings">重設所有設定</h5>
+                                        <p data-i18n="clearSettingsDescription">將首頁恢復到預設外觀、書籤與所有個人化設定。</p>
+                                        <button id="resetSettings" type="button" class="btn primary" data-i18n="clearSettingsAction">立即重設</button>
+                                    </div>
+                                </div>
                             </div>
                         </section>
                     </div>
