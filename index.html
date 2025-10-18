@@ -47,6 +47,9 @@
         <button id="manageCategoriesBtn" class="quick-btn desktop-only" aria-label="管理分類" title="管理分類">
             <i data-lucide="folder"></i>
         </button>
+        <button id="weatherSettingsBtn" class="quick-btn desktop-only" aria-label="天氣設定" title="天氣設定">
+            <i data-lucide="cloud-sun"></i>
+        </button>
         <button id="settingsBtn" class="quick-btn desktop-only" aria-label="設定" title="設定">
             <i data-lucide="settings"></i>
         </button>
@@ -79,6 +82,10 @@
             <button class="fab-option" id="fabManageCategories" data-i18n-attr="title:manageCategories" title="管理分類">
                 <i data-lucide="folder"></i>
                 <span data-i18n="manageCategories">管理分類</span>
+            </button>
+            <button class="fab-option" id="fabWeather" data-i18n-attr="title:weatherSection" title="天氣設定">
+                <i data-lucide="cloud-sun"></i>
+                <span data-i18n="weatherSection">天氣</span>
             </button>
             <button class="fab-option" id="fabSettings" data-i18n-attr="title:settings" title="設定">
                 <i data-lucide="settings"></i>
@@ -327,6 +334,9 @@
                                                     <input id="weatherLocationInput" type="text" class="settings-input" placeholder="輸入城市或地標" data-i18n-placeholder="weatherLocationPlaceholder" />
                                                     <button id="weatherApplyBtn" type="button" class="btn ghost" data-i18n="weatherApply">套用並刷新</button>
                                                 </div>
+                                                <div class="weather-location-search">
+                                                    <div class="weather-location-suggestions" id="weatherLocationSuggestions"></div>
+                                                </div>
                                                 <div class="hint weather-field__hint-text" id="weatherStatusText" role="status"></div>
                                             </div>
                                         </div>
@@ -443,49 +453,6 @@
         </div>
 
         <!-- 分類彈窗 -->
-        <div id="categoryModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="categoryTitle">
-            <div class="modal-panel">
-                <header class="modal-header">
-                    <h3 id="categoryTitle"><i data-lucide="folder-open" style="width:18px;height:18px;margin-right:6px;"></i><span data-i18n="manageCategoriesTitle">管理分類</span></h3>
-                    <button class="modal-close" data-close="categoryModal" aria-label="關閉分類管理">×</button>
-                </header>
-                <div class="modal-body category-modal-body">
-                    <div class="category-modal-intro">
-                        <div class="category-modal-icon">
-                            <i data-lucide="folder-plus"></i>
-                        </div>
-                        <div class="category-modal-copy">
-                            <h4 data-i18n="manageCategories">管理分類</h4>
-                            <p data-i18n="categoriesDesc">建立分類來整理書籤。刪除分類時，書籤會回到主列表。</p>
-                        </div>
-                    </div>
-                    <div id="categoryList" class="category-list category-list--panel"></div>
-                    <div class="category-form">
-                        <label for="newCategoryName" data-i18n="enterCategoryName">輸入新分類名稱</label>
-                        <div class="category-form__row">
-                            <input id="newCategoryName" type="text" data-i18n-placeholder="enterCategoryName" placeholder="輸入新分類名稱" />
-                            <button id="addCategoryBtn" type="button" class="btn primary" data-i18n="addCategoryBtn">+ 新增</button>
-                        </div>
-                    </div>
-                </div>
-                                <footer class="modal-footer">
-                    <button data-close="categoryModal" class="btn primary" data-i18n="done">完成</button>
-                </footer>
-            </div>
-        </div>
-
-        <!-- 天氣彈窗 -->
-        <div id="weatherModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="weatherModalTitle">
-            <div class="modal-panel modal-panel--weather">
-                <header class="modal-header">
-                    <h3 id="weatherModalTitle">
-                        <span data-weather-icon="modal"><i data-lucide="cloud"></i></span>
-                        <span data-weather-temp="modal">--°</span>
-                    </h3>
-                    <button class="modal-close" data-close="weatherModal" aria-label="關閉天氣">×</button>
-                </header>
-                <div class="modal-body weather-modal-body">
-                    <div class="weather-modal-info">
                         <div class="weather-modal-location" data-weather-location="modal"></div>
                         <div class="weather-modal-condition" data-weather-condition></div>
                         <div class="weather-modal-meta">
