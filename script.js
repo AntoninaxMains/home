@@ -1651,6 +1651,16 @@ function initEventListeners() {
             openModal('settingsModal');
             closeFabMenu();
         });
+        
+        document.getElementById('fabLang')?.addEventListener('click', function() {
+            cycleFabLanguage();
+            closeFabMenu();
+        });
+        
+        document.getElementById('fabDarkMode')?.addEventListener('click', function() {
+            toggleDarkMode();
+            closeFabMenu();
+        });
     }
     
     // 夜間模式深度調整
