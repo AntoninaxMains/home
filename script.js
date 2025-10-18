@@ -3911,6 +3911,128 @@ function ensureIconLibrary() {
     return iconLibraryPromise;
 }
 
+// 天氣位置搜索功能
+let weatherLocationSearchTimeout = null;
+let weatherLocationCache = new Map();
+
+async function searchWeatherLocations(query) {
+    if (!query || query.length < 2) {
+        hideWeatherLocationSuggestions();
+        return;
+    }
+
+    const cacheKey = query.toLowerCase();
+    if (weatherLocationCache.has(cacheKey)) {
+        showWeatherLocationSuggestions(weatherLocationCache.get(cacheKey));
+        return;
+    }
+
+    try {
+        const url = `${WEATHER_GEOCODE_URL}?name=${encodeURIComponent(query)}&count=10&language=${currentLanguage || 'en'}&format=json`;
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Search failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const results = data?.results || [];
+        
+        weatherLocationCache.set(cacheKey, results);
+        showWeatherLocationSuggestions(results);
+    } catch (error) {
+        console.error('Weather location search failed:', error);
+        hideWeatherLocationSuggestions();
+    }
+}
+
+function showWeatherLocationSuggestions(results) {
+    const container = document.getElementById('weatherLocationSuggestions');
+    if (!container) return;
+
+    if (!results || results.length === 0) {
+        hideWeatherLocationSuggestions();
+        return;
+    }
+
+    container.innerHTML = results.map(location => {
+        const parts = [
+            location.name,
+            location.admin1,
+            location.admin2,
+            location.country
+        ].filter(Boolean);
+        
+        const name = location.name || '';
+        const details = [location.admin1, location.country].filter(Boolean).join(', ');
+
+        return `
+            <div class="weather-location-suggestion" data-location="${escapeAttribute(location.name)}" data-lat="${location.latitude}" data-lon="${location.longitude}">
+                <div class="weather-location-suggestion__name">${escapeHtml(name)}</div>
+                ${details ? `<div class="weather-location-suggestion__details">${escapeHtml(details)}</div>` : ''}
+            </div>
+        `;
+    }).join('');
+
+    container.classList.add('show');
+
+    // 綁定點擊事件
+    container.querySelectorAll('.weather-location-suggestion').forEach(item => {
+        item.addEventListener('click', () => {
+            const locationName = item.dataset.location;
+            const input = document.getElementById('weatherModalLocationInput');
+            if (input) {
+                input.value = locationName;
+            }
+            hideWeatherLocationSuggestions();
+        });
+    });
+}
+
+function hideWeatherLocationSuggestions() {
+    const container = document.getElementById('weatherLocationSuggestions');
+    if (container) {
+        container.classList.remove('show');
+        container.innerHTML = '';
+    }
+}
+
+function initializeWeatherLocationSearch() {
+    const input = document.getElementById('weatherModalLocationInput');
+    if (!input) return;
+
+    input.addEventListener('input', (event) => {
+        const query = event.target.value.trim();
+        
+        if (weatherLocationSearchTimeout) {
+            clearTimeout(weatherLocationSearchTimeout);
+        }
+
+        if (!query || query.length < 2) {
+            hideWeatherLocationSuggestions();
+            return;
+        }
+
+        weatherLocationSearchTimeout = setTimeout(() => {
+            searchWeatherLocations(query);
+        }, 300);
+    });
+
+    input.addEventListener('focus', () => {
+        const query = input.value.trim();
+        if (query && query.length >= 2) {
+            searchWeatherLocations(query);
+        }
+    });
+
+    // 點擊外部關閉建議
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.weather-location-search')) {
+            hideWeatherLocationSuggestions();
+        }
+    });
+}
+
 // 暴露全局函數
 window.openBookmarkModal = openBookmarkModal;
 window.editBookmark = editBookmark;

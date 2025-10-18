@@ -495,10 +495,11 @@
                     </div>
                     <div class="weather-modal-controls">
                         <label for="weatherModalLocationInput" data-i18n="weatherLocationLabel">地點</label>
-                        <div class="weather-location-controls">
-                            <input id="weatherModalLocationInput" type="text" class="settings-input" placeholder="輸入城市或地標" data-i18n-placeholder="weatherLocationPlaceholder" />
-                            <button id="weatherModalApplyBtn" type="button" class="btn ghost" data-i18n="weatherApply">套用</button>
+                        <div class="weather-location-search">
+                            <input id="weatherModalLocationInput" type="text" class="settings-input" placeholder="輸入城市或地標" data-i18n-placeholder="weatherLocationPlaceholder" autocomplete="off" />
+                            <div class="weather-location-suggestions" id="weatherLocationSuggestions"></div>
                         </div>
+                        <button id="weatherModalApplyBtn" type="button" class="btn ghost" data-i18n="weatherApply">套用</button>
                         <div class="hint weather-modal-status" data-weather-status role="status"></div>
                     </div>
                 </div>
