@@ -1521,7 +1521,6 @@ function cleanSuggestionText(value) {
 }
 
 function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMIT) {
-    console.log('extractRemoteSuggestions 被調用，payload:', payload, 'query:', query);
     const suggestions = [];
     const seen = new Set();
 
@@ -1538,7 +1537,6 @@ function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMI
     if (Array.isArray(payload)) {
         // 標準格式：第二個元素是建議數組
         if (payload.length >= 2 && Array.isArray(payload[1])) {
-            console.log('使用標準格式解析，payload[1]:', payload[1]);
             payload[1].forEach(item => {
                 if (typeof item === 'string') {
                     add(item);
@@ -1548,7 +1546,6 @@ function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMI
             });
         } else {
             // 備用格式：直接是建議數組
-            console.log('使用備用格式解析');
             payload.forEach(item => {
                 if (!item) return;
                 if (typeof item === 'string') {
@@ -1560,7 +1557,6 @@ function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMI
         }
     } else if (payload && typeof payload === 'object') {
         // 對象格式
-        console.log('使用對象格式解析');
         if (Array.isArray(payload.phrase)) {
             payload.phrase.forEach(add);
         } else if (Array.isArray(payload.results)) {
@@ -1571,7 +1567,6 @@ function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMI
     }
 
     const result = suggestions.slice(0, limit);
-    console.log('extractRemoteSuggestions 返回結果:', result);
     return result;
 }
 
