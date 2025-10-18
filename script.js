@@ -77,6 +77,8 @@ const translations = {
     clearSearchHistoryAction: 'Clear now',
     clearSearchHistoryConfirm: 'Are you sure you want to clear all search history?',
     clearSearchHistorySuccess: 'Search history cleared!',
+    renameCategory: 'Rename',
+    editCategoryIcon: 'Edit Icon',
         backgroundSection: 'Background Settings',
         backgroundType: 'Background Type',
         gradient: 'Gradient',
@@ -203,6 +205,8 @@ const translations = {
     clearSearchHistoryAction: '立即清空',
     clearSearchHistoryConfirm: '确定要清空所有搜索记录吗？',
     clearSearchHistorySuccess: '搜索记录已清空！',
+    renameCategory: '重新命名',
+    editCategoryIcon: '修改图标',
         backgroundSection: '背景设置',
         backgroundType: '背景类型',
         gradient: '渐层',
@@ -382,6 +386,134 @@ const translations = {
         alertImageUploaded: '圖片已上傳並應用！',
     alertUploadError: '圖片上傳失敗，請重試',
     alertIconSelected: '已選擇圖標：{icon}'
+    },
+    'ja': {
+        // Hero
+        heroTitle: 'スタートページ',
+        heroSubtitle: '素早く検索し、お気に入りを整理。すべてはここから始まります。',
+        // Search
+        searchPlaceholder: 'なんでも検索…',
+        searchButton: '検索',
+    searchOpenLink: 'リンクを開く',
+    searchSuggestionsTitle: '検索候補',
+    searchHistoryTitle: '検索履歴',
+    noSearchHistory: '検索履歴はまだありません',
+        // Toolbar
+        addBookmark: 'ブックマークを追加',
+        manageCategories: 'カテゴリを管理',
+        settings: '設定',
+        // Bookmarks
+        myBookmarks: 'マイブックマーク',
+        bookmarksDesc: 'よく使うサイトをここにまとめています。クリックですぐ開けます。',
+        noBookmarks: 'まだブックマークがありません。上のボタンから追加しましょう！',
+        // Modals
+        addBookmarkTitle: 'ブックマークを追加',
+        editBookmarkTitle: 'ブックマークを編集',
+        categoryLabel: 'カテゴリ',
+        nameLabel: '名前',
+        urlLabel: 'URL',
+        iconLabel: 'アイコン',
+        autoFetch: '自動取得',
+        save: '保存',
+        cancel: 'キャンセル',
+        done: '完了',
+        mainList: 'メインリスト（カテゴリなし）',
+        newCategory: '+ 新しいカテゴリを作成',
+        enterNewCategory: '新しいカテゴリを入力',
+        enterCategoryName: '新しいカテゴリ名を入力',
+        namePlaceholder: 'サイト名',
+        urlPlaceholder: 'https://example.com',
+        iconPlaceholder: '🌐 絵文字または画像の URL',
+        iconHint: '絵文字・画像 URL を入力するか、自動取得を使ってください',
+        iconSearch: 'アイコンを検索',
+    iconSearchHint: 'Simple Icons からブランドロゴを検索（例: github、google、youtube）',
+    iconSearchLibraryLink: 'Simple Icons ライブラリを開く',
+    iconSearchPlaceholder: 'ブランド名を入力…',
+    iconLoading: 'アイコンライブラリを読み込み中…',
+    iconLoadError: 'アイコンライブラリを読み込めません。しばらくしてから再試行してください。',
+    iconLoadMore: 'さらにアイコンを表示',
+    iconNoResults: '利用できるアイコンがありません。',
+    iconNoResultsWithQuery: '「{query}」に一致するアイコンが見つかりませんでした。',
+        manageCategoriesTitle: 'カテゴリを管理',
+        categoriesDesc: 'ブックマークを整理するカテゴリを作成しましょう。カテゴリを削除するとブックマークはメインリストに戻ります。',
+        noCategories: 'カテゴリがまだありません',
+        addCategoryBtn: '+ 追加',
+        deleteCategory: '削除',
+        // Settings
+        settingsTitle: '設定',
+        searchEngineSection: '検索エンジン',
+    engineGoogle: 'Google',
+    engineBing: 'Bing',
+    engineDuckDuckGo: 'DuckDuckGo',
+    engineBaidu: 'Baidu',
+    engineCustom: 'カスタム',
+        customSearchUrl: 'カスタム検索エンジン URL',
+        customSearchHint: '{query} を検索キーワードのプレースホルダーとして使用します',
+    customSearchInlineLabel: 'カスタム検索エンジン URL',
+    customSearchInlineHint: '検索キーワードのプレースホルダーとして {query} を使用してください',
+    customSearchSave: '保存して適用',
+    customSearchPlaceholder: 'https://example.com/search?q={query}',
+    cleanupSectionTitle: 'クリーンアップとリセット',
+    clearSettings: 'すべての設定をリセット',
+    clearSettingsDescription: 'ホームを初期の外観と内容に戻します。',
+    clearSettingsAction: '今すぐリセット',
+    clearSettingsConfirm: '本当にすべてをリセットしますか？カスタムのブックマークやカテゴリ、設定が削除されます。',
+    clearSettingsSuccess: '設定をクリアしました。ページを再読み込みします…',
+    clearSearchHistory: '検索履歴をクリア',
+    clearSearchHistoryDescription: 'すべての検索履歴を削除します。',
+    clearSearchHistoryAction: '今すぐクリア',
+    clearSearchHistoryConfirm: '本当にすべての検索履歴を削除しますか？',
+    clearSearchHistorySuccess: '検索履歴をクリアしました！',
+        renameCategory: '名前を変更',
+        editCategoryIcon: 'アイコンを変更',
+        backgroundSection: '背景設定',
+        backgroundType: '背景タイプ',
+        gradient: 'グラデーション',
+        image: '画像',
+        solidColor: '単色',
+        selectGradient: 'グラデーションを選択',
+        imageUrl: '画像 URL',
+        imageHint: 'ヒント: Unsplash を利用できます（例: https://source.unsplash.com/1920x1080/?nature）',
+        uploadImage: '画像をアップロード',
+        uploadHint: 'アップロードした画像はブラウザのキャッシュに保存されます',
+        selectColor: '色を選択',
+        appearanceSection: '表示効果（外観）',
+        backgroundBlur: '背景ぼかし',
+        enableBlur: '背景ぼかしを有効にする',
+        blurDepth: 'ぼかしの強さ',
+        backgroundFilter: '背景フィルター',
+        filterNone: 'なし',
+        filterWhite: 'ホワイトフィルター',
+        filterBlack: 'ブラックフィルター',
+        filterOpacity: 'フィルターの不透明度',
+        languageSection: '言語',
+        selectLanguage: '言語を選択',
+        darkModeSection: 'ダークモード',
+        enableDarkMode: 'ダークモードを有効にする',
+        darkModeDepth: 'ダークモードの強さ',
+        darkMode: 'ダークモード',
+        lightMode: 'ライトモード',
+        // Gradient presets
+        gradientDefault: 'スカイブルー',
+        gradientSunset: 'サンセットオレンジ',
+        gradientOcean: 'オーシャンブルー',
+        gradientPurple: 'ドリーミーパープル',
+        gradientGreen: 'フォレストグリーン',
+        gradientDark: 'スターリーナイト',
+        // Alerts
+        alertFillRequired: '名前とURLを入力してください',
+        alertEnterCategory: '新しいカテゴリ名を入力してください',
+        alertCategoryExists: 'このカテゴリは既に存在します',
+        alertDeleteBookmark: 'このブックマークを削除しますか？',
+        alertDeleteCategory: '「{category}」カテゴリを削除してもよろしいですか？\nこのカテゴリ内のブックマークはメインリストに移動します。',
+        alertSetCustomUrl: '先にカスタム検索エンジンのURLを設定してください',
+        alertIconFetched: 'アイコンを自動で入力しました！',
+        alertInvalidUrl: 'URLの形式が正しいか確認してください',
+        alertInvalidImage: '有効な画像ファイルを選択してください',
+        alertImageTooLarge: '画像サイズは5MB以下にしてください',
+        alertImageUploaded: '画像をアップロードして適用しました！',
+    alertUploadError: '画像のアップロードに失敗しました。もう一度お試しください',
+    alertIconSelected: 'アイコンを選択しました: {icon}'
     }
 };
 
@@ -694,6 +826,8 @@ function loadLanguage() {
         const browserLang = navigator.language || navigator.userLanguage;
         if (browserLang.startsWith('zh')) {
             currentLanguage = browserLang.includes('CN') ? 'zh-CN' : 'zh-TW';
+        } else if (browserLang.startsWith('ja')) {
+            currentLanguage = 'ja';
         } else {
             currentLanguage = 'en';
         }
@@ -890,10 +1024,13 @@ function showBgOptions(type) {
 
 // 儲存設定
 function saveSettings() {
-    const customUrl = document.getElementById('customSearchUrl').value;
-    localStorage.setItem('customSearchUrl', customUrl);
-    searchEngines.custom.url = customUrl;
-    syncCustomSearchInputs(customUrl);
+    const customUrlInput = document.getElementById('customSearchUrl');
+    if (customUrlInput) {
+        const customUrl = customUrlInput.value;
+        localStorage.setItem('customSearchUrl', customUrl);
+        searchEngines.custom.url = customUrl;
+        syncCustomSearchInputs(customUrl);
+    }
     
     // 儲存背景設定
     const bgType = document.querySelector('input[name="bgType"]:checked').value;
@@ -1685,7 +1822,7 @@ function extractRemoteSuggestions(payload, query, limit = SEARCH_SUGGESTION_LIMI
 }
 
 function getRemoteSuggestionMinLength() {
-    if (currentLanguage && currentLanguage.startsWith('zh')) {
+    if (currentLanguage && (currentLanguage.startsWith('zh') || currentLanguage === 'ja')) {
         return 1;
     }
     return REMOTE_SUGGESTION_MIN_LENGTH;
@@ -1780,6 +1917,8 @@ function getGoogleSuggestionLocale(lang = currentLanguage) {
             return { hl: 'zh-CN', gl: 'cn' };
         case 'zh-TW':
             return { hl: 'zh-TW', gl: 'tw' };
+        case 'ja':
+            return { hl: 'ja', gl: 'jp' };
         case 'en':
         default:
             return { hl: 'en', gl: 'us' };
@@ -1792,6 +1931,8 @@ function getBingSuggestionLocale(lang = currentLanguage) {
             return { language: 'zh-cn', market: 'zh-CN' };
         case 'zh-TW':
             return { language: 'zh-tw', market: 'zh-TW' };
+        case 'ja':
+            return { language: 'ja-jp', market: 'ja-JP' };
         case 'en':
         default:
             return { language: 'en-us', market: 'en-US' };
@@ -1804,6 +1945,8 @@ function getDuckDuckGoLocale(lang = currentLanguage) {
             return { kl: 'cn-zh', kad: 'zh-cn' };
         case 'zh-TW':
             return { kl: 'tw-tzh', kad: 'zh-tw' };
+        case 'ja':
+            return { kl: 'jp-ja', kad: 'ja-jp' };
         case 'en':
         default:
             return { kl: 'us-en', kad: 'en-us' };
@@ -2655,7 +2798,7 @@ function closeFabMenu() {
 }
 
 function cycleFabLanguage() {
-    const languages = ['en', 'zh-CN', 'zh-TW'];
+    const languages = ['en', 'zh-CN', 'zh-TW', 'ja'];
     const currentIndex = languages.indexOf(currentLanguage);
     const nextIndex = (currentIndex + 1) % languages.length;
     changeLanguage(languages[nextIndex]);
@@ -2749,7 +2892,7 @@ function loadDarkMode() {
 
 // 語言循環切換
 function cycleLanguage() {
-    const languages = ['en', 'zh-CN', 'zh-TW'];
+    const languages = ['en', 'zh-CN', 'zh-TW', 'ja'];
     const currentIndex = languages.indexOf(currentLanguage);
     const nextIndex = (currentIndex + 1) % languages.length;
     changeLanguage(languages[nextIndex]);

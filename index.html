@@ -31,6 +31,7 @@
                 <button class="lang-option" data-lang="en">English</button>
                 <button class="lang-option" data-lang="zh-CN">简体中文</button>
                 <button class="lang-option" data-lang="zh-TW">正體中文</button>
+                <button class="lang-option" data-lang="ja">日本語</button>
             </div>
         </div>
         <button id="quickDarkModeBtn" class="quick-btn desktop-only" aria-label="夜間模式" title="切換夜間模式">
@@ -120,35 +121,6 @@
                 </header>
                 <div class="modal-body settings-body">
                     <div class="settings-layout">
-                        <!-- 搜尋引擎 -->
-                        <section class="settings-card">
-                            <header class="settings-card__header">
-                                <i data-lucide="search"></i>
-                                <h4 data-i18n="searchEngineSection">搜尋引擎</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <label for="customSearchUrl" data-i18n="customSearchUrl">自訂搜尋引擎 URL</label>
-                                <input id="customSearchUrl" type="text" placeholder="https://example.com/search?q={query}" class="settings-input" />
-                                <span class="hint" data-i18n="customSearchHint">使用 {query} 作為搜尋關鍵字的佔位符</span>
-                            </div>
-                        </section>
-
-                        <!-- 語言設置 -->
-                        <section class="settings-card">
-                            <header class="settings-card__header">
-                                <i data-lucide="languages"></i>
-                                <h4 data-i18n="languageSection">語言</h4>
-                            </header>
-                            <div class="settings-card__content">
-                                <label for="languageSelect" data-i18n="selectLanguage">選擇語言</label>
-                                <select id="languageSelect" class="settings-select">
-                                    <option value="en">English</option>
-                                    <option value="zh-CN">简体中文</option>
-                                    <option value="zh-TW">正體中文</option>
-                                </select>
-                            </div>
-                        </section>
-
                         <!-- 夜間模式 -->
                         <section class="settings-card">
                             <header class="settings-card__header">
