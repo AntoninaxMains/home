@@ -1448,11 +1448,8 @@ function buildLocalSuggestions(query) {
 }
 
 function renderSuggestionList(container, suggestions, hasQuery = false) {
-    console.log('renderSuggestionList 被調用，suggestions:', suggestions, 'hasQuery:', hasQuery);
-    
     // 如果沒有建議
     if (!suggestions || suggestions.length === 0) {
-        console.log('沒有建議，隱藏容器');
         // 沒有輸入且沒有歷史記錄，顯示提示
         if (!hasQuery && searchHistory.length === 0) {
             container.innerHTML = `<div class="suggestions-title">${t('searchHistoryTitle')}</div><div class="suggestion-list"><div class="hint" style="padding: 12px; text-align: center;">${t('noSearchHistory') || '暫無搜尋歷史'}</div></div>`;
@@ -1468,8 +1465,6 @@ function renderSuggestionList(container, suggestions, hasQuery = false) {
     // 根據是否有輸入決定標題
     const titleKey = hasQuery ? 'searchSuggestionsTitle' : 'searchHistoryTitle';
     const title = `<div class="suggestions-title">${t(titleKey)}</div>`;
-    console.log('使用標題:', titleKey, '翻譯為:', t(titleKey));
-    
     const list = suggestions.map(item => {
         const value = escapeAttribute(item);
         const label = escapeHtml(item);
@@ -1477,7 +1472,6 @@ function renderSuggestionList(container, suggestions, hasQuery = false) {
     }).join('');
     container.innerHTML = `${title}<div class="suggestion-list">${list}</div>`;
     container.classList.remove('hidden');
-    console.log('建議列表已渲染，共', suggestions.length, '項');
 }
 
 function mergeSuggestions(localSuggestions, remoteSuggestions, limit = SEARCH_SUGGESTION_LIMIT) {
