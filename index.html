@@ -468,11 +468,50 @@
                         </div>
                     </div>
                 </div>
-                <footer class="modal-footer">
+                                <footer class="modal-footer">
                     <button data-close="categoryModal" class="btn primary" data-i18n="done">完成</button>
                 </footer>
+            </div>
         </div>
-    </div>
+
+        <!-- 天氣彈窗 -->
+        <div id="weatherModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="weatherModalTitle">
+            <div class="modal-panel modal-panel--weather">
+                <header class="modal-header">
+                    <h3 id="weatherModalTitle">
+                        <span data-weather-icon="modal"><i data-lucide="cloud"></i></span>
+                        <span data-weather-temp="modal">--°</span>
+                    </h3>
+                    <button class="modal-close" data-close="weatherModal" aria-label="關閉天氣">×</button>
+                </header>
+                <div class="modal-body weather-modal-body">
+                    <div class="weather-modal-info">
+                        <div class="weather-modal-location" data-weather-location="modal"></div>
+                        <div class="weather-modal-condition" data-weather-condition></div>
+                        <div class="weather-modal-meta">
+                            <span data-weather-wind></span>
+                            <span data-weather-updated></span>
+                        </div>
+                    </div>
+                    <div class="weather-modal-controls">
+                        <label for="weatherModalLocationInput" data-i18n="weatherLocationLabel">地點</label>
+                        <div class="weather-location-controls">
+                            <input id="weatherModalLocationInput" type="text" class="settings-input" placeholder="輸入城市或地標" data-i18n-placeholder="weatherLocationPlaceholder" />
+                            <button id="weatherModalApplyBtn" type="button" class="btn ghost" data-i18n="weatherApply">套用</button>
+                        </div>
+                        <div class="hint weather-modal-status" data-weather-status role="status"></div>
+                    </div>
+                </div>
+                <footer class="modal-footer">
+                    <button id="weatherModalRefreshBtn" type="button" class="btn ghost" data-refresh-weather>
+                        <i data-lucide="refresh-cw"></i>
+                        <span data-i18n="weatherRefresh">重新整理</span>
+                    </button>
+                    <button id="weatherModalDisableBtn" type="button" class="btn" data-i18n="disableWeather">停用天氣</button>
+                    <button data-close="weatherModal" class="btn primary" data-i18n="done">完成</button>
+                </footer>
+            </div>
+        </div>
 
     <!-- 動態載入語言文件 / Dynamically load language file -->
     <script>
