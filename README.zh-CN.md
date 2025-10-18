@@ -1,42 +1,81 @@
-# Start Page# Start Page / 开始页
+# 起始页# Start Page# Start Page / 开始页
 
 
 
-> 一个简洁、快速且可高度自定义的浏览器起始页，支持多语言、天气小部件与智能搜索建议。<div align="center">
+> 简洁、快速、高度可定制的浏览器起始页。
 
 
 
-[🌐 在线体验](https://home.zakk.au) | [English](README.en.md) | [繁體中文](README.md) | [日本語](README.ja.md)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
-[![Live Demo](https://img.shields.io/badge/demo-在线演示-success.svg)](https://home.zakk.au)
-
----[![Languages](https://img.shields.io/badge/languages-4-brightgreen.svg)](#-多语言支持)
+**其他语言版本：** [English](README.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md)> 一个简洁、快速且可高度自定义的浏览器起始页，支持多语言、天气小部件与智能搜索建议。<div align="center">
 
 
-
-## ✨ 核心特色**一个精美、可自定义的浏览器起始页，具有暗色模式、书签管理和多语言支持。**
-
-
-
-- 🚀 **极速启动** - 所有资源本地加载，无需等待[🌐 在线演示](https://home.zakk.au) • [📖 文档](#-功能特性) • [🌍 语言](#-多语言支持)
-
-- 🔍 **智能搜索** - 支持 Google、Bing、DuckDuckGo、Baidu，实时建议不干扰书签
-
-- 🎨 **自适应主题** - 深浅色主题自动切换，支持自定义背景与滤镜**其他语言:** [English](README.en.md) | [正體中文](README.zh-TW.md) | [日本語](README.ja.md)
-
-- 📱 **响应式设计** - 完美适配桌面、平板与手机
-
-- 🌦️ **天气小部件** - 集成 Open-Meteo API，搭配 Microsoft Fluent Emoji 动画图标</div>
-
-- 🔖 **书签管理** - 分类整理、自定义图标、拖拽排序
-
-- 🌍 **多语言支持** - 内置英文、简中、繁中、日文---
-
-- 💾 **本地存储** - 所有数据保存在浏览器，无需后端
-
-## ✨ 功能特性
 
 ---
+
+
+
+## 🌐 在线演示[🌐 在线体验](https://home.zakk.au) | [English](README.en.md) | [繁體中文](README.md) | [日本語](README.ja.md)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+
+
+访问 **[home.zakk.au](https://home.zakk.au)** 查看实际效果！[![Live Demo](https://img.shields.io/badge/demo-在线演示-success.svg)](https://home.zakk.au)
+
+
+
+------[![Languages](https://img.shields.io/badge/languages-4-brightgreen.svg)](#-多语言支持)
+
+
+
+## 📖 关于
+
+
+
+这是一个可定制的浏览器起始页，支持多种语言、主题和搜索引擎。## ✨ 核心特色**一个精美、可自定义的浏览器起始页，具有暗色模式、书签管理和多语言支持。**
+
+
+
+完整功能和文档，请访问 **[home.zakk.au](https://home.zakk.au)**。
+
+
+
+---- 🚀 **极速启动** - 所有资源本地加载，无需等待[🌐 在线演示](https://home.zakk.au) • [📖 文档](#-功能特性) • [🌍 语言](#-多语言支持)
+
+
+
+## 📄 许可证- 🔍 **智能搜索** - 支持 Google、Bing、DuckDuckGo、Baidu，实时建议不干扰书签
+
+
+
+本项目采用 **MIT 许可证** - 详见 [LICENSE](LICENSE) 文件。- 🎨 **自适应主题** - 深浅色主题自动切换，支持自定义背景与滤镜**其他语言:** [English](README.en.md) | [正體中文](README.zh-TW.md) | [日本語](README.ja.md)
+
+
+
+---- 📱 **响应式设计** - 完美适配桌面、平板与手机
+
+
+
+## 🙏 鸣谢- 🌦️ **天气小部件** - 集成 Open-Meteo API，搭配 Microsoft Fluent Emoji 动画图标</div>
+
+
+
+- 天气图标来自 [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji)- 🔖 **书签管理** - 分类整理、自定义图标、拖拽排序
+
+- 天气数据由 [Open-Meteo API](https://open-meteo.com/) 提供
+
+- 搜索引擎图标来自各自品牌- 🌍 **多语言支持** - 内置英文、简中、繁中、日文---
+
+
+
+---- 💾 **本地存储** - 所有数据保存在浏览器，无需后端
+
+
+
+## 📞 联系方式与更多信息## ✨ 功能特性
+
+
+
+更多信息、功能和更新，请访问 **[home.zakk.au](https://home.zakk.au)**。---
+
 
 ### 🎨 视觉定制
 

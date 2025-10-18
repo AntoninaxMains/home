@@ -2,51 +2,80 @@
 
 
 
-> A clean, fast, and highly customizable browser start page with multi-language support, weather widget, and intelligent search suggestions.<div align="center">
+> A clean, fast, and highly customizable browser start page.> A clean, fast, and highly customizable browser start page.
 
 
 
-[🌐 Live Demo](https://home.zakk.au) | [简体中文](README.zh-CN.md) | [繁體中文](README.md) | [日本語](README.ja.md)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
-[![Live Demo](https://img.shields.io/badge/demo-live-success.svg)](https://home.zakk.au)
-
----[![Languages](https://img.shields.io/badge/languages-4-brightgreen.svg)](#-multilingual-support)
+**Read this in other languages:** [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md)**Read this in other languages:** [简体中文](README.zh-CN.md) | [正體中文](README.zh-TW.md) | [日本語](README.ja.md)
 
 
 
-## ✨ Key Features**A beautiful, customizable browser start page with dark mode, bookmark management, and multilingual support.**
+------
 
 
 
-- 🚀 **Lightning Fast** - All assets loaded locally, zero latency[🌐 Live Demo](https://home.zakk.au) • [📖 Documentation](#-features) • [🌍 Languages](#-multilingual-support)
+## 🌐 Live Demo## 🌐 Live Demo
 
-- 🔍 **Smart Search** - Supports Google, Bing, DuckDuckGo, Baidu with real-time suggestions
 
-- 🎨 **Adaptive Themes** - Auto dark/light mode with custom backgrounds and filters**Read this in other languages:** [简体中文](README.zh-CN.md) | [正體中文](README.zh-TW.md) | [日本語](README.ja.md)
 
-- 📱 **Responsive Design** - Perfect on desktop, tablet, and mobile
+Visit **[home.zakk.au](https://home.zakk.au)** to see it in action!Visit **[home.zakk.au](https://home.zakk.au)** to see it in action!
 
-- 🌦️ **Weather Widget** - Powered by Open-Meteo API with Microsoft Fluent Emoji animations</div>
 
-- 🔖 **Bookmark Manager** - Category organization, custom icons, drag-to-sort
 
-- 🌍 **Multi-language** - Built-in English, Simplified Chinese, Traditional Chinese, Japanese---
+------
 
-- 💾 **Local Storage** - All data saved in browser, no backend required
 
-## ✨ Features
 
----
+## 📖 About## 📖 About
 
-### 🎨 Visual Customization
 
-## 🎯 Feature Highlights- **Multiple Backgrounds**: Choose from gradient presets, custom images, or solid colors
 
-- **Dark Mode**: Elegant dark theme with adjustable depth control
+This is a customizable browser start page with support for multiple languages, themes, and search engines.This is a customizable browser start page with support for multiple languages, themes, and search engines.
 
-### Search & Suggestions- **Background Blur**: Customizable blur effects with opacity controls
 
-- Multiple search engines (Google/Bing/DuckDuckGo/Baidu/Custom)- **Background Filters**: Add white or black overlay filters with adjustable opacity
+
+For full features and documentation, please visit **[home.zakk.au](https://home.zakk.au)**.For full features and documentation, please visit **[home.zakk.au](https://home.zakk.au)**.
+
+
+
+------
+
+
+
+## 📄 License## � License
+
+
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+
+
+------
+
+
+
+## 🙏 Acknowledgments## � Acknowledgments
+
+
+
+- Weather icons from [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji)- Weather icons from [Microsoft Fluent Emoji](https://github.com/microsoft/fluentui-emoji)
+
+- Weather data powered by [Open-Meteo API](https://open-meteo.com/)- Weather data powered by [Open-Meteo API](https://open-meteo.com/)
+
+- Search engine icons from their respective brands- Search engine icons from their respective brands
+
+
+
+------
+
+
+
+## 📞 Contact & More Info## 📞 Contact & More Info
+
+
+
+For more information, features, and updates, visit **[home.zakk.au](https://home.zakk.au)**.For more information, features, and updates, visit **[home.zakk.au](https://home.zakk.au)**.
+
 
 - Real-time JSONP suggestions with i18n support- **Smooth Animations**: Fluid transitions and micro-interactions throughout the interface
 
