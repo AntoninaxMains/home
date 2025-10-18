@@ -2172,6 +2172,36 @@ function handleSuggestionClick(event) {
     performSearch();
 }
 
+function setSuggestionsLoading(container, isLoading) {
+    if (!container) return;
+
+    if (isLoading) {
+        container.setAttribute('aria-busy', 'true');
+        container.classList.add('is-loading');
+        container.classList.remove('hidden');
+
+        if (container.dataset.hasContent !== 'true') {
+            const placeholderChips = Array.from({ length: 4 }, () => '<span class="suggestion-item suggestion-item--skeleton" aria-hidden="true"></span>').join('');
+            const title = `<div class="suggestions-title">${t('searchSuggestionsTitle')}</div>`;
+            container.innerHTML = `${title}<div class="suggestion-list suggestion-list--skeleton" role="presentation">${placeholderChips}</div>`;
+            container.dataset.loadingPlaceholder = 'true';
+        } else {
+            container.dataset.loadingPlaceholder = 'false';
+        }
+        return;
+    }
+
+    container.removeAttribute('aria-busy');
+    container.classList.remove('is-loading');
+
+    if (container.dataset.loadingPlaceholder === 'true') {
+        container.innerHTML = '';
+        container.classList.add('hidden');
+    }
+
+    container.dataset.loadingPlaceholder = 'false';
+}
+
 async function updateSearchSuggestions(query) {
     const container = document.getElementById('searchSuggestions');
     if (!container) return;
@@ -2182,6 +2212,8 @@ async function updateSearchSuggestions(query) {
     updateOpenButtonState(value);
 
     const callToken = ++latestSuggestQueryToken;
+
+    setSuggestionsLoading(container, false);
 
     if (!trimmed) {
         const history = searchHistory.slice(0, SEARCH_SUGGESTION_LIMIT);
@@ -2196,9 +2228,13 @@ async function updateSearchSuggestions(query) {
     const localSuggestions = buildLocalSuggestions(trimmed);
     renderSuggestionList(container, localSuggestions.slice(0, SEARCH_SUGGESTION_LIMIT), true);
 
-    if (trimmed.length < getRemoteSuggestionMinLength() || isLikelyUrl(trimmed)) {
+    const shouldFetchRemote = trimmed.length >= getRemoteSuggestionMinLength() && !isLikelyUrl(trimmed);
+
+    if (!shouldFetchRemote) {
         return;
     }
+
+    setSuggestionsLoading(container, true);
 
     try {
         const remoteSuggestions = await fetchRemoteSuggestions(trimmed);
@@ -2209,6 +2245,10 @@ async function updateSearchSuggestions(query) {
         }
     } catch (error) {
         console.error('Failed to fetch suggestions:', error);
+    } finally {
+        if (callToken === latestSuggestQueryToken) {
+            setSuggestionsLoading(container, false);
+        }
     }
 }
 
@@ -2237,21 +2277,29 @@ function buildLocalSuggestions(query) {
 }
 
 function renderSuggestionList(container, suggestions, hasQuery = false) {
-    // 如果沒有建議
-    if (!suggestions || suggestions.length === 0) {
-        // 沒有輸入且沒有歷史記錄，顯示提示
+    if (!container) return;
+
+    container.dataset.loadingPlaceholder = 'false';
+
+    const hasItems = Array.isArray(suggestions) && suggestions.length > 0;
+
+    if (!hasItems) {
+        container.dataset.hasContent = 'false';
         if (!hasQuery && searchHistory.length === 0) {
             container.innerHTML = `<div class="suggestions-title">${t('searchHistoryTitle')}</div><div class="suggestion-list"><div class="hint" style="padding: 12px; text-align: center;">${t('noSearchHistory') || '暫無搜尋歷史'}</div></div>`;
             container.classList.remove('hidden');
             return;
         }
-        // 其他情況隱藏
-        container.innerHTML = '';
-        container.classList.add('hidden');
+
+        if (!container.classList.contains('is-loading')) {
+            container.innerHTML = '';
+            container.classList.add('hidden');
+        }
         return;
     }
-    
-    // 根據是否有輸入決定標題
+
+    container.dataset.hasContent = 'true';
+
     const titleKey = hasQuery ? 'searchSuggestionsTitle' : 'searchHistoryTitle';
     const title = `<div class="suggestions-title">${t(titleKey)}</div>`;
     const list = suggestions.map(item => {
