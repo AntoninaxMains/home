@@ -295,9 +295,10 @@
                     <label for="bookmarkUrl" data-i18n="urlLabel">網址</label>
                     <input id="bookmarkUrl" type="text" placeholder="https://example.com" data-i18n-placeholder="urlPlaceholder" />
                     <label for="bookmarkIcon" data-i18n="iconLabel">圖示</label>
-                    <div class="icon-row">
+                    <div class="icon-row icon-row--with-preview">
                         <input id="bookmarkIcon" type="text" placeholder="🌐 Emoji 或圖片網址" data-i18n-placeholder="iconPlaceholder" />
                         <button id="autoIconBtn" type="button" class="btn" data-i18n="autoFetch"><i data-lucide="sparkles" style="width:14px;height:14px;margin-right:4px;"></i>自動抓取</button>
+                        <div id="bookmarkIconPreview" class="bookmark-icon-preview" role="presentation" aria-hidden="true"></div>
                     </div>
                     <span class="hint" data-i18n="iconHint">可輸入 Emoji、圖片網址，或使用自動抓取</span>
                     <a class="icon-library-link" href="https://simpleicons.org/" target="_blank" rel="noopener" style="margin-top: 8px;">
