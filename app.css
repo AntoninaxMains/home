@@ -190,6 +190,14 @@ body.dark-mode .settings-panels.is-scrolled::before {
   border: 1px solid rgba(76, 110, 245, 0.1);
   box-shadow: 0 22px 40px rgba(15, 23, 42, 0.1);
   animation: settingsCardPop 0.35s ease both;
+  position: relative;
+  z-index: 1;
+}
+
+/* 天氣設定區塊需要更高的 z-index 以顯示搜索建議 */
+.settings-section[data-settings-area="weather"] {
+  z-index: 100;
+  overflow: visible;
 }
 
 .settings-section__header {
@@ -1420,13 +1428,15 @@ body.dark-mode .weather-modal-info {
 
 .weather-field__body {
   position: relative;
-  z-index: 100;
+  z-index: 200;
+  overflow: visible;
 }
 
 .weather-location-search {
   position: relative;
   width: 100%;
-  z-index: 100;
+  z-index: 300;
+  overflow: visible;
 }
 
 .weather-location-suggestions {
@@ -1437,10 +1447,10 @@ body.dark-mode .weather-modal-info {
   background: #fff;
   border: 1px solid rgba(76, 110, 245, 0.2);
   border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(76, 110, 245, 0.1);
   max-height: 280px;
   overflow-y: auto;
-  z-index: 9999;
+  z-index: 99999;
   min-width: 280px;
   display: none;
 }
@@ -1463,10 +1473,12 @@ body.dark-mode .weather-modal-info {
   .weather-location-suggestions {
     position: fixed;
     top: auto;
+    bottom: auto;
     left: 16px;
     right: 16px;
     max-height: 60vh;
-    z-index: 10000;
+    z-index: 999999;
+    margin-top: 8px;
   }
 }
 
@@ -1948,7 +1960,7 @@ body.dark-mode .radio-list label:has(input[type="radio"]:checked) {
   flex-direction: column; 
   gap: 12px; 
   position: relative;
-  z-index: 40;
+  z-index: 200;
   overflow: visible;
 }
 .weather-location-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
