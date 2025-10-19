@@ -19,7 +19,9 @@ const DEBUG_PANEL_STORAGE_KEY = 'debugPanelEnabled';
 const WEATHER_ENABLED_KEY = 'weatherEnabled';
 const WEATHER_LOCATION_KEY = 'weatherLocation';
 const WEATHER_CACHE_TTL = 15 * 60 * 1000;
+// 使用 OpenWeatherMap Geocoding API（免費且覆蓋更廣）
 const WEATHER_GEOCODE_URL = 'https://geocoding-api.open-meteo.com/v1/search';
+const WEATHER_GEOCODE_URL_BACKUP = 'https://nominatim.openstreetmap.org/search';
 const WEATHER_FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
 
 const weatherCache = new Map();
@@ -1514,15 +1516,47 @@ async function searchWeatherLocation(query) {
         };
         const apiLang = langMap[currentLanguage] || 'en';
         
-        const url = `${WEATHER_GEOCODE_URL}?name=${encodeURIComponent(query)}&count=8&language=${apiLang}&format=json`;
-        const response = await fetch(url);
+        let results = [];
         
-        if (!response.ok) {
-            throw new Error(`Geocoding failed: ${response.status}`);
+        // 嘗試 Open-Meteo API
+        try {
+            const url = `${WEATHER_GEOCODE_URL}?name=${encodeURIComponent(query)}&count=8&language=${apiLang}&format=json`;
+            const response = await fetch(url);
+            
+            if (response.ok) {
+                const data = await response.json();
+                results = data.results || [];
+            }
+        } catch (error) {
+            console.warn('Open-Meteo geocoding failed, trying backup...', error);
         }
         
-        const data = await response.json();
-        displayWeatherSuggestions(data.results || []);
+        // 如果沒有結果，使用 Nominatim 備用 API
+        if (results.length === 0) {
+            try {
+                const backupUrl = `${WEATHER_GEOCODE_URL_BACKUP}?q=${encodeURIComponent(query)}&format=json&limit=8&accept-language=${apiLang}`;
+                const backupResponse = await fetch(backupUrl, {
+                    headers: {
+                        'User-Agent': 'CustomHomePage/1.0'
+                    }
+                });
+                
+                if (backupResponse.ok) {
+                    const backupData = await backupResponse.json();
+                    results = backupData.map(item => ({
+                        name: item.display_name.split(',')[0],
+                        admin1: item.address?.state || item.address?.county || '',
+                        country: item.address?.country || '',
+                        latitude: parseFloat(item.lat),
+                        longitude: parseFloat(item.lon)
+                    }));
+                }
+            } catch (backupError) {
+                console.error('Backup geocoding failed:', backupError);
+            }
+        }
+        
+        displayWeatherSuggestions(results);
     } catch (error) {
         console.error('Location search failed:', error);
         hideWeatherSuggestions();
@@ -1553,15 +1587,7 @@ function displayWeatherSuggestions(locations) {
     }).join('');
     
     container.hidden = false;
-    
-    // Position the dropdown relative to the input
-    const input = document.getElementById('weatherLocationSearchInput');
-    if (input) {
-        const rect = input.getBoundingClientRect();
-        container.style.top = `${rect.bottom + 6}px`;
-        container.style.left = `${rect.left}px`;
-        container.style.width = `${rect.width}px`;
-    }
+    container.classList.add('show');
     
     // Re-initialize Lucide icons
     if (typeof lucide !== 'undefined') {
@@ -1595,6 +1621,7 @@ function hideWeatherSuggestions() {
     const container = document.querySelector('[data-weather-suggestions]');
     if (container) {
         container.hidden = true;
+        container.classList.remove('show');
         container.innerHTML = '';
     }
 }
@@ -4061,15 +4088,48 @@ async function searchWeatherLocations(query) {
     }
 
     try {
-        const url = `${WEATHER_GEOCODE_URL}?name=${encodeURIComponent(query)}&count=10&language=${currentLanguage || 'en'}&format=json`;
-        const response = await fetch(url);
+        // 首先嘗試 Open-Meteo Geocoding API
+        let results = [];
         
-        if (!response.ok) {
-            throw new Error(`Search failed: ${response.status}`);
+        try {
+            const url = `${WEATHER_GEOCODE_URL}?name=${encodeURIComponent(query)}&count=10&language=${currentLanguage || 'en'}&format=json`;
+            const response = await fetch(url);
+            
+            if (response.ok) {
+                const data = await response.json();
+                results = data?.results || [];
+            }
+        } catch (error) {
+            console.warn('Open-Meteo geocoding failed, trying backup...', error);
         }
 
-        const data = await response.json();
-        const results = data?.results || [];
+        // 如果沒有結果，嘗試使用 Nominatim (OpenStreetMap) 作為備用
+        if (results.length === 0) {
+            try {
+                const backupUrl = `${WEATHER_GEOCODE_URL_BACKUP}?q=${encodeURIComponent(query)}&format=json&limit=10&accept-language=${currentLanguage || 'en'}`;
+                const backupResponse = await fetch(backupUrl, {
+                    headers: {
+                        'User-Agent': 'CustomHomePage/1.0'
+                    }
+                });
+                
+                if (backupResponse.ok) {
+                    const backupData = await backupResponse.json();
+                    // 轉換 Nominatim 格式到我們的格式
+                    results = backupData.map(item => ({
+                        name: item.display_name.split(',')[0],
+                        admin1: item.address?.state || item.address?.county || '',
+                        admin2: item.address?.city || item.address?.town || '',
+                        country: item.address?.country || '',
+                        country_code: item.address?.country_code?.toUpperCase() || '',
+                        latitude: parseFloat(item.lat),
+                        longitude: parseFloat(item.lon)
+                    }));
+                }
+            } catch (backupError) {
+                console.error('Backup geocoding also failed:', backupError);
+            }
+        }
         
         weatherLocationCache.set(cacheKey, results);
         showWeatherLocationSuggestions(results);

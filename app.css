@@ -1418,6 +1418,11 @@ body.dark-mode .weather-modal-info {
   font-size: 14px;
 }
 
+.weather-field__body {
+  position: relative;
+  z-index: 100;
+}
+
 .weather-location-search {
   position: relative;
   width: 100%;
@@ -1425,19 +1430,44 @@ body.dark-mode .weather-modal-info {
 }
 
 .weather-location-suggestions {
-  position: fixed;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
   background: #fff;
   border: 1px solid rgba(76, 110, 245, 0.2);
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
   max-height: 280px;
   overflow-y: auto;
-  z-index: 99999;
+  z-index: 9999;
   min-width: 280px;
+  display: none;
+}
+
+.weather-location-suggestions.show {
+  display: block;
 }
 
 .weather-location-suggestions[hidden] {
   display: none;
+}
+
+/* 修復手機端天氣搜索被遮擋問題 */
+@media (max-width: 1023px) {
+  .weather-location-search {
+    position: relative;
+    z-index: 1000;
+  }
+  
+  .weather-location-suggestions {
+    position: fixed;
+    top: auto;
+    left: 16px;
+    right: 16px;
+    max-height: 60vh;
+    z-index: 10000;
+  }
 }
 
 body.dark-mode .weather-location-suggestions {
