@@ -270,16 +270,16 @@ body.dark-mode .search-loading-overlay {
 }
 
 body.dark-mode .spinner-ring:nth-child(1) {
-  border-top-color: #60a5fa;
-  filter: drop-shadow(0 0 15px rgba(96, 165, 250, 0.6));
+  border-top-color: var(--primary);
+  filter: drop-shadow(0 0 15px color-mix(in srgb, var(--primary) 60%, transparent));
 }
 
 body.dark-mode .spinner-ring:nth-child(2) {
-  border-top-color: #93c5fd;
+  border-top-color: color-mix(in srgb, var(--primary) 80%, white);
 }
 
 body.dark-mode .spinner-ring:nth-child(3) {
-  border-top-color: #bfdbfe;
+  border-top-color: color-mix(in srgb, var(--primary) 60%, white);
 }
 
 /* 夜間模式選項樣式 */
@@ -332,13 +332,13 @@ body.dark-mode .spinner-ring:nth-child(3) {
 }
 
 body.dark-mode .dark-mode-option.active {
-  background: #60a5fa;
-  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.4);
+  background: var(--primary);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 40%, transparent);
 }
 
 body.dark-mode .dark-mode-option.active:hover {
-  background: #60a5fa;
-  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.5);
+  background: var(--primary);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 50%, transparent);
 }
 
 /* 啟動網頁設定已移除，現在由 manifest.json 的 chrome_settings_overrides 控制 */
@@ -528,12 +528,12 @@ body.dark-mode .settings-nav__item {
 }
 
 body.dark-mode .settings-nav__item:hover {
-  background: rgba(148, 163, 255, 0.12);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
   color: rgba(232, 236, 255, 0.95);
 }
 
 body.dark-mode .settings-nav__item.is-active {
-  background: rgba(148, 163, 255, 0.18);
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
   color: rgba(232, 236, 255, 1);
 }
 
@@ -607,7 +607,7 @@ body.dark-mode .settings-nav__item.is-active {
 
 body.dark-mode .settings-panels {
   background: rgba(24, 32, 52, 0.92);
-  border-color: rgba(148, 163, 255, 0.18);
+  border-color: color-mix(in srgb, var(--primary) 18%, transparent);
   box-shadow: 0 32px 64px rgba(2, 4, 12, 0.7);
 }
 
@@ -757,27 +757,27 @@ body.dark-mode .settings-panels.is-scrolled::before {
 
 body.dark-mode .settings-section {
   background: rgba(30, 36, 58, 0.92);
-  border-color: rgba(148, 163, 255, 0.22);
+  border-color: color-mix(in srgb, var(--primary) 22%, transparent);
   box-shadow: 0 30px 58px rgba(2, 4, 12, 0.68);
 }
 
 body.dark-mode .settings-section__icon {
-  background: rgba(148, 163, 255, 0.18);
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
   color: #d6dcff;
 }
 
 body.dark-mode .settings-action-card {
-  background: rgba(148, 163, 255, 0.1);
-  border-color: rgba(148, 163, 255, 0.18);
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 body.dark-mode .settings-action-card:hover {
   box-shadow: 0 26px 48px rgba(5, 8, 24, 0.48);
-  border-color: rgba(148, 163, 255, 0.3);
+  border-color: color-mix(in srgb, var(--primary) 30%, transparent);
 }
 
 body.dark-mode .settings-action-card__icon {
-  background: rgba(148, 163, 255, 0.22);
+  background: color-mix(in srgb, var(--primary) 22%, transparent);
   color: #d6dcff;
 }
 
@@ -1063,7 +1063,7 @@ body.modal-open {
 }
 
 body.dark-mode .weather-widget--tile .weather-widget__refresh {
-  background: rgba(148, 163, 255, 0.16);
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
   color: #d6dcff;
 }
   gap: 10px;
@@ -1081,7 +1081,7 @@ body.dark-mode .weather-widget--tile .weather-widget__refresh {
 }
 
 .dark-mode .weather-widget__icon {
-  background: rgba(148, 163, 255, 0.16);
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
   color: #d6dcff;
 }
 
@@ -1107,7 +1107,7 @@ body.dark-mode .weather-widget--tile .weather-widget__refresh {
 /* Search Card */
 .search-card { width: min(680px, 100%); margin: 0 auto; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(255, 255, 255, 0.7); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16); display: flex; flex-direction: column; gap: 16px; transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease; position: relative; z-index: 10; backdrop-filter: blur(18px); }
 .search-card:hover { transform: translateY(-2px); box-shadow: 0 28px 64px rgba(15, 23, 42, 0.18); }
-.dark-mode .search-card { background: rgba(17, 24, 39, 0.9); border: 1px solid rgba(148, 163, 255, 0.16); box-shadow: 0 32px 70px rgba(4, 6, 18, 0.68); }
+.dark-mode .search-card { background: rgba(17, 24, 39, 0.9); border: 1px solid color-mix(in srgb, var(--primary) 16%, transparent); box-shadow: 0 32px 70px rgba(4, 6, 18, 0.68); }
 .search-header { position: relative; display: flex; justify-content: flex-end; }
 .engine-selector { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent); background: #fff; color: var(--text); font-weight: 600; cursor: pointer; box-shadow: 0 10px 20px rgba(15,23,42,.12); transition: transform var(--transition), box-shadow var(--transition), background var(--transition); }
 .engine-selector:hover { transform: translateY(-1px); box-shadow: 0 16px 28px color-mix(in srgb, var(--primary) 18%, transparent); }
@@ -1586,17 +1586,17 @@ body.dark-mode .bookmark-item--weather:hover {
 }
 
 body.dark-mode .bookmark-item--weather .bookmark-actions__btn {
-  background: rgba(148, 163, 255, 0.18);
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 body.dark-mode .bookmark-item--weather .bookmark-actions__btn:hover {
-  background: linear-gradient(135deg, rgba(148, 163, 255, 0.8), rgba(148, 163, 255, 0.6));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 80%, transparent), color-mix(in srgb, var(--primary) 60%, transparent));
   color: #fff;
 }
 
 /* Dark mode: only style loader and error icons (emoji already colorful) */
 body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="loader-2"] {
-  color: #60A5FA;
+  color: var(--primary);
 }
 
 body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="help-circle"],
@@ -1605,7 +1605,7 @@ body.dark-mode .weather-tile__icon [data-weather-icon] i[data-lucide="alert-tria
 }
 
 body.dark-mode .bookmark-empty {
-  background: rgba(148, 163, 255, 0.12);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
   color: rgba(235, 238, 255, 0.85);
 }
 .bookmark-icon { font-size: 32px; line-height: 1; margin: 10px auto 10px; }
@@ -1714,19 +1714,19 @@ body.dark-mode .bookmark-empty {
 }
 .dark-mode .category-section {
   background: rgba(17, 24, 39, 0.9);
-  border-color: rgba(148, 163, 255, 0.2);
+  border-color: color-mix(in srgb, var(--primary) 20%, transparent);
   box-shadow: 0 28px 60px rgba(3, 5, 18, 0.7);
 }
 .dark-mode .category-header__icon {
-  background: rgba(148, 163, 255, 0.16);
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
   color: #d6dcff;
 }
 .dark-mode .category-header__count {
   color: rgba(208, 214, 255, 0.72);
 }
 .dark-mode .category-header__btn {
-  background: rgba(148, 163, 255, 0.18);
-  border-color: rgba(148, 163, 255, 0.24);
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 24%, transparent);
   color: #d6dcff;
 }
 .dark-mode .category-header__btn:hover {
@@ -1735,10 +1735,10 @@ body.dark-mode .bookmark-empty {
 .dark-mode .category-header__btn--ghost {
   background: transparent;
   color: rgba(208, 214, 255, 0.82);
-  border-color: rgba(148, 163, 255, 0.24);
+  border-color: color-mix(in srgb, var(--primary) 24%, transparent);
 }
 .dark-mode .category-header__btn--ghost:hover {
-  background: rgba(148, 163, 255, 0.16);
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
   color: #fff;
 }
 
@@ -1880,8 +1880,8 @@ body.dark-mode .bookmark-empty {
 }
 
 body.dark-mode .weather-modal-info {
-  background: rgba(148, 163, 255, 0.08);
-  border-color: rgba(148, 163, 255, 0.15);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 15%, transparent);
 }
 
 .weather-modal-location {
@@ -2014,7 +2014,7 @@ body.dark-mode .weather-location-suggestions {
 }
 
 body.dark-mode .weather-suggestion-item:hover {
-  background: rgba(148, 163, 255, 0.12);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
 .weather-location-suggestion {
@@ -2047,11 +2047,11 @@ body.dark-mode .weather-suggestion-item:hover {
 }
 
 body.dark-mode .weather-location-suggestion {
-  border-bottom-color: rgba(148, 163, 255, 0.12);
+  border-bottom-color: color-mix(in srgb, var(--primary) 12%, transparent);
 }
 
 body.dark-mode .weather-location-suggestion:hover {
-  background: rgba(148, 163, 255, 0.15);
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
 }
 
 .weather-modal-status {
@@ -2101,15 +2101,15 @@ body.dark-mode .weather-location-suggestion:hover {
 .category-form__row input { flex: 1 1 220px; }
 .category-form__row .btn { flex: 0 0 auto; border-radius: 999px; padding: 10px 20px; }
 
-body.dark-mode .category-item { background: rgba(28, 31, 48, 0.92); border-color: rgba(148, 163, 255, 0.22); box-shadow: 0 22px 46px rgba(3, 5, 18, 0.65); }
-body.dark-mode .category-item:hover { background: rgba(35, 41, 60, 0.95); border-color: rgba(148, 163, 255, 0.35); box-shadow: 0 24px 52px rgba(6, 10, 28, 0.72); }
-body.dark-mode .category-item__icon { background: rgba(148, 163, 255, 0.18); color: #d6dcff; }
+body.dark-mode .category-item { background: rgba(28, 31, 48, 0.92); border-color: color-mix(in srgb, var(--primary) 22%, transparent); box-shadow: 0 22px 46px rgba(3, 5, 18, 0.65); }
+body.dark-mode .category-item:hover { background: rgba(35, 41, 60, 0.95); border-color: color-mix(in srgb, var(--primary) 35%, transparent); box-shadow: 0 24px 52px rgba(6, 10, 28, 0.72); }
+body.dark-mode .category-item__icon { background: color-mix(in srgb, var(--primary) 18%, transparent); color: #d6dcff; }
 body.dark-mode .category-item__count { color: rgba(208, 214, 255, 0.72); }
 body.dark-mode .category-item__action { border-color: rgba(148,163,255,0.28); background: rgba(148,163,255,0.12); color: #d6dcff; }
 body.dark-mode .category-item__action:hover { background: linear-gradient(135deg, #8c9eff, #5c6bc0); color: #fff; box-shadow: 0 16px 40px rgba(92, 107, 192, 0.32); }
 body.dark-mode .category-item__action--danger { border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.18); color: #ff9d9d; }
 body.dark-mode .category-item__action--danger:hover { background: linear-gradient(135deg, #f87171, #dc2626); color: #fff; box-shadow: 0 16px 40px rgba(220, 38, 38, 0.35); }
-body.dark-mode .category-item.is-highlighted { border-color: rgba(148, 163, 255, 0.45); box-shadow: 0 26px 58px rgba(8, 13, 38, 0.7); }
+body.dark-mode .category-item.is-highlighted { border-color: color-mix(in srgb, var(--primary) 45%, transparent); box-shadow: 0 26px 58px rgba(8, 13, 38, 0.7); }
 body.dark-mode .category-modal-intro { background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 26%, transparent), color-mix(in srgb, var(--primary) 8%, transparent)); border-color: color-mix(in srgb, var(--primary) 30%, transparent); }
 body.dark-mode .category-modal-icon { background: color-mix(in srgb, var(--primary) 22%, transparent); color: #fff; }
 body.dark-mode .category-modal-copy p { color: rgba(235, 238, 255, 0.75); }
@@ -2216,18 +2216,18 @@ body.dark-mode .icon-library-link { color: #aebdff; }
 }
 
 body.dark-mode .radio-list label {
-  border-color: rgba(148, 163, 255, 0.25);
-  background: rgba(148, 163, 255, 0.08);
+  border-color: color-mix(in srgb, var(--primary) 25%, transparent);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
   color: rgba(232, 236, 255, 0.9);
 }
 
 body.dark-mode .radio-list label:hover {
-  border-color: rgba(148, 163, 255, 0.4);
-  background: rgba(148, 163, 255, 0.15);
+  border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
 }
 
 body.dark-mode .radio-list label:has(input[type="radio"]:checked) {
-  background: linear-gradient(135deg, rgba(148, 163, 255, 0.95), rgba(92, 107, 192, 0.95));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 95%, transparent), rgba(92, 107, 192, 0.95));
   border-color: transparent;
   color: #fff;
 }
@@ -2591,24 +2591,24 @@ body.dark-mode .radio-list label:has(input[type="radio"]:checked) {
 }
 
 .dark-mode .settings-toggle {
-  background: rgba(148, 163, 255, 0.15);
-  border-color: rgba(148, 163, 255, 0.26);
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 26%, transparent);
   color: rgba(232, 236, 255, 0.9);
 }
 
 .dark-mode .settings-toggle:hover {
-  background: rgba(148, 163, 255, 0.22);
-  border-color: rgba(148, 163, 255, 0.35);
+  background: color-mix(in srgb, var(--primary) 22%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 35%, transparent);
   box-shadow: none;
 }
 
 .dark-mode .settings-toggle__icon {
-  background: rgba(148, 163, 255, 0.2);
+  background: color-mix(in srgb, var(--primary) 20%, transparent);
   color: #d6dcff;
 }
 
 .dark-mode .settings-toggle.is-active {
-  background: linear-gradient(135deg, rgba(148, 163, 255, 0.92), rgba(92, 107, 192, 0.92));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 92%, transparent), rgba(92, 107, 192, 0.92));
   box-shadow: none;
 }
 
@@ -3210,13 +3210,13 @@ body.dark-mode .modal-footer {
 
 body.dark-mode .bookmark-item {
   background: rgba(24, 28, 46, 0.92);
-  border: 1px solid rgba(148, 163, 255, 0.22);
+  border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
   color: rgba(232, 236, 255, 0.95);
 }
 
 body.dark-mode .bookmark-card {
   background: rgba(17, 24, 39, 0.9);
-  border: 1px solid rgba(148, 163, 255, 0.2);
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
   box-shadow: 0 28px 64px rgba(3, 5, 15, 0.75);
   backdrop-filter: blur(18px);
 }
