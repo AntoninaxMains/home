@@ -1162,7 +1162,7 @@ body.dark-mode .weather-widget--tile .weather-widget__refresh {
   object-fit: contain;
 }
 
-/* 為 SVG 圖標添加主題色濾鏡效果 */
+/* 為 SVG 圖標添加主題色濾鏡效果 - 僅日間模式 */
 .engine-selector--inline .engine-selector__icon svg,
 .engine-selector--inline .engine-selector__icon img[src$=".svg"] {
   filter: brightness(0) saturate(100%) 
@@ -1173,14 +1173,11 @@ body.dark-mode .weather-widget--tile .weather-widget__refresh {
   transition: filter 0.3s ease, opacity 0.3s ease;
 }
 
+/* 夜間模式：移除濾鏡，保持 SVG 原色 */
 body.dark-mode .engine-selector--inline .engine-selector__icon svg,
 body.dark-mode .engine-selector--inline .engine-selector__icon img[src$=".svg"] {
-  filter: brightness(0) saturate(100%)
-          invert(1)
-          sepia(1) saturate(5)
-          hue-rotate(calc(var(--primary-hue, 223deg) - 220deg))
-          brightness(0.9) contrast(1.2);
-  opacity: 0.95;
+  filter: none;
+  opacity: 1;
 }
 
 @media (min-width: 640px) {
