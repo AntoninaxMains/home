@@ -528,6 +528,10 @@ function initializeApp() {
             console.error('Lucide library not loaded');
             logDebug('Lucide not available');
         }
+        
+        // 檢查啟動跳轉
+        checkStartupRedirect();
+        logDebug('Startup redirect checked');
     } catch (error) {
         console.error('Initialization error:', error);
         logDebug(`Initialization error: ${error?.message || error}`);
@@ -806,6 +810,107 @@ function loadSettings() {
     // 載入天氣與開發者設定
     loadWeatherSettings();
     loadDeveloperSettings();
+    // 載入啟動網頁設定
+    loadStartupSettings();
+}
+
+// 載入啟動網頁設定
+function loadStartupSettings() {
+    const startupEnabled = localStorage.getItem('startupEnabled') === 'true';
+    const startupUrl = localStorage.getItem('startupUrl') || '';
+    
+    const toggleBtn = document.getElementById('startupToggleBtn');
+    const urlInput = document.getElementById('startupUrlInput');
+    const status = document.querySelector('.startup-toggle__status');
+    
+    if (urlInput) {
+        urlInput.value = startupUrl;
+    }
+    
+    if (toggleBtn) {
+        const icon = toggleBtn.querySelector('.settings-toggle__icon i');
+        const label = toggleBtn.querySelector('.settings-toggle__label');
+        
+        if (startupEnabled) {
+            toggleBtn.setAttribute('aria-pressed', 'true');
+            if (icon) {
+                icon.setAttribute('data-lucide', 'link-2');
+            }
+            if (label) {
+                label.textContent = t('disableStartup') || '停用';
+            }
+            if (status) {
+                status.setAttribute('data-state', 'on');
+                status.textContent = t('startupStatusOn') || '啟動網頁已開啟';
+            }
+        } else {
+            toggleBtn.setAttribute('aria-pressed', 'false');
+            if (icon) {
+                icon.setAttribute('data-lucide', 'link-2-off');
+            }
+            if (label) {
+                label.textContent = t('enableStartup') || '啟用';
+            }
+            if (status) {
+                status.setAttribute('data-state', 'off');
+                status.textContent = t('startupStatusOff') || '啟動網頁已關閉';
+            }
+        }
+        
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    }
+}
+
+// 切換啟動網頁
+function toggleStartupUrl() {
+    const currentEnabled = localStorage.getItem('startupEnabled') === 'true';
+    const newEnabled = !currentEnabled;
+    
+    localStorage.setItem('startupEnabled', newEnabled.toString());
+    loadStartupSettings();
+}
+
+// 儲存啟動網頁 URL
+function saveStartupUrl() {
+    const urlInput = document.getElementById('startupUrlInput');
+    if (!urlInput) return;
+    
+    const url = urlInput.value.trim();
+    
+    if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+        alert(t('startupUrlInvalid') || '請輸入完整的網址，包含 https://');
+        return;
+    }
+    
+    localStorage.setItem('startupUrl', url);
+}
+
+// 檢查並執行啟動跳轉
+function checkStartupRedirect() {
+    const startupEnabled = localStorage.getItem('startupEnabled') === 'true';
+    const startupUrl = localStorage.getItem('startupUrl') || '';
+    
+    // 檢查是否有標記表示已經處理過啟動跳轉（避免無限循環）
+    const hasRedirected = sessionStorage.getItem('hasStartupRedirected') === 'true';
+    
+    if (startupEnabled && startupUrl && !hasRedirected) {
+        // 標記為已跳轉
+        sessionStorage.setItem('hasStartupRedirected', 'true');
+        
+        // 顯示載入動畫
+        showSearchLoading();
+        
+        // 延遲後跳轉
+        setTimeout(() => {
+            window.location.href = startupUrl;
+        }, 500);
+        
+        return true;
+    }
+    
+    return false;
 }
 
 // 載入背景設定
@@ -2248,6 +2353,24 @@ function initEventListeners() {
             applyWeatherLocation();
         });
     }
+    
+    // 啟動網頁設定
+    const startupToggleBtn = document.getElementById('startupToggleBtn');
+    if (startupToggleBtn) {
+        startupToggleBtn.addEventListener('click', toggleStartupUrl);
+    }
+    
+    const startupUrlInput = document.getElementById('startupUrlInput');
+    if (startupUrlInput) {
+        startupUrlInput.addEventListener('blur', saveStartupUrl);
+        startupUrlInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveStartupUrl();
+                this.blur();
+            }
+        });
+    }
 
     // Settings panel weather location search
     const weatherLocationSearchInput = document.getElementById('weatherLocationSearchInput');
@@ -3286,7 +3409,30 @@ function performSearch() {
     updateSearchSuggestions(query);
 
     searchUrl = searchUrl.replace('{query}', encodeURIComponent(query));
-    window.location.href = searchUrl;
+    
+    // 顯示載入動畫
+    showSearchLoading();
+    
+    // 短暫延遲後跳轉，讓動畫顯示
+    setTimeout(() => {
+        window.location.href = searchUrl;
+    }, 300);
+}
+
+// 顯示搜尋載入動畫
+function showSearchLoading() {
+    const overlay = document.getElementById('searchLoadingOverlay');
+    if (overlay) {
+        overlay.classList.remove('hidden');
+    }
+}
+
+// 隱藏搜尋載入動畫
+function hideSearchLoading() {
+    const overlay = document.getElementById('searchLoadingOverlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+    }
 }
 
 // 分類管理

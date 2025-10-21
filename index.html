@@ -13,6 +13,16 @@
     <div class="background-layer" aria-hidden="true"></div>
     <div id="backgroundOverlay" class="background-overlay" aria-hidden="true"></div>
     
+    <!-- 搜尋載入動畫 -->
+    <div id="searchLoadingOverlay" class="search-loading-overlay hidden">
+        <div class="search-loading-spinner">
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+            <p class="spinner-text" data-i18n="searchingText">正在搜尋...</p>
+        </div>
+    </div>
+    
     <!-- 右上角快速設置 -->
     <div class="quick-settings">
         <button id="addBookmarkBtn" class="quick-btn desktop-only" aria-label="新增書籤" title="新增書籤">
@@ -143,6 +153,10 @@
                             <button type="button" class="settings-nav__item" data-settings-nav="weather">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></span>
                                 <span class="settings-nav__label" data-i18n="weatherSection">天氣</span>
+                            </button>
+                            <button type="button" class="settings-nav__item" data-settings-nav="startup">
+                                <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="rocket"></i></span>
+                                <span class="settings-nav__label" data-i18n="startupSection">啟動設定</span>
                             </button>
                             <button type="button" class="settings-nav__item" data-settings-nav="developer">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="terminal-square"></i></span>
@@ -308,6 +322,43 @@
                                                     <div class="weather-location-suggestions" data-weather-suggestions hidden></div>
                                                 </div>
                                                 <div class="hint weather-field__hint-text" id="weatherStatusText" role="status"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="settings-section" data-settings-area="startup">
+                                <header class="settings-section__header">
+                                    <div class="settings-section__title">
+                                        <span class="settings-section__icon" aria-hidden="true"><i data-lucide="rocket"></i></span>
+                                        <h4 data-i18n="startupSection">啟動設定</h4>
+                                    </div>
+                                </header>
+                                <div class="settings-section__body">
+                                    <div class="settings-section__block">
+                                        <div class="settings-field startup-field">
+                                            <div class="settings-field__header">
+                                                <div class="startup-field__meta">
+                                                    <label data-i18n="startupUrlLabel">啟動時自動開啟網頁</label>
+                                                    <p class="startup-field__hint" data-i18n="startupUrlDescription">開啟新標籤頁時自動跳轉到指定網址</p>
+                                                </div>
+                                                <div class="startup-field__controls">
+                                                    <span class="startup-toggle__status" data-state="off" data-i18n="startupStatusOff">啟動網頁已關閉</span>
+                                                    <button id="startupToggleBtn" type="button" class="settings-toggle" aria-pressed="false" data-toggle-labels="enableStartup,disableStartup" data-icon-off="link-2-off" data-icon-on="link-2" aria-label="切換啟動網頁">
+                                                        <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="link-2-off"></i></span>
+                                                        <span class="settings-toggle__label"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="startup-field__body">
+                                                <label for="startupUrlInput" data-i18n="startupUrlInputLabel">網址</label>
+                                                <input 
+                                                    id="startupUrlInput" 
+                                                    type="url" 
+                                                    class="settings-input" 
+                                                    placeholder="https://example.com" 
+                                                    data-i18n-placeholder="startupUrlPlaceholder" />
+                                                <div class="hint startup-field__hint-text" data-i18n="startupUrlHint">輸入完整的網址，包含 https://</div>
                                             </div>
                                         </div>
                                     </div>
