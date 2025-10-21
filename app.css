@@ -1175,10 +1175,11 @@ body.dark-mode .weather-widget--tile .weather-widget__refresh {
 
 body.dark-mode .engine-selector--inline .engine-selector__icon svg,
 body.dark-mode .engine-selector--inline .engine-selector__icon img[src$=".svg"] {
-  filter: brightness(0) saturate(100%) invert(1)
-          brightness(110%) contrast(95%)
-          hue-rotate(var(--primary-hue, 223deg));
-  opacity: 0.9;
+  filter: brightness(0) saturate(100%)
+          invert(64%) sepia(52%) saturate(1500%)
+          hue-rotate(var(--primary-hue, 223deg))
+          brightness(105%) contrast(95%);
+  opacity: 0.95;
 }
 
 @media (min-width: 640px) {
