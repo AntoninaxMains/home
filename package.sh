@@ -23,6 +23,8 @@ REQUIRED_FILES=(
     "manifest.json"
     "index.html"
     "script.js"
+    "init.js"
+    "lang-loader.js"
     "app.css"
     "style.css"
 )
@@ -76,6 +78,8 @@ FILES_TO_PACK=(
     "manifest.json"
     "index.html"
     "script.js"
+    "init.js"
+    "lang-loader.js"
     "app.css"
     "style.css"
 )

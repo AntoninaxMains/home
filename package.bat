@@ -36,6 +36,20 @@ if not exist "script.js" (
     echo   ✓ script.js
 )
 
+if not exist "init.js" (
+    echo   ❌ 缺少: init.js
+    set ERROR=1
+) else (
+    echo   ✓ init.js
+)
+
+if not exist "lang-loader.js" (
+    echo   ❌ 缺少: lang-loader.js
+    set ERROR=1
+) else (
+    echo   ✓ lang-loader.js
+)
+
 if not exist "app.css" (
     echo   ❌ 缺少: app.css
     set ERROR=1
