@@ -3142,7 +3142,7 @@ body.dark-mode {
   --border: rgba(255, 255, 255, 0.15);
 }
 
-body.dark-mode::before {
+/* body.dark-mode::before {
   content: '';
   position: fixed;
   inset: 0;
@@ -3150,7 +3150,7 @@ body.dark-mode::before {
   pointer-events: none;
   z-index: -1;
   animation: fadeInOverlay 0.5s ease;
-}
+} */
 
 @keyframes fadeInOverlay {
   from {
