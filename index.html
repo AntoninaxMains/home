@@ -150,6 +150,10 @@
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="image"></i></span>
                                 <span class="settings-nav__label" data-i18n="appearanceSection">顯示效果（外觀）</span>
                             </button>
+                            <button type="button" class="settings-nav__item" data-settings-nav="theme-color">
+                                <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="paintbrush"></i></span>
+                                <span class="settings-nav__label" data-i18n="themeColorSection">主題色</span>
+                            </button>
                             <button type="button" class="settings-nav__item" data-settings-nav="weather">
                                 <span class="settings-nav__icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></span>
                                 <span class="settings-nav__label" data-i18n="weatherSection">天氣</span>
@@ -287,6 +291,73 @@
                                             </div>
                                             <input id="overlayOpacity" type="range" min="0" max="1" step="0.01" value="0.4" class="settings-range" />
                                             <div class="hint"><span data-i18n="filterOpacity">濾鏡透明度</span>: <span id="overlayValue">0.40</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section class="settings-section" data-settings-area="theme-color">
+                                <header class="settings-section__header">
+                                    <div class="settings-section__title">
+                                        <span class="settings-section__icon" aria-hidden="true"><i data-lucide="paintbrush"></i></span>
+                                        <h4 data-i18n="themeColorSection">主題色</h4>
+                                    </div>
+                                </header>
+                                <div class="settings-section__body">
+                                    <div class="settings-section__block">
+                                        <div class="settings-field theme-color-field">
+                                            <div class="settings-field__header">
+                                                <label data-i18n="lightThemeColor">日間模式主題色</label>
+                                            </div>
+                                            <div class="theme-color-presets">
+                                                <button type="button" class="theme-color-preset" data-mode="light" data-color="#4c6ef5" style="background: #4c6ef5;" title="預設藍色">
+                                                    <i data-lucide="check"></i>
+                                                </button>
+                                                <button type="button" class="theme-color-preset" data-mode="light" data-color="#7c3aed" style="background: #7c3aed;" title="紫色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="light" data-color="#db2777" style="background: #db2777;" title="粉紅色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="light" data-color="#dc2626" style="background: #dc2626;" title="紅色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="light" data-color="#ea580c" style="background: #ea580c;" title="橙色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="light" data-color="#f59e0b" style="background: #f59e0b;" title="金色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="light" data-color="#10b981" style="background: #10b981;" title="綠色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="light" data-color="#06b6d4" style="background: #06b6d4;" title="青色"></button>
+                                            </div>
+                                            <div class="theme-color-custom">
+                                                <label for="lightThemeColorPicker" data-i18n="customColor">自訂顏色</label>
+                                                <div class="color-picker-wrapper">
+                                                    <input type="color" id="lightThemeColorPicker" value="#4c6ef5" />
+                                                    <input type="text" id="lightThemeColorInput" class="settings-input color-input" value="#4c6ef5" maxlength="7" />
+                                                    <button type="button" id="lightThemeColorReset" class="btn-icon" title="重置為預設">
+                                                        <i data-lucide="rotate-ccw"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="settings-field theme-color-field">
+                                            <div class="settings-field__header">
+                                                <label data-i18n="darkThemeColor">夜間模式主題色</label>
+                                            </div>
+                                            <div class="theme-color-presets">
+                                                <button type="button" class="theme-color-preset" data-mode="dark" data-color="#8c9eff" style="background: #8c9eff;" title="預設淺藍色">
+                                                    <i data-lucide="check"></i>
+                                                </button>
+                                                <button type="button" class="theme-color-preset" data-mode="dark" data-color="#a78bfa" style="background: #a78bfa;" title="淺紫色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="dark" data-color="#f472b6" style="background: #f472b6;" title="淺粉色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="dark" data-color="#fb7185" style="background: #fb7185;" title="淺紅色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="dark" data-color="#fb923c" style="background: #fb923c;" title="淺橙色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="dark" data-color="#fbbf24" style="background: #fbbf24;" title="淺金色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="dark" data-color="#34d399" style="background: #34d399;" title="淺綠色"></button>
+                                                <button type="button" class="theme-color-preset" data-mode="dark" data-color="#22d3ee" style="background: #22d3ee;" title="淺青色"></button>
+                                            </div>
+                                            <div class="theme-color-custom">
+                                                <label for="darkThemeColorPicker" data-i18n="customColor">自訂顏色</label>
+                                                <div class="color-picker-wrapper">
+                                                    <input type="color" id="darkThemeColorPicker" value="#8c9eff" />
+                                                    <input type="text" id="darkThemeColorInput" class="settings-input color-input" value="#8c9eff" maxlength="7" />
+                                                    <button type="button" id="darkThemeColorReset" class="btn-icon" title="重置為預設">
+                                                        <i data-lucide="rotate-ccw"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

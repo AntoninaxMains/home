@@ -343,9 +343,142 @@ body.dark-mode .dark-mode-option.active:hover {
 
 /* 啟動網頁設定已移除，現在由 manifest.json 的 chrome_settings_overrides 控制 */
 
+/* 主題色設定樣式 */
+.theme-color-field {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.theme-color-field .settings-field__header {
+  margin-bottom: 8px;
+}
+
+.theme-color-field label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.theme-color-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 12px;
+}
+
+.theme-color-preset {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.theme-color-preset i {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.theme-color-preset.active {
+  border-color: var(--text);
+  box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.2);
+}
+
+.theme-color-preset.active i {
+  opacity: 1;
+}
+
+.theme-color-preset:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-mode .theme-color-preset.active {
+  box-shadow: 0 0 0 3px rgba(140, 158, 255, 0.3);
+}
+
+.theme-color-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.theme-color-custom label {
+  font-size: 14px;
+  color: var(--text-subtle);
+}
+
+.color-picker-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.color-picker-wrapper input[type="color"] {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  cursor: pointer;
+  background: transparent;
+}
+
+.color-picker-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-picker-wrapper input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+.color-input {
+  flex: 1;
+  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  text-transform: uppercase;
+}
+
+.btn-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-subtle);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  background: var(--surface-muted);
+  color: var(--text);
+  transform: rotate(-90deg);
+}
+
+.btn-icon i {
+  width: 20px;
+  height: 20px;
+}
+
 @media (max-width: 640px) {
   .settings-nav {
     display: none;
+  }
+  
+  .theme-color-presets {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

@@ -806,6 +806,8 @@ function loadSettings() {
     loadBackgroundSettings();
     // 載入外觀設定（模糊/濾鏡）
     loadAppearanceSettings();
+    // 載入主題色設定
+    loadThemeColorSettings();
     // 載入天氣與開發者設定
     loadWeatherSettings();
     loadDeveloperSettings();
@@ -813,6 +815,77 @@ function loadSettings() {
 
 // 啟動網頁功能已移除
 // 現在使用 manifest.json 的 chrome_settings_overrides 來覆蓋瀏覽器的啟動頁和首頁按鈕
+
+// 主題色管理
+const DEFAULT_LIGHT_COLOR = '#4c6ef5';
+const DEFAULT_DARK_COLOR = '#8c9eff';
+
+function loadThemeColorSettings() {
+    const lightColor = localStorage.getItem('themeColorLight') || DEFAULT_LIGHT_COLOR;
+    const darkColor = localStorage.getItem('themeColorDark') || DEFAULT_DARK_COLOR;
+    
+    // 應用主題色
+    applyThemeColor('light', lightColor);
+    applyThemeColor('dark', darkColor);
+    
+    // 更新 UI
+    updateThemeColorUI('light', lightColor);
+    updateThemeColorUI('dark', darkColor);
+}
+
+function applyThemeColor(mode, color) {
+    if (mode === 'light') {
+        document.documentElement.style.setProperty('--primary-light', color);
+    } else {
+        document.documentElement.style.setProperty('--primary-dark', color);
+    }
+    
+    // 如果當前模式匹配，立即應用
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    if ((mode === 'dark' && isDarkMode) || (mode === 'light' && !isDarkMode)) {
+        document.documentElement.style.setProperty('--primary', color);
+    }
+}
+
+function updateThemeColorUI(mode, color) {
+    const picker = document.getElementById(mode === 'light' ? 'lightThemeColorPicker' : 'darkThemeColorPicker');
+    const input = document.getElementById(mode === 'light' ? 'lightThemeColorInput' : 'darkThemeColorInput');
+    const presets = document.querySelectorAll(`.theme-color-preset[data-mode="${mode}"]`);
+    
+    if (picker) picker.value = color;
+    if (input) input.value = color.toUpperCase();
+    
+    // 更新預設按鈕的選中狀態
+    presets.forEach(preset => {
+        const presetColor = preset.getAttribute('data-color');
+        if (presetColor.toLowerCase() === color.toLowerCase()) {
+            preset.classList.add('active');
+        } else {
+            preset.classList.remove('active');
+        }
+    });
+}
+
+function setThemeColor(mode, color) {
+    // 驗證顏色格式
+    if (!/^#[0-9A-F]{6}$/i.test(color)) {
+        return;
+    }
+    
+    // 保存到 localStorage
+    localStorage.setItem(mode === 'light' ? 'themeColorLight' : 'themeColorDark', color);
+    
+    // 應用主題色
+    applyThemeColor(mode, color);
+    
+    // 更新 UI
+    updateThemeColorUI(mode, color);
+}
+
+function resetThemeColor(mode) {
+    const defaultColor = mode === 'light' ? DEFAULT_LIGHT_COLOR : DEFAULT_DARK_COLOR;
+    setThemeColor(mode, defaultColor);
+}
 
 // 載入背景設定
 function loadBackgroundSettings() {
@@ -2266,6 +2339,86 @@ function initEventListeners() {
     }
     
     // 啟動網頁設定已移除，現在由 manifest.json 控制
+
+    // 主題色設定事件監聽
+    // 預設顏色按鈕
+    document.querySelectorAll('.theme-color-preset').forEach(preset => {
+        preset.addEventListener('click', function() {
+            const mode = this.getAttribute('data-mode');
+            const color = this.getAttribute('data-color');
+            setThemeColor(mode, color);
+        });
+    });
+    
+    // 日間模式顏色選擇器
+    const lightColorPicker = document.getElementById('lightThemeColorPicker');
+    if (lightColorPicker) {
+        lightColorPicker.addEventListener('input', (e) => {
+            const color = e.target.value;
+            setThemeColor('light', color);
+        });
+    }
+    
+    // 日間模式顏色輸入框
+    const lightColorInput = document.getElementById('lightThemeColorInput');
+    if (lightColorInput) {
+        lightColorInput.addEventListener('change', (e) => {
+            let color = e.target.value.trim();
+            if (!color.startsWith('#')) {
+                color = '#' + color;
+            }
+            if (/^#[0-9A-F]{6}$/i.test(color)) {
+                setThemeColor('light', color);
+            } else {
+                // 恢復到當前值
+                const currentColor = localStorage.getItem('themeColorLight') || DEFAULT_LIGHT_COLOR;
+                e.target.value = currentColor;
+            }
+        });
+    }
+    
+    // 日間模式重置按鈕
+    const lightColorReset = document.getElementById('lightThemeColorReset');
+    if (lightColorReset) {
+        lightColorReset.addEventListener('click', () => {
+            resetThemeColor('light');
+        });
+    }
+    
+    // 夜間模式顏色選擇器
+    const darkColorPicker = document.getElementById('darkThemeColorPicker');
+    if (darkColorPicker) {
+        darkColorPicker.addEventListener('input', (e) => {
+            const color = e.target.value;
+            setThemeColor('dark', color);
+        });
+    }
+    
+    // 夜間模式顏色輸入框
+    const darkColorInput = document.getElementById('darkThemeColorInput');
+    if (darkColorInput) {
+        darkColorInput.addEventListener('change', (e) => {
+            let color = e.target.value.trim();
+            if (!color.startsWith('#')) {
+                color = '#' + color;
+            }
+            if (/^#[0-9A-F]{6}$/i.test(color)) {
+                setThemeColor('dark', color);
+            } else {
+                // 恢復到當前值
+                const currentColor = localStorage.getItem('themeColorDark') || DEFAULT_DARK_COLOR;
+                e.target.value = currentColor;
+            }
+        });
+    }
+    
+    // 夜間模式重置按鈕
+    const darkColorReset = document.getElementById('darkThemeColorReset');
+    if (darkColorReset) {
+        darkColorReset.addEventListener('click', () => {
+            resetThemeColor('dark');
+        });
+    }
 
     // Settings panel weather location search
     const weatherLocationSearchInput = document.getElementById('weatherLocationSearchInput');
@@ -3958,6 +4111,12 @@ function toggleDarkMode(forceState, options = {}) {
     } else {
         document.body.classList.remove('dark-mode');
     }
+    
+    // 應用對應模式的主題色
+    const color = isDark 
+        ? (localStorage.getItem('themeColorDark') || DEFAULT_DARK_COLOR)
+        : (localStorage.getItem('themeColorLight') || DEFAULT_LIGHT_COLOR);
+    document.documentElement.style.setProperty('--primary', color);
     
     // 更新按鈕圖標為當前實際模式
     updateCurrentModeButtons(isDark);

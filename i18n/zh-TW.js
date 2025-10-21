@@ -187,5 +187,11 @@ window.TRANSLATIONS['zh-TW'] = {
     alertImageTooLarge: '圖片大小不能超過 5MB',
     alertImageUploaded: '圖片已上傳並套用！',
     alertUploadError: '圖片上傳失敗，請重試',
-    alertIconSelected: '已選擇圖示：{icon}'
+    alertIconSelected: '已選擇圖示：{icon}',
+    
+    // 主題色設定
+    themeColorSection: '主題色',
+    lightThemeColor: '日間模式主題色',
+    darkThemeColor: '夜間模式主題色',
+    customColor: '自訂顏色'
 };
