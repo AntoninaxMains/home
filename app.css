@@ -816,7 +816,7 @@ body.dark-mode .settings-action-card__content p {
 }
 
 body.dark-mode {
-  --primary: #8c9eff;
+  /* --primary 由 JavaScript 動態設置，不在這裡硬編碼 */
   --primary-dark: #5c6bc0;
   --surface: rgba(25, 29, 44, 0.92);
   --surface-muted: rgba(33, 37, 54, 0.75);
@@ -1176,9 +1176,10 @@ body.dark-mode .weather-widget--tile .weather-widget__refresh {
 body.dark-mode .engine-selector--inline .engine-selector__icon svg,
 body.dark-mode .engine-selector--inline .engine-selector__icon img[src$=".svg"] {
   filter: brightness(0) saturate(100%)
-          invert(64%) sepia(52%) saturate(1500%)
-          hue-rotate(var(--primary-hue, 223deg))
-          brightness(105%) contrast(95%);
+          invert(1)
+          sepia(1) saturate(5)
+          hue-rotate(calc(var(--primary-hue, 223deg) - 220deg))
+          brightness(0.9) contrast(1.2);
   opacity: 0.95;
 }
 
