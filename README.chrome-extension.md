@@ -1,10 +1,12 @@
-# 🎯 我的起始頁 - Chrome 擴充功能版
+# 🎯 我的起始頁 - Chrome 擴充功能
 
 一個美觀、功能豐富的自訂新標籤頁和主頁 Chrome 擴充功能。
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![Chrome](https://img.shields.io/badge/Chrome-Extension-green.svg)
-![License](https://img.shields.io/badge/license-MIT-orange.svg)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/AntoninaxMains/home/releases)
+[![Chrome](https://img.shields.io/badge/Chrome-Extension-green.svg)](https://chrome.google.com/webstore)
+[![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
+
+[English](README.md) | [繁體中文](README.zh-TW.md) | [簡體中文](README.zh-CN.md) | [日本語](README.ja.md)
 
 ## ✨ 功能特點
 
@@ -21,45 +23,51 @@
 
 ## 📦 安裝方法
 
-### 方法 1: 直接載入（推薦）
+### 方法 1: 從 GitHub Releases 下載（推薦）
 
-#### 步驟 1: 準備圖示文件
+1. 前往 [Releases 頁面](https://github.com/AntoninaxMains/home/releases)
+2. 下載最新版本的 `my-start-page-x.x.x.zip`
+3. 解壓縮文件到任意資料夾
+4. 打開 Chrome，前往 `chrome://extensions/`
+5. 啟用「**開發人員模式**」
+6. 點擊「**載入未封裝項目**」
+7. 選擇解壓縮後的資料夾
 
-1. 在瀏覽器中打開 `create-icons.html`
-2. 頁面會自動生成三種尺寸的圖示
-3. 點擊「**下載所有圖示**」按鈕
-4. 將下載的三個文件（`icon16.png`、`icon48.png`、`icon128.png`）放在專案根目錄
+### 方法 2: 從源碼安裝
 
-#### 步驟 2: 載入擴充功能
-
-1. 打開 Chrome 瀏覽器
-2. 在網址列輸入 `chrome://extensions/`
-3. 在頁面右上角啟用「**開發人員模式**」
-4. 點擊左上角的「**載入未封裝項目**」按鈕
-5. 選擇本專案的資料夾
-6. 點擊「**選擇**」按鈕
-
-#### 步驟 3: 驗證安裝
-
-1. 開啟新標籤頁（`Ctrl+T` 或 `Cmd+T`）
-2. 應該會看到自訂的起始頁面
-3. 在 `chrome://extensions/` 頁面應該能看到「我的起始頁」擴充功能
-
-### 方法 2: 使用打包腳本
-
-#### Linux/Mac 用戶
+#### 克隆倉庫
 
 ```bash
-# 給腳本添加執行權限（首次使用）
-chmod +x package.sh
-
-# 執行打包腳本
-./package.sh
+git clone git@github.com:AntoninaxMains/home.git
+cd home
 ```
 
-#### Windows 用戶
+#### 生成圖示
 
-雙擊運行 `package.bat` 文件
+```bash
+# Linux/Mac
+./generate-icons.sh
+
+# 或在瀏覽器中打開
+open create-icons.html
+```
+
+#### 載入擴充功能
+
+1. 打開 Chrome，前往 `chrome://extensions/`
+2. 啟用「**開發人員模式**」
+3. 點擊「**載入未封裝項目**」
+4. 選擇本專案資料夾
+
+### 方法 3: 打包並安裝
+
+```bash
+# 執行打包腳本
+./package.sh
+
+# ZIP 文件會生成在 dist/ 資料夾
+# 然後按照方法 1 的步驟 3-7 進行安裝
+```
 
 ## 🔧 配置說明
 
@@ -257,13 +265,76 @@ my-start-page/
 - GitHub Issues
 - Email: your-email@example.com
 
+## 🚀 開發和部署
+
+### 本地開發
+
+```bash
+# 克隆倉庫
+git clone git@github.com:AntoninaxMains/home.git
+cd home
+
+# 生成圖示
+./generate-icons.sh
+
+# 驗證文件完整性
+./verify.sh
+
+# 在 Chrome 中載入擴充功能進行測試
+# chrome://extensions/ → 開發人員模式 → 載入未封裝項目
+```
+
+### 打包發布
+
+```bash
+# 打包擴充功能
+./package.sh
+
+# 生成的 ZIP 文件位於 dist/my-start-page-1.0.0.zip
+```
+
+### 發布到 GitHub Releases
+
+```bash
+# 1. 提交所有更改
+git add -A
+git commit -m "chore: Release v1.0.0"
+
+# 2. 創建標籤
+git tag -a v1.0.0 -m "Release version 1.0.0"
+
+# 3. 推送代碼和標籤
+git push origin main
+git push origin v1.0.0
+
+# 4. 前往 GitHub 創建 Release
+# https://github.com/AntoninaxMains/home/releases/new
+# - 選擇標籤 v1.0.0
+# - 填寫發布說明
+# - 上傳 dist/my-start-page-1.0.0.zip
+# - 發布 Release
+```
+
+### 工具腳本
+
+- `generate-icons.sh` - 從 SVG 生成圖示
+- `verify.sh` - 驗證文件完整性
+- `package.sh` - 打包擴充功能為 ZIP
+- `create-icons.html` - 瀏覽器中生成圖示
+
 ## 🎉 致謝
 
 - 圖示來源: [Lucide Icons](https://lucide.dev/)
 - 天氣資料: [Open-Meteo](https://open-meteo.com/)
 - 地理編碼: [OpenStreetMap Nominatim](https://nominatim.org/)
 
+## 📄 授權
+
+本專案使用 MIT 授權條款。詳見 [LICENSE](LICENSE) 文件。
+
 ---
 
 **享受您的自訂起始頁！** 🚀
+
+如有問題或建議，歡迎提交 [Issue](https://github.com/AntoninaxMains/home/issues) 或 [Pull Request](https://github.com/AntoninaxMains/home/pulls)。
 
