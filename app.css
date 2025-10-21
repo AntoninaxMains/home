@@ -1162,26 +1162,23 @@ body.dark-mode .weather-widget--tile .weather-widget__refresh {
   object-fit: contain;
 }
 
-/* 為 SVG 圖標添加主題色效果 */
-.engine-selector--inline .engine-selector__icon {
-  position: relative;
+/* 為 SVG 圖標添加主題色濾鏡效果 */
+.engine-selector--inline .engine-selector__icon svg,
+.engine-selector--inline .engine-selector__icon img[src$=".svg"] {
+  filter: brightness(0) saturate(100%) 
+          invert(36%) sepia(89%) saturate(2477%) 
+          hue-rotate(var(--primary-hue, 223deg)) 
+          brightness(96%) contrast(92%);
+  opacity: 0.85;
+  transition: filter 0.3s ease, opacity 0.3s ease;
 }
 
-.engine-selector--inline .engine-selector__icon::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--primary);
-  opacity: 0.15;
-  border-radius: var(--radius-sm);
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-body.dark-mode .engine-selector--inline .engine-selector__icon::before {
-  opacity: 0.25;
-  mix-blend-mode: screen;
+body.dark-mode .engine-selector--inline .engine-selector__icon svg,
+body.dark-mode .engine-selector--inline .engine-selector__icon img[src$=".svg"] {
+  filter: brightness(0) saturate(100%) invert(1)
+          brightness(110%) contrast(95%)
+          hue-rotate(var(--primary-hue, 223deg));
+  opacity: 0.9;
 }
 
 @media (min-width: 640px) {
@@ -1228,7 +1225,7 @@ body.dark-mode .engine-dropdown {
 .engine-option { width: 100%; border: none; background: transparent; padding: 10px 12px; border-radius: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text); font-weight: 600; transition: background var(--transition), transform var(--transition); }
 .engine-option:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); transform: translateY(-1px); }
 .engine-option.active { background: color-mix(in srgb, var(--primary) 12%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 25%, transparent); }
-.engine-option__icon { width: 24px; height: 24px; display: grid; place-items: center; position: relative; }
+.engine-option__icon { width: 24px; height: 24px; display: grid; place-items: center; }
 .engine-option__icon img,
 .engine-option__icon svg,
 .engine-option__icon i {
@@ -1238,34 +1235,6 @@ body.dark-mode .engine-dropdown {
   max-height: 100%;
   display: block;
 }
-
-/* 為引擎選項圖標添加主題色效果 */
-.engine-option__icon::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: var(--primary);
-  opacity: 0;
-  border-radius: 6px;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.engine-option:hover .engine-option__icon::after,
-.engine-option.active .engine-option__icon::after {
-  opacity: 0.12;
-}
-
-body.dark-mode .engine-option__icon::after {
-  mix-blend-mode: screen;
-}
-
-body.dark-mode .engine-option:hover .engine-option__icon::after,
-body.dark-mode .engine-option.active .engine-option__icon::after {
-  opacity: 0.18;
-}
-
 .engine-option__name { font-size: 14px; text-align: left; }
 
 .search-input-group { display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 1000; }
@@ -1637,26 +1606,8 @@ body.dark-mode .bookmark-empty {
   background: rgba(148, 163, 255, 0.12);
   color: rgba(235, 238, 255, 0.85);
 }
-.bookmark-icon { font-size: 32px; line-height: 1; margin: 10px auto 10px; position: relative; }
+.bookmark-icon { font-size: 32px; line-height: 1; margin: 10px auto 10px; }
 .bookmark-icon img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
-
-/* 為書籤 SVG 圖標添加主題色效果 */
-.bookmark-icon::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--primary);
-  opacity: 0.08;
-  border-radius: 8px;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-body.dark-mode .bookmark-icon::after {
-  opacity: 0.15;
-  mix-blend-mode: screen;
-}
 .bookmark-name { font-weight: 700; color: var(--text); font-size: 14px; word-break: break-word; }
 
 /* Category sections */

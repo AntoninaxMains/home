@@ -841,11 +841,48 @@ function applyThemeColor(mode, color) {
         document.documentElement.style.setProperty('--primary-dark', color);
     }
     
+    // 計算色相值用於 SVG 濾鏡
+    const hue = hexToHue(color);
+    if (hue !== null) {
+        document.documentElement.style.setProperty('--primary-hue', `${hue}deg`);
+    }
+    
     // 如果當前模式匹配，立即應用
     const isDarkMode = document.body.classList.contains('dark-mode');
     if ((mode === 'dark' && isDarkMode) || (mode === 'light' && !isDarkMode)) {
         document.documentElement.style.setProperty('--primary', color);
     }
+}
+
+// 將十六進制顏色轉換為色相值
+function hexToHue(hex) {
+    // 移除 # 符號
+    hex = hex.replace('#', '');
+    
+    // 轉換為 RGB
+    const r = parseInt(hex.substr(0, 2), 16) / 255;
+    const g = parseInt(hex.substr(2, 2), 16) / 255;
+    const b = parseInt(hex.substr(4, 2), 16) / 255;
+    
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const delta = max - min;
+    
+    if (delta === 0) return 0;
+    
+    let hue;
+    if (max === r) {
+        hue = ((g - b) / delta) % 6;
+    } else if (max === g) {
+        hue = (b - r) / delta + 2;
+    } else {
+        hue = (r - g) / delta + 4;
+    }
+    
+    hue = Math.round(hue * 60);
+    if (hue < 0) hue += 360;
+    
+    return hue;
 }
 
 function updateThemeColorUI(mode, color) {
