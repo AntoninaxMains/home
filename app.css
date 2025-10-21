@@ -41,20 +41,25 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 主題切換動畫 */
-body.theme-transitioning,
-body.theme-transitioning * {
-  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              fill 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              stroke 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+/* 主題切換動畫 - 優化版 */
+body.theme-transitioning {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 防止動畫影響變換 */
-body.theme-transitioning * {
-  transition-property: background-color, color, border-color, box-shadow, fill, stroke !important;
+body.theme-transitioning .app,
+body.theme-transitioning .search-card,
+body.theme-transitioning .bookmark-card,
+body.theme-transitioning .bookmark-item,
+body.theme-transitioning .modal-panel,
+body.theme-transitioning .quick-btn,
+body.theme-transitioning .settings-toggle,
+body.theme-transitioning input,
+body.theme-transitioning button,
+body.theme-transitioning .category-bookmarks {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
 }
 
 .search-card,
@@ -336,57 +341,7 @@ body.dark-mode .dark-mode-option.active:hover {
   box-shadow: 0 4px 12px rgba(96, 165, 250, 0.5);
 }
 
-/* 啟動網頁設置樣式 */
-.startup-field {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.startup-field__meta {
-  flex: 1;
-}
-
-.startup-field__meta label {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  display: block;
-  margin-bottom: 4px;
-}
-
-.startup-field__hint {
-  font-size: 13px;
-  color: var(--text-subtle);
-  line-height: 1.5;
-}
-
-.startup-field__controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.startup-toggle__status {
-  font-size: 13px;
-  color: var(--text-subtle);
-  white-space: nowrap;
-}
-
-.startup-toggle__status[data-state="on"] {
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.startup-field__body {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.startup-field__hint-text {
-  margin: 0;
-}
+/* 啟動網頁設定已移除，現在由 manifest.json 的 chrome_settings_overrides 控制 */
 
 @media (max-width: 640px) {
   .settings-nav {
