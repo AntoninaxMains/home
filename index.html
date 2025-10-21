@@ -6,33 +6,7 @@
         <title>我的起始頁</title>
         <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
         <link rel="stylesheet" href="app.css" />
-        <script>
-            (function ensureUUID() {
-                const global = window;
-                if (!global.crypto) {
-                    global.crypto = global.msCrypto || {};
-                }
-                if (global.crypto && typeof global.crypto.randomUUID !== 'function') {
-                    const getRandomValues = typeof global.crypto.getRandomValues === 'function'
-                        ? global.crypto.getRandomValues.bind(global.crypto)
-                        : null;
-                    global.crypto.randomUUID = function randomUUID() {
-                        const bytes = new Uint8Array(16);
-                        if (getRandomValues) {
-                            getRandomValues(bytes);
-                        } else {
-                            for (let i = 0; i < 16; i++) {
-                                bytes[i] = Math.floor(Math.random() * 256);
-                            }
-                        }
-                        bytes[6] = (bytes[6] & 0x0f) | 0x40;
-                        bytes[8] = (bytes[8] & 0x3f) | 0x80;
-                        const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0'));
-                        return `${hex.slice(0, 4).join('')}-${hex.slice(4, 6).join('')}-${hex.slice(6, 8).join('')}-${hex.slice(8, 10).join('')}-${hex.slice(10, 16).join('')}`;
-                    };
-                }
-            })();
-        </script>
+        <script src="init.js"></script>
         <script src="assets/lucide.min.js"></script>
     </head>
     <body>
@@ -521,84 +495,6 @@
         </div>
 
     <!-- 動態載入語言文件 / Dynamically load language file -->
-    <script>
-        // 偵測用戶語言 / Detect user language
-        const supportedLanguages = ['en', 'zh-CN', 'zh-TW', 'ja'];
-        const savedLang = localStorage.getItem('language');
-
-        const normalizeLanguage = (code) => {
-            if (!code || typeof code !== 'string') return null;
-            const lower = code.trim().toLowerCase();
-            if (!lower) return null;
-            if (supportedLanguages.includes(lower)) return lower;
-            if (lower === 'en' || lower.startsWith('en-')) return 'en';
-            if (lower === 'ja' || lower.startsWith('ja-') || lower.startsWith('jp')) return 'ja';
-            if (lower.startsWith('zh')) {
-                if (lower.includes('cn') || lower.includes('hans') || lower.includes('sg') || lower.includes('my')) {
-                    return 'zh-CN';
-                }
-                if (lower.includes('tw') || lower.includes('hk') || lower.includes('mo') || lower.includes('hant')) {
-                    return 'zh-TW';
-                }
-                return 'zh-TW';
-            }
-            return null;
-        };
-
-        const languageCandidates = [];
-        if (Array.isArray(navigator.languages)) {
-            navigator.languages.forEach(lang => languageCandidates.push(lang));
-        }
-        if (navigator.language) languageCandidates.push(navigator.language);
-        if (navigator.userLanguage) languageCandidates.push(navigator.userLanguage);
-        languageCandidates.push('en');
-
-        let detectedLang = savedLang;
-        if (!detectedLang) {
-            for (const candidate of languageCandidates) {
-                const resolved = normalizeLanguage(candidate);
-                if (resolved && supportedLanguages.includes(resolved)) {
-                    detectedLang = resolved;
-                    break;
-                }
-            }
-        }
-
-        if (!detectedLang || !supportedLanguages.includes(detectedLang)) {
-            detectedLang = 'en';
-        }
-
-        const initialLanguage = detectedLang;
-        
-        // 動態載入對應語言文件 / Dynamically load corresponding language file
-        const script = document.createElement('script');
-        script.src = `i18n/${initialLanguage}.js`;
-        script.onload = function() {
-            // 確保全局變量在腳本載入前設置
-            window.TRANSLATIONS = window.TRANSLATIONS || {};
-            window.translations = window.TRANSLATIONS;
-            window.currentLanguage = initialLanguage;
-            window.SUPPORTED_LANGUAGES = supportedLanguages;
-            
-            // 載入主腳本 / Load main script
-            const mainScript = document.createElement('script');
-            mainScript.src = 'script.js';
-            mainScript.onerror = function() {
-                console.error('Failed to load main script');
-            };
-            document.body.appendChild(mainScript);
-        };
-        script.onerror = function() {
-            console.error('Failed to load language file:', initialLanguage);
-            // 降級到英語
-            window.TRANSLATIONS = window.TRANSLATIONS || {};
-            window.translations = window.TRANSLATIONS;
-            window.currentLanguage = 'en';
-            const mainScript = document.createElement('script');
-            mainScript.src = 'script.js';
-            document.body.appendChild(mainScript);
-        };
-        document.body.appendChild(script);
-    </script>
+    <script src="lang-loader.js"></script>
 </body>
 </html>
