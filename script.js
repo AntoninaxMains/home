@@ -4058,8 +4058,15 @@ function toggleDarkMode(forceState, options = {}) {
     const isDark = forceState !== undefined ? forceState : !currentDark;
     const { skipTransition = false } = options;
     
-    // 添加過渡動畫類
-    document.body.style.transition = skipTransition ? '' : 'background-color 0.3s ease, color 0.3s ease';
+    if (!skipTransition) {
+        // 添加過渡動畫類
+        document.body.classList.add('theme-transitioning');
+        
+        // 動畫結束後移除過渡類
+        setTimeout(() => {
+            document.body.classList.remove('theme-transitioning');
+        }, 500);
+    }
     
     if (isDark) {
         document.body.classList.add('dark-mode');
@@ -4067,9 +4074,8 @@ function toggleDarkMode(forceState, options = {}) {
         document.body.classList.remove('dark-mode');
     }
     
-    // 注意：按鈕UI由 updateDarkModeUI() 統一管理
-    
-    // 深色強度設置現在常駐顯示，不需要切換 hidden class
+    // 更新按鈕圖標為當前實際模式
+    updateCurrentModeButtons(isDark);
 }
 
 function updateDarkModeDepth(depth) {
@@ -4142,9 +4148,8 @@ function updateDarkModeUI(preference) {
         darkBtn.classList.add('active');
     }
     
-    // 更新快速按鈕圖示
-    updateQuickDarkModeButton(preference);
-    updateFabDarkModeIcon(preference);
+    // 注意：快速按鈕圖標由 updateCurrentModeButtons 在主題切換時更新
+    // 這樣可以顯示當前實際的主題狀態，而不是設置偏好
     
     if (window.lucide) {
         window.lucide.createIcons();
@@ -4169,57 +4174,54 @@ function cycleDarkModePreference() {
     setDarkModePreference(nextMode);
 }
 
-// 更新快速按鈕圖示
-function updateQuickDarkModeButton(preference) {
+// 更新快速按鈕圖示（根據當前實際模式）
+function updateCurrentModeButtons(isDark) {
     const quickBtn = document.getElementById('quickDarkModeBtn');
-    if (!quickBtn) return;
+    if (quickBtn) {
+        const icon = quickBtn.querySelector('i');
+        if (icon) {
+            const iconName = isDark ? 'moon' : 'sun';
+            const label = isDark ? (t('darkMode') || '夜間模式') : (t('lightMode') || '日間模式');
+            icon.setAttribute('data-lucide', iconName);
+            quickBtn.setAttribute('title', label);
+            quickBtn.setAttribute('aria-label', label);
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+    }
     
-    const icon = quickBtn.querySelector('i');
-    if (!icon) return;
-    
-    const icons = {
-        'auto': 'monitor',
-        'light': 'sun',
-        'dark': 'moon'
-    };
-    
-    const labels = {
-        'auto': t('autoMode') || '自動',
-        'light': t('lightMode') || '日間',
-        'dark': t('darkMode') || '夜間'
-    };
-    
-    icon.setAttribute('data-lucide', icons[preference] || 'moon');
-    quickBtn.setAttribute('title', labels[preference]);
-    quickBtn.setAttribute('aria-label', labels[preference]);
+    // 更新 FAB 按鈕
+    const fabDarkMode = document.getElementById('fabDarkMode');
+    if (fabDarkMode) {
+        const icon = fabDarkMode.querySelector('i');
+        const span = fabDarkMode.querySelector('span');
+        if (icon) {
+            const iconName = isDark ? 'moon' : 'sun';
+            const label = isDark ? (t('darkMode') || '夜間模式') : (t('lightMode') || '日間模式');
+            icon.setAttribute('data-lucide', iconName);
+            if (span) {
+                span.textContent = label;
+            }
+            fabDarkMode.setAttribute('title', label);
+            fabDarkMode.setAttribute('aria-label', label);
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+    }
 }
 
-// 更新 FAB 夜間模式圖示
+// 更新快速按鈕圖示（根據設置的偏好）- 僅用於設定面板
+function updateQuickDarkModeButton(preference) {
+    // 這個函數現在主要用於顯示用戶選擇的偏好
+    // 實際按鈕圖標由 updateCurrentModeButtons 控制
+}
+
+// 更新 FAB 夜間模式圖示（根據設置的偏好）- 僅用於設定面板
 function updateFabDarkModeIcon(preference) {
-    const fabDarkMode = document.getElementById('fabDarkMode');
-    if (!fabDarkMode) return;
-    
-    const icon = fabDarkMode.querySelector('i');
-    const span = fabDarkMode.querySelector('span');
-    
-    if (!icon) return;
-    
-    const icons = {
-        'auto': 'monitor',
-        'light': 'sun',
-        'dark': 'moon'
-    };
-    
-    const labels = {
-        'auto': t('autoMode') || '自動',
-        'light': t('lightMode') || '日間',
-        'dark': t('darkMode') || '夜間'
-    };
-    
-    icon.setAttribute('data-lucide', icons[preference] || 'moon');
-    if (span) {
-        span.textContent = labels[preference];
-    }
+    // 這個函數現在主要用於顯示用戶選擇的偏好
+    // 實際按鈕圖標由 updateCurrentModeButtons 控制
 }
 
 // 語言循環切換

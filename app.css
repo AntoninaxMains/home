@@ -41,6 +41,22 @@
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* 主題切換動畫 */
+body.theme-transitioning,
+body.theme-transitioning * {
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              fill 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              stroke 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 防止動畫影響變換 */
+body.theme-transitioning * {
+  transition-property: background-color, color, border-color, box-shadow, fill, stroke !important;
+}
+
 .search-card,
 .bookmark-card,
 .modal-panel,
