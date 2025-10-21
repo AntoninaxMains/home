@@ -36,6 +36,10 @@ let weatherRequestToken = 0;
 let settingsNavObserver = null;
 let settingsNavCleanup = null;
 
+// 主題色常量（必須在早期聲明，因為 toggleDarkMode 等函數會使用）
+const DEFAULT_LIGHT_COLOR = '#4c6ef5';
+const DEFAULT_DARK_COLOR = '#8c9eff';
+
 function logDebug(message) {
     try {
         const timestamp = new Date().toISOString().split('T')[1]?.replace('Z', '') || '';
@@ -817,9 +821,6 @@ function loadSettings() {
 // 現在使用 manifest.json 的 chrome_settings_overrides 來覆蓋瀏覽器的啟動頁和首頁按鈕
 
 // 主題色管理
-const DEFAULT_LIGHT_COLOR = '#4c6ef5';
-const DEFAULT_DARK_COLOR = '#8c9eff';
-
 function loadThemeColorSettings() {
     const lightColor = localStorage.getItem('themeColorLight') || DEFAULT_LIGHT_COLOR;
     const darkColor = localStorage.getItem('themeColorDark') || DEFAULT_DARK_COLOR;
