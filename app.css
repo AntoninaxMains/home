@@ -2728,7 +2728,7 @@ body.dark-mode .settings-card { background: rgba(22, 24, 34, 0.94); border: 1px 
 body.dark-mode .settings-card--dark { background: linear-gradient(160deg, rgba(35, 38, 58, 0.92), rgba(26, 28, 42, 0.88)); border-color: color-mix(in srgb, var(--primary) 24%, transparent); box-shadow: 0 24px 44px rgba(0, 0, 0, 0.6); }
 body.dark-mode .settings-card__header h4 { color: #f5f7ff; }
 body.dark-mode .settings-card__header i { color: var(--primary); }
-body.dark-mode .dark-mode-panel { background: rgba(46, 53, 82, 0.65); border-color: color-mix(in srgb, var(--primary) 30%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 12%, transparent); }
+body.dark-mode .dark-mode-panel { background: color-mix(in srgb, var(--primary) 3%, rgba(40, 42, 50, 0.65)); border-color: color-mix(in srgb, var(--primary) 30%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 12%, transparent); }
 body.dark-mode .dark-mode-panel__label { color: #f5f7ff; }
 body.dark-mode .dark-mode-panel__hint { color: rgba(235, 238, 255, 0.72); }
 body.dark-mode .dark-mode-toggle__status,
@@ -2737,7 +2737,7 @@ body.dark-mode .debug-toggle__status { background: color-mix(in srgb, var(--prim
 body.dark-mode .dark-mode-panel__slider label { color: rgba(235, 238, 255, 0.75); }
 body.dark-mode .appearance-field,
 body.dark-mode .weather-field,
-body.dark-mode .developer-field { background: rgba(46, 53, 82, 0.55); border-color: color-mix(in srgb, var(--primary) 28%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 12%, transparent); }
+body.dark-mode .developer-field { background: color-mix(in srgb, var(--primary) 3%, rgba(40, 42, 50, 0.55)); border-color: color-mix(in srgb, var(--primary) 28%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 12%, transparent); }
 body.dark-mode .appearance-field__hint,
 body.dark-mode .weather-field__hint,
 body.dark-mode .developer-field__hint { color: rgba(235, 238, 255, 0.72); }
@@ -2747,7 +2747,7 @@ body.dark-mode .developer-field__hint { color: rgba(235, 238, 255, 0.68); }
 body.dark-mode .appearance-field .hint span { color: var(--primary); }
 body.dark-mode .settings-card__content label,
 body.dark-mode .settings-card__content .hint { color: rgba(235, 238, 255, 0.72); }
-body.dark-mode .settings-action-block { background: rgba(84, 90, 140, 0.24); border-color: color-mix(in srgb, var(--primary) 24%, transparent); box-shadow: 0 18px 34px rgba(0, 0, 0, 0.55); }
+body.dark-mode .settings-action-block { background: color-mix(in srgb, var(--primary) 8%, rgba(40, 42, 50, 0.5)); border-color: color-mix(in srgb, var(--primary) 24%, transparent); box-shadow: 0 18px 34px rgba(0, 0, 0, 0.55); }
 body.dark-mode .settings-action-block__body h5 { color: #f5f7ff; }
 body.dark-mode .settings-action-block__body p { color: rgba(235, 238, 255, 0.78); }
 body.dark-mode .settings-select,
@@ -2758,14 +2758,14 @@ body.dark-mode .settings-select:focus,
 body.dark-mode .settings-input:focus { border-color: color-mix(in srgb, var(--primary) 65%, transparent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 16%, transparent); }
 body.dark-mode .settings-inline__label { color: #f5f7ff; }
 body.dark-mode .settings-range { background: color-mix(in srgb, var(--primary) 35%, transparent); }
-body.dark-mode .settings-reset-card { border-color: color-mix(in srgb, var(--primary) 35%, transparent); background: rgba(46, 53, 82, 0.55); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55); }
+body.dark-mode .settings-reset-card { border-color: color-mix(in srgb, var(--primary) 35%, transparent); background: color-mix(in srgb, var(--primary) 3%, rgba(40, 42, 50, 0.55)); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55); }
 body.dark-mode .settings-reset-header { border-bottom-color: color-mix(in srgb, var(--primary) 20%, transparent); }
 body.dark-mode .settings-reset-header h4 { color: #f5f7ff; }
 body.dark-mode .settings-reset-header i { color: var(--primary); }
 body.dark-mode .settings-reset-item__text h5 { color: #f5f7ff; }
 body.dark-mode .settings-reset-item__text p { color: rgba(235, 238, 255, 0.7); }
 body.dark-mode .settings-reset-divider { background: color-mix(in srgb, var(--primary) 15%, transparent); }
-body.dark-mode .settings-cache-info { background: rgba(46, 53, 82, 0.6); }
+body.dark-mode .settings-cache-info { background: color-mix(in srgb, var(--primary) 3%, rgba(40, 42, 50, 0.6)); }
 body.dark-mode .settings-cache-info__icon { background: color-mix(in srgb, var(--primary) 20%, transparent); }
 body.dark-mode .settings-cache-label { color: rgba(235, 238, 255, 0.7); }
 body.dark-mode .settings-cache-size { color: var(--primary); }
