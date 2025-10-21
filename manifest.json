@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "我的起始頁",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "一個美觀的自訂新標籤頁和主頁，包含搜尋、書籤管理和天氣小工具",
   "icons": {
     "16": "icon16.png",
