@@ -184,11 +184,20 @@
                                                     <p class="dark-mode-panel__hint" data-i18n="darkModeHint">為整個首頁套用柔和的深色主題，可減少夜間使用時的眩光。</p>
                                                 </div>
                                                 <div class="dark-mode-panel__actions">
-                                                    <span class="dark-mode-toggle__status" data-state="off">日間模式</span>
-                                                    <button id="darkModeToggleBtn" type="button" class="settings-toggle dark-mode-toggle" aria-pressed="false" data-toggle-labels="enableDarkMode,disableDarkMode" data-icon-off="moon" data-icon-on="sun" aria-label="切換夜間模式">
-                                                        <span class="settings-toggle__icon" aria-hidden="true"><i data-lucide="moon"></i></span>
-                                                        <span class="settings-toggle__label"></span>
-                                                    </button>
+                                                    <div class="dark-mode-options">
+                                                        <button id="darkModeAutoBtn" type="button" class="dark-mode-option" data-mode="auto" aria-label="自動">
+                                                            <i data-lucide="monitor"></i>
+                                                            <span data-i18n="autoMode">自動</span>
+                                                        </button>
+                                                        <button id="darkModeLightBtn" type="button" class="dark-mode-option" data-mode="light" aria-label="日間">
+                                                            <i data-lucide="sun"></i>
+                                                            <span data-i18n="lightMode">日間</span>
+                                                        </button>
+                                                        <button id="darkModeDarkBtn" type="button" class="dark-mode-option active" data-mode="dark" aria-label="夜間">
+                                                            <i data-lucide="moon"></i>
+                                                            <span data-i18n="darkMode">夜間</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="dark-mode-panel__slider">

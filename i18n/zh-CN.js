@@ -115,6 +115,7 @@ window.TRANSLATIONS['zh-CN'] = {
     darkModeDepth: '夜间模式深度',
     darkMode: '夜间模式',
     lightMode: '日间模式',
+    autoMode: '自动',
     darkModeHint: '为整个主页套用柔和的深色主题，减少夜间使用时的眩光。',
     developerSection: '开发者工具',
     debugPanelLabel: '显示调试面板',

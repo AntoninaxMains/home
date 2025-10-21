@@ -2273,7 +2273,7 @@ function initEventListeners() {
     
     const quickDarkModeBtn = document.getElementById('quickDarkModeBtn');
     if (quickDarkModeBtn) {
-        quickDarkModeBtn.addEventListener('click', () => toggleDarkMode());
+        quickDarkModeBtn.addEventListener('click', () => cycleDarkModePreference());
     }
     
     // 移動端懸浮球
@@ -2323,7 +2323,7 @@ function initEventListeners() {
         });
         
         document.getElementById('fabDarkMode')?.addEventListener('click', function() {
-            toggleDarkMode();
+            cycleDarkModePreference();
             closeFabMenu();
         });
     }
@@ -2337,9 +2337,19 @@ function initEventListeners() {
         });
     }
 
-    const darkModeToggleBtn = document.getElementById('darkModeToggleBtn');
-    if (darkModeToggleBtn) {
-        darkModeToggleBtn.addEventListener('click', () => toggleDarkMode());
+    // 設定面板中的夜間模式選項按鈕
+    const darkModeAutoBtn = document.getElementById('darkModeAutoBtn');
+    const darkModeLightBtn = document.getElementById('darkModeLightBtn');
+    const darkModeDarkBtn = document.getElementById('darkModeDarkBtn');
+    
+    if (darkModeAutoBtn) {
+        darkModeAutoBtn.addEventListener('click', () => setDarkModePreference('auto'));
+    }
+    if (darkModeLightBtn) {
+        darkModeLightBtn.addEventListener('click', () => setDarkModePreference('light'));
+    }
+    if (darkModeDarkBtn) {
+        darkModeDarkBtn.addEventListener('click', () => setDarkModePreference('dark'));
     }
 
     const weatherToggleBtn = document.getElementById('weatherToggleBtn');
@@ -4040,27 +4050,7 @@ function cycleFabLanguage() {
     changeLanguage(SUPPORTED_LANGUAGES[nextIndex]);
 }
 
-function updateFabDarkModeIcon() {
-    const fabDarkMode = document.getElementById('fabDarkMode');
-    if (fabDarkMode) {
-        const isDark = document.body.classList.contains('dark-mode');
-        const span = fabDarkMode.querySelector('span');
-        fabDarkMode.querySelectorAll('[data-lucide]').forEach(el => el.remove());
-        const newIcon = document.createElement('i');
-        newIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-        if (span) {
-            fabDarkMode.insertBefore(newIcon, span);
-        } else {
-            fabDarkMode.insertBefore(newIcon, fabDarkMode.firstChild);
-        }
-        if (window.lucide) window.lucide.createIcons();
-        if (span) {
-            span.textContent = isDark ? t('lightMode') || '日間模式' : t('darkMode') || '夜間模式';
-        }
-        fabDarkMode.setAttribute('title', isDark ? t('lightMode') || '日間模式' : t('darkMode') || '夜間模式');
-        fabDarkMode.setAttribute('aria-label', isDark ? t('lightMode') || '日間模式' : t('darkMode') || '夜間模式');
-    }
-}
+// 舊版本的 updateFabDarkModeIcon 已被移除，現在使用新版本
 
 // 夜間模式功能
 function toggleDarkMode(forceState, options = {}) {
@@ -4077,39 +4067,7 @@ function toggleDarkMode(forceState, options = {}) {
         document.body.classList.remove('dark-mode');
     }
     
-    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-    
-    // 更新桌面端按鈕狀態和圖標
-    const quickBtn = document.getElementById('quickDarkModeBtn');
-    if (quickBtn) {
-        quickBtn.classList.toggle('active', isDark);
-        const iconEl = document.createElement('i');
-        iconEl.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-        quickBtn.innerHTML = '';
-        quickBtn.appendChild(iconEl);
-        if (window.lucide) window.lucide.createIcons();
-        quickBtn.setAttribute('title', t(isDark ? 'lightMode' : 'darkMode'));
-        quickBtn.setAttribute('aria-label', t(isDark ? 'lightMode' : 'darkMode'));
-    }
-    
-    const settingsToggleBtn = document.getElementById('darkModeToggleBtn');
-    if (settingsToggleBtn) {
-        updateToggleButton(settingsToggleBtn, isDark);
-        const toggleLabelKey = isDark ? 'disableDarkMode' : 'enableDarkMode';
-        const toggleLabel = t(toggleLabelKey);
-        settingsToggleBtn.setAttribute('aria-label', toggleLabel);
-        settingsToggleBtn.setAttribute('title', toggleLabel);
-    }
-
-    const statusLabel = document.querySelector('.dark-mode-toggle__status');
-    if (statusLabel) {
-        const statusKey = isDark ? 'darkMode' : 'lightMode';
-        statusLabel.textContent = t(statusKey);
-        statusLabel.dataset.state = isDark ? 'on' : 'off';
-    }
-    
-    // 更新 FAB 圖標
-    updateFabDarkModeIcon();
+    // 注意：按鈕UI由 updateDarkModeUI() 統一管理
     
     // 深色強度設置現在常駐顯示，不需要切換 hidden class
 }
@@ -4121,11 +4079,11 @@ function updateDarkModeDepth(depth) {
 }
 
 function loadDarkMode() {
-    const darkMode = localStorage.getItem('darkMode');
+    const darkModePreference = localStorage.getItem('darkModePreference') || 'auto'; // auto, light, dark
     const depth = localStorage.getItem('darkModeDepth') || '35';
-    const isDark = darkMode === 'enabled';
-
-    toggleDarkMode(isDark, { skipTransition: true });
+    
+    applyDarkModePreference(darkModePreference, { skipTransition: true });
+    updateDarkModeUI(darkModePreference);
     
     const depthInput = document.getElementById('darkModeDepth');
     if (depthInput) {
@@ -4134,6 +4092,134 @@ function loadDarkMode() {
         if (valueDisplay) valueDisplay.textContent = depth + '%';
     }
     updateDarkModeDepth(depth);
+    
+    // 監聽系統主題變化
+    if (window.matchMedia) {
+        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        darkModeMediaQuery.addEventListener('change', (e) => {
+            const currentPreference = localStorage.getItem('darkModePreference') || 'auto';
+            if (currentPreference === 'auto') {
+                applyDarkModePreference('auto');
+            }
+        });
+    }
+}
+
+// 應用夜間模式偏好設置
+function applyDarkModePreference(preference, options = {}) {
+    let shouldBeDark = false;
+    
+    if (preference === 'auto') {
+        // 跟隨系統設定
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            shouldBeDark = true;
+        }
+    } else if (preference === 'dark') {
+        shouldBeDark = true;
+    } else if (preference === 'light') {
+        shouldBeDark = false;
+    }
+    
+    toggleDarkMode(shouldBeDark, options);
+}
+
+// 更新夜間模式 UI
+function updateDarkModeUI(preference) {
+    // 更新設定面板中的按鈕
+    const autoBtn = document.getElementById('darkModeAutoBtn');
+    const lightBtn = document.getElementById('darkModeLightBtn');
+    const darkBtn = document.getElementById('darkModeDarkBtn');
+    
+    [autoBtn, lightBtn, darkBtn].forEach(btn => {
+        if (btn) btn.classList.remove('active');
+    });
+    
+    if (preference === 'auto' && autoBtn) {
+        autoBtn.classList.add('active');
+    } else if (preference === 'light' && lightBtn) {
+        lightBtn.classList.add('active');
+    } else if (preference === 'dark' && darkBtn) {
+        darkBtn.classList.add('active');
+    }
+    
+    // 更新快速按鈕圖示
+    updateQuickDarkModeButton(preference);
+    updateFabDarkModeIcon(preference);
+    
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+}
+
+// 設置夜間模式偏好
+function setDarkModePreference(preference) {
+    localStorage.setItem('darkModePreference', preference);
+    applyDarkModePreference(preference);
+    updateDarkModeUI(preference);
+}
+
+// 循環切換夜間模式（用於快速按鈕）
+function cycleDarkModePreference() {
+    const current = localStorage.getItem('darkModePreference') || 'auto';
+    const modes = ['auto', 'light', 'dark'];
+    const currentIndex = modes.indexOf(current);
+    const nextIndex = (currentIndex + 1) % modes.length;
+    const nextMode = modes[nextIndex];
+    
+    setDarkModePreference(nextMode);
+}
+
+// 更新快速按鈕圖示
+function updateQuickDarkModeButton(preference) {
+    const quickBtn = document.getElementById('quickDarkModeBtn');
+    if (!quickBtn) return;
+    
+    const icon = quickBtn.querySelector('i');
+    if (!icon) return;
+    
+    const icons = {
+        'auto': 'monitor',
+        'light': 'sun',
+        'dark': 'moon'
+    };
+    
+    const labels = {
+        'auto': t('autoMode') || '自動',
+        'light': t('lightMode') || '日間',
+        'dark': t('darkMode') || '夜間'
+    };
+    
+    icon.setAttribute('data-lucide', icons[preference] || 'moon');
+    quickBtn.setAttribute('title', labels[preference]);
+    quickBtn.setAttribute('aria-label', labels[preference]);
+}
+
+// 更新 FAB 夜間模式圖示
+function updateFabDarkModeIcon(preference) {
+    const fabDarkMode = document.getElementById('fabDarkMode');
+    if (!fabDarkMode) return;
+    
+    const icon = fabDarkMode.querySelector('i');
+    const span = fabDarkMode.querySelector('span');
+    
+    if (!icon) return;
+    
+    const icons = {
+        'auto': 'monitor',
+        'light': 'sun',
+        'dark': 'moon'
+    };
+    
+    const labels = {
+        'auto': t('autoMode') || '自動',
+        'light': t('lightMode') || '日間',
+        'dark': t('darkMode') || '夜間'
+    };
+    
+    icon.setAttribute('data-lucide', icons[preference] || 'moon');
+    if (span) {
+        span.textContent = labels[preference];
+    }
 }
 
 // 語言循環切換

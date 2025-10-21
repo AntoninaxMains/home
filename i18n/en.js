@@ -115,6 +115,7 @@ window.TRANSLATIONS['en'] = {
     darkModeDepth: 'Dark Mode Depth',
     darkMode: 'Dark Mode',
     lightMode: 'Light Mode',
+    autoMode: 'Auto',
     darkModeHint: 'Apply a gentle dark theme to reduce glare at night.',
     developerSection: 'Developer Tools',
     debugPanelLabel: 'Show debug overlay',

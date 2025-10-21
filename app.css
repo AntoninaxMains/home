@@ -131,21 +131,21 @@ html {
   scroll-behavior: smooth;
 }
 
-/* 搜尋載入動畫 */
+/* 搜尋載入動畫 - 增強版 */
 .search-loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
+  backdrop-filter: blur(12px) saturate(180%);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .search-loading-overlay.hidden {
@@ -158,7 +158,19 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
+  animation: floatIn 0.5s ease-out;
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .spinner-ring {
@@ -166,33 +178,38 @@ html {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 80px;
-  border: 4px solid transparent;
-  border-top-color: #4a90e2;
+  width: 100px;
+  height: 100px;
+  border: 5px solid transparent;
   border-radius: 50%;
-  animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  animation: spin 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  filter: drop-shadow(0 0 10px rgba(74, 144, 226, 0.5));
 }
 
 .spinner-ring:nth-child(1) {
   border-top-color: #4a90e2;
+  border-right-color: rgba(74, 144, 226, 0.3);
   animation-delay: 0s;
+  width: 100px;
+  height: 100px;
 }
 
 .spinner-ring:nth-child(2) {
   border-top-color: #64b5f6;
-  animation-delay: -0.4s;
-  width: 64px;
-  height: 64px;
-  top: 8px;
+  border-right-color: rgba(100, 181, 246, 0.3);
+  animation-delay: -0.5s;
+  width: 80px;
+  height: 80px;
+  top: 10px;
 }
 
 .spinner-ring:nth-child(3) {
   border-top-color: #90caf9;
-  animation-delay: -0.8s;
-  width: 48px;
-  height: 48px;
-  top: 16px;
+  border-right-color: rgba(144, 202, 249, 0.3);
+  animation-delay: -1s;
+  width: 60px;
+  height: 60px;
+  top: 20px;
 }
 
 @keyframes spin {
@@ -205,21 +222,102 @@ html {
 }
 
 .spinner-text {
-  margin-top: 100px;
+  margin-top: 120px;
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   text-align: center;
-  animation: pulse 1.5s ease-in-out infinite;
+  letter-spacing: 0.5px;
+  animation: pulse 2s ease-in-out infinite;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.6;
+    opacity: 0.7;
+    transform: scale(1.02);
   }
+}
+
+/* 夜間模式下的搜尋載入動畫 */
+body.dark-mode .search-loading-overlay {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(31, 41, 55, 0.8) 100%);
+}
+
+body.dark-mode .spinner-ring:nth-child(1) {
+  border-top-color: #60a5fa;
+  filter: drop-shadow(0 0 15px rgba(96, 165, 250, 0.6));
+}
+
+body.dark-mode .spinner-ring:nth-child(2) {
+  border-top-color: #93c5fd;
+}
+
+body.dark-mode .spinner-ring:nth-child(3) {
+  border-top-color: #bfdbfe;
+}
+
+/* 夜間模式選項樣式 */
+.dark-mode-options {
+  display: flex;
+  gap: 8px;
+  background: var(--surface);
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.dark-mode-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-subtle);
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 70px;
+}
+
+.dark-mode-option i {
+  width: 20px;
+  height: 20px;
+}
+
+.dark-mode-option:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.dark-mode-option.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(76, 110, 245, 0.3);
+}
+
+.dark-mode-option.active:hover {
+  background: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 110, 245, 0.4);
+}
+
+body.dark-mode .dark-mode-option.active {
+  background: #60a5fa;
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.4);
+}
+
+body.dark-mode .dark-mode-option.active:hover {
+  background: #60a5fa;
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.5);
 }
 
 /* 啟動網頁設置樣式 */

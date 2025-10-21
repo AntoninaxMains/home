@@ -115,6 +115,7 @@ window.TRANSLATIONS['ja'] = {
     darkModeDepth: 'ダークモードの深さ',
     darkMode: 'ダークモード',
     lightMode: 'ライトモード',
+    autoMode: '自動',
     darkModeHint: '柔らかいダークテーマで夜間の眩しさをおさえます。',
     developerSection: '開発者ツール',
     debugPanelLabel: 'デバッグパネルを表示',
