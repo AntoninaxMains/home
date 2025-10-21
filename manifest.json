@@ -18,9 +18,9 @@
     "https://*/*"
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self' https://unpkg.com; object-src 'self'"
+    "extension_pages": "script-src 'self'; object-src 'self'"
   },
-  "author": "Your Name",
-  "homepage_url": "https://github.com/yourusername/your-repo"
+  "author": "AntoninaxMains",
+  "homepage_url": "https://github.com/AntoninaxMains/home"
 }
 
