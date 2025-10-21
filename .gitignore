@@ -28,3 +28,8 @@ node_modules/
 # Build outputs (if applicable)
 dist/
 build/
+
+# Chrome extension packaging
+*.crx
+*.pem
+*.zip

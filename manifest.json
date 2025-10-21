@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "我的起始頁",
+  "version": "1.0.0",
+  "description": "一個美觀的自訂新標籤頁和主頁，包含搜尋、書籤管理和天氣小工具",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' https://unpkg.com; object-src 'self'"
+  },
+  "author": "Your Name",
+  "homepage_url": "https://github.com/yourusername/your-repo"
+}
+
